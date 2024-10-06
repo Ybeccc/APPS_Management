@@ -1,0 +1,12 @@
+// Create a user
+POST http://localhost:5173/user
+Content-Type: application/json
+
+{
+    "fullname": "Ribka Suwardy",
+    "username": "ribka",
+    "password": "admin",
+    "confPassword": "admin",
+    "role": "Koordinator Praktikum",
+    "status": "active"
+}
