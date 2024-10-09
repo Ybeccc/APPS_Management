@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { landing, logo } from '../assets';
+import { useDispatch, useSelector } from "react-redux";
+import { LoginUser, reset } from "../features/authSlice";
+import { landing } from '../assets';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user, isError, isSuccess, isLoading, message } = useSelector(
+    (state) => state.auth
+  );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    if (username === 'admin' && password === 'admin') {
-      navigate('/app'); // Navigate to the main application page after login
-    } else {
-      alert('Invalid username or password');
+  useEffect(() => {
+    if (user || isSuccess) {
+      navigate("/beranda");
     }
+  }, [user, isSuccess, dispatch, navigate]);
+  
+  const Auth = (e) => {
+    e.preventDefault();
+    dispatch(LoginUser({ username, password }));
   };
 
   return (
@@ -25,7 +30,8 @@ const Login = () => {
       </div>
       <div className="md:w-1/2 flex items-center justify-center bg-gray-100">
         <div className="w-full max-w-xs">
-          <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 py-6">
+          <form onSubmit={Auth} className="bg-white shadow-md rounded px-8 py-6">
+            {isError && <p className="has-text-centered">{message}</p>}
             <h2 className="text-center text-2xl font-bold mb-6">Login</h2>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
@@ -60,7 +66,7 @@ const Login = () => {
                 type="submit"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
-                Login
+                {isLoading ? "Loading..." : "Login"}
               </button>
             </div>
           </form>

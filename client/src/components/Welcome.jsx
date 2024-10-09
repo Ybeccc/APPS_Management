@@ -4,7 +4,7 @@ const Welcome = () => {
   return (
     <div>
         <h1 className='title'>hai</h1>
-        <h2 className='subtitle'>Selamat Datang ...</h2>
+        <h2 className='subtitle'>Selamat Datang <strong>user && user.fullname</strong></h2>
     </div>
   )
 }
