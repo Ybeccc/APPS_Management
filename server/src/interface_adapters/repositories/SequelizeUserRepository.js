@@ -86,8 +86,11 @@ class SequelizeUserRepository extends UserRepository {
     return await UserModel.findAll();
   }
   async update(userId, updatedData) {
-    const user = await UserModel.findByPk(userId);
-    await user.update(updatedData);
+    const user = await UserModel.update(userId, updatedData{
+      where: {
+        usr_id: userId
+      }
+    });
 
     return user;
   }
