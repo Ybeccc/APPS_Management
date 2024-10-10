@@ -72,7 +72,24 @@ const UserModel = sequelizeDatabase.getConnection().define('User', {
 class SequelizeUserRepository extends UserRepository {
   async create(userData) {
     const createdUser = await UserModel.create(userData);
-    return new User(createdUser);
+    return createdUser;
+  }
+  async findById(userId) {
+    const user = await UserModel.findOne({
+      where: {
+        usr_id: userId,
+      }
+    });
+    return user
+  }
+  async getAll() {
+    return await UserModel.findAll();
+  }
+  async update(userId, updatedData) {
+    const user = await UserModel.findByPk(userId);
+    await user.update(updatedData);
+
+    return user;
   }
 }
 

@@ -8,6 +8,9 @@ class UserRepository {
     getAll(user) {
       throw new Error('Method not implemented');
     }
+    update(user) {
+      throw new Error('Method not implemented');
+    }
   }
   
-module.exports = UserRepository;  
+module.exports = UserRepository;

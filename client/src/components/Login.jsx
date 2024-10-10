@@ -17,6 +17,7 @@ const Login = () => {
     if (user || isSuccess) {
       navigate("/beranda");
     }
+    dispatch(reset());
   }, [user, isSuccess, dispatch, navigate]);
   
   const Auth = (e) => {

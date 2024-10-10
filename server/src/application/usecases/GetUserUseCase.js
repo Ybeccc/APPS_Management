@@ -44,8 +44,28 @@ class GetUserUseCase {
           }
         return response;
     }
+
+    async update(userId, updatedData) {
+      const response = {};
+      try {
+          let user = await this.userRepository.findById(userId);
+          if (!user) {
+              throw new Error('User not found');
+          }
+          let updatedUser = await user.update(updatedData);
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'User updated';
+          response.data = updatedUser;
+      } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'User not updated';
+          response.error = error.message;
+      }
+      return response;
+    }
+  
   }
   
-  module.exports = GetUserUseCase;
-
-  
+module.exports = GetUserUseCase;

@@ -3,7 +3,6 @@ const CreateUserUseCase = require('../../application/usecases/CreateUserUseCase'
 const GetUserUseCase = require('../../application/usecases/GetUserUseCase');
 const SequelizeUserRepository = require('../../interface_adapters/repositories/SequelizeUserRepository');
 
-
 class UserController {
   constructor() {
     this.userRepository = new SequelizeUserRepository();
@@ -36,9 +35,25 @@ class UserController {
         .json(response);
     }
   }
+
   async getAll(req, res) {
     try {
       const response = await this.getUserUseCase.getAll();
+      res
+        .status(200)
+        .json(response);
+    } catch (error) {
+      res
+        .status(500)
+        .json(response);
+    }
+  }
+
+  async updateUser(req, res) {
+    try {
+      const userId = req.params.id;
+      const updatedData = req.body;
+      const response = await this.getUserUseCase.update(userId, updatedData);
       res
         .status(200)
         .json(response);
