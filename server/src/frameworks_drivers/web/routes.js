@@ -25,5 +25,6 @@ router.delete('/logout', (req, res) => authController.logOut(req, res));
 router.post('/payrolls', (req, res) => payrollController.createPayroll(req, res));
 router.get('/payrolls/:id', (req, res) => payrollController.getPayrollById(req, res));
 router.get('/payrolls', (req, res) => payrollController.getAll(req, res));
+router.delete('/delete/payrolls/:id', (req, res) => payrollController.deletePayroll(req, res));
 
 module.exports = router;

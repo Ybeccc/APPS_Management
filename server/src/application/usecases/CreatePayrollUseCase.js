@@ -1,5 +1,5 @@
 const { response } = require('express');
-const Response = require('../..domain/entities/Response');
+const Response = require('../../domain/entities/Response');
 
 class CreatePayrollUseCase {
     constructor(payrollRepository) {

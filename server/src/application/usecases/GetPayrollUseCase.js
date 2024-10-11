@@ -8,7 +8,7 @@ class GetPayrollUseCase {
     async findById(payrollId) {
         const response = new Response();
         try {
-            let payrollById = await this.userRepository.findById(payrollId);
+            let payrollById = await this.payrollRepository.findById(payrollId);
             if (!payrollById) {
                 throw new Error('Payroll not found');
             }

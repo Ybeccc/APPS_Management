@@ -39,8 +39,8 @@ const PayrollModel = sequelizeDatabase.getConnection().define('Payroll', {
         field: 'prl_created_at'
     }
 }, {
-  tableName: 'user',
-  schema: 'payroll',
+  tableName: 'payroll',
+  schema: 'users',
   timestamps: false,
 });
 
@@ -59,6 +59,14 @@ class SequelizePayrollRepository extends PayrollRepository {
   }
   async getAll() {
     return await PayrollModel.findAll();
+  }
+  async delete(payrollId) {
+    const result = await PayrollModel.destroy({
+      where: {
+        prl_id: payrollId,
+      }
+    });
+    return result;
   }
 }
 

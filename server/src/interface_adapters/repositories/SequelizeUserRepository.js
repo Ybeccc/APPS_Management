@@ -85,15 +85,6 @@ class SequelizeUserRepository extends UserRepository {
   async getAll() {
     return await UserModel.findAll();
   }
-  async update(userId, updatedData) {
-    const user = await UserModel.update(userId, updatedData{
-      where: {
-        usr_id: userId
-      }
-    });
-
-    return user;
-  }
 }
 
 module.exports = SequelizeUserRepository;
