@@ -14,7 +14,7 @@ const payrollController = new PayrollController();
 router.post('/users', (req, res) => userController.createUser(req, res));
 router.get('/users/:id', (req, res) => userController.getUserById(req, res));
 router.get('/users', (req, res) => userController.getAll(req, res));
-router.patch('/users/:id', (req, res) => userController.updateUser(req, res));
+router.post('/update/users', (req, res) => userController.updateUser(req, res));
 
 // auth routes
 router.get('/me', (req, res) => authController.Me(req, res));
@@ -25,6 +25,7 @@ router.delete('/logout', (req, res) => authController.logOut(req, res));
 router.post('/payrolls', (req, res) => payrollController.createPayroll(req, res));
 router.get('/payrolls/:id', (req, res) => payrollController.getPayrollById(req, res));
 router.get('/payrolls', (req, res) => payrollController.getAll(req, res));
+router.post('/update/payrolls', (req, res) => payrollController.updatePayroll(req, res));
 router.delete('/delete/payrolls/:id', (req, res) => payrollController.deletePayroll(req, res));
 
 module.exports = router;

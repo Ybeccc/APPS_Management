@@ -60,6 +60,22 @@ class SequelizePayrollRepository extends PayrollRepository {
   async getAll() {
     return await PayrollModel.findAll();
   }
+  async update(payrollId, payrollData){
+    const [affectedRows] = await PayrollModel.update(
+      payrollData,  
+      {
+        where: { prlId: payrollId } 
+      }
+    );
+
+    if (affectedRows === 0) {
+      console.log('No rows updated.');
+      return null;  
+    }
+
+    const updatedPayroll = await PayrollModel.findByPk(payrollId);
+    return updatedPayroll;
+  }
   async delete(payrollId) {
     const result = await PayrollModel.destroy({
       where: {

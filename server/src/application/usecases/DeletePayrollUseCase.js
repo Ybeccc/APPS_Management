@@ -1,7 +1,7 @@
 const Response = require('../../domain/entities/Response');
 
 class DeletePayrollUseCase {
-    constructor(payrollRepository, getPayrollUseCase) {
+    constructor(payrollRepository) {
         this.payrollRepository = payrollRepository;
     }
 

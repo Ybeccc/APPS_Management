@@ -1,6 +1,7 @@
 const { response } = require('express');
 const CreateUserUseCase = require('../../application/usecases/CreateUserUseCase');
 const GetUserUseCase = require('../../application/usecases/GetUserUseCase');
+const UpdateUserUseCase = require("../../application/usecases/UpdateUserUseCase")
 const SequelizeUserRepository = require('../../interface_adapters/repositories/SequelizeUserRepository');
 
 class UserController {
@@ -8,6 +9,7 @@ class UserController {
     this.userRepository = new SequelizeUserRepository();
     this.createUserUseCase = new CreateUserUseCase(this.userRepository);
     this.getUserUseCase = new GetUserUseCase(this.userRepository);
+    this.updateUserUseCase = new UpdateUserUseCase(this.userRepository);
   }
 
   async createUser(req, res) {
@@ -51,16 +53,13 @@ class UserController {
 
   async updateUser(req, res) {
     try {
-      const userId = req.params.id;
-      const updatedData = req.body;
-      const response = await this.getUserUseCase.update(userId, updatedData);
+      const userData = req.body;
+      const response = await this.updateUserUseCase.updateUser(userData);
       res
-        .status(200)
+        .status(201)
         .json(response);
     } catch (error) {
-      res
-        .status(500)
-        .json(response);
+      res.status(500).json(response);
     }
   }
 }

@@ -2,6 +2,7 @@ const { response } = require('express');
 const CreatePayrollUseCase = require('../../application/usecases/CreatePayrollUseCase');
 const GetPayrollUseCase = require('../../application/usecases/GetPayrollUseCase');
 const DeletePayrollUseCase = require('../../application/usecases/DeletePayrollUseCase');
+const UpdatePayrollUseCase = require('../../application/usecases/UpdatePayrollUseCase');
 const SequelizePayrollRepository = require('../../interface_adapters/repositories/SequelizePayrollRepository');
 
 class PayrollController {
@@ -9,6 +10,7 @@ class PayrollController {
         this.payrollRepository = new SequelizePayrollRepository();
         this.createPayrollUseCase = new CreatePayrollUseCase(this.payrollRepository);
         this.getPayrollUseCase = new GetPayrollUseCase(this.payrollRepository);
+        this.updatePayrollUseCase = new UpdatePayrollUseCase(this.payrollRepository);
         this.deletePayrollUseCase = new DeletePayrollUseCase(this.payrollRepository);
     }
 
@@ -23,7 +25,6 @@ class PayrollController {
         res.status(500).json(response);
         }
     }
-
     async getPayrollById(req, res) {
         try {
         const payrollId = req.params.id;
@@ -37,7 +38,6 @@ class PayrollController {
             .json(response);
         }
     }
-
     async getAll(req, res) {
         try {
         const response = await this.getPayrollUseCase.getAll();
@@ -50,7 +50,17 @@ class PayrollController {
             .json(response);
         }
     }
-
+    async updatePayroll(req, res) {
+        try {
+          const payrollData = req.body;
+          const response = await this.updatePayrollUseCase.updatePayroll(payrollData);
+          res
+            .status(201)
+            .json(response);
+        } catch (error) {
+          res.status(500).json(response);
+        }
+    }
     async deletePayroll(req, res) {
         try {
         const payrollId = req.params.id;
