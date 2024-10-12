@@ -3,7 +3,7 @@ const Payroll = require('../../domain/entities/Payroll');
 const sequelizeDatabase = require('../../config/Database');
 const { DataTypes } = require('sequelize');
 
-// Define the Sequelize model for User
+// Define the Sequelize model for Payroll
 const PayrollModel = sequelizeDatabase.getConnection().define('Payroll', {
     prlId: {
         type: DataTypes.INTEGER,
