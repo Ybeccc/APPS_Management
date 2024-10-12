@@ -5,6 +5,8 @@ const PayrollController = require('../../interfaces/rest/PayrollController');
 const ClassesController = require('../../interfaces/rest/ClassesController');
 const CoursesController = require('../../interfaces/rest/CoursesController');
 const ClassCourseController = require('../../interfaces/rest/ClassCourseController');
+const AppointmentController = require('../../interfaces/rest/AppointmentController');
+const AttendanceController = require('../../interfaces/rest/AttendanceController');
 
 const router = express.Router();
 
@@ -15,6 +17,8 @@ const payrollController = new PayrollController();
 const classesController = new ClassesController();
 const coursesController = new CoursesController();
 const classCourseController = new ClassCourseController();
+const appointmentController = new AppointmentController();
+const attendanceController = new AttendanceController();
 
 // user routes
 router.post('/users', (req, res) => userController.createUser(req, res));
@@ -44,5 +48,17 @@ router.get('/courses', (req, res) => coursesController.getAll(req, res));
 router.post('/classcourse', (req, res) => classCourseController.createCC(req, res));
 router.get('/classcourse/:id', (req, res) => classCourseController.getCCById(req, res));
 router.get('/classcourse', (req, res) => classCourseController.getAll(req, res));
+
+// appointment routes
+router.post('/appointment', (req, res) => appointmentController.createAppointment(req, res));
+router.get('/appointment/:id', (req, res) => appointmentController.getAppointmentById(req, res));
+router.get('/appointment', (req, res) => appointmentController.getAll(req, res));
+router.post('/appointment/payrolls', (req, res) => appointmentController.updateAppointment(req, res));
+
+// attendance routes
+router.post('/attendance', (req, res) => attendanceController.createAttendance(req, res));
+router.get('/attendance/:id', (req, res) => attendanceController.getAttendanceById(req, res));
+router.get('/attendance', (req, res) => attendanceController.getAll(req, res));
+router.post('/attendance/payrolls', (req, res) => attendanceController.updateAttendance(req, res));
 
 module.exports = router;
