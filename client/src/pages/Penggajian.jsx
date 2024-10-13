@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Layout from './Layout';
 import styles from '../style';
+import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa'; // Importing edit and delete icons
 
 const Penggajian = () => {
+  const navigate = useNavigate();
+
   const [data] = useState([
     { date: "2024-10-01", fullname: "John Doe", bankaccount: "Oracle Database Administrator", bankaccountno: "A", status: "Pending" },
     { date: "2024-10-02", fullname: "Jane Smith", bankaccount: "Database Systems", bankaccountno: "B", status: "Pending" },
@@ -19,8 +22,9 @@ const Penggajian = () => {
 
       {/* Add "+ payroll" button */}
       <div className="flex justify-between items-center mb-4">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded">
-          + Payroll
+        <button className="bg-blue-500 text-white px-4 py-2 rounded"
+        onClick={() => navigate('/penggajian/tambah')}>
+          + Gaji
         </button>
       </div>
 
@@ -46,12 +50,14 @@ const Penggajian = () => {
                 <td className="font-poppins border border-black px-4 text-[14px]">{row.bankaccountno}</td>
                 <td className="font-poppins border border-black px-4 text-[14px]">{row.status}</td>
                 <td className="font-poppins border border-black px-4 text-[14px]">
-                  <button className="flex items-center text-green-500">
+                  <button className="flex items-center text-green-500"
+                  onClick={() => navigate('/penggajian/edit')}>
                     <FaEdit className="mr-1" /> Ubah
                   </button>
                 </td>
                 <td className="font-poppins border border-black px-4 text-[14px]">
-                  <button className="flex items-center text-red-500">
+                  <button className="flex items-center text-red-500"
+                  onClick={() => navigate('/penggajian/hapus')}>
                     <FaTrash className="mr-1" /> Hapus
                   </button>
                 </td>
