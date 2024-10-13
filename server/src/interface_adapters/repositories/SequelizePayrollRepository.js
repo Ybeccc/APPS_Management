@@ -1,7 +1,9 @@
 const PayrollRepository = require('../../domain/repositories/PayrollRepository');
 const Payroll = require('../../domain/entities/Payroll');
 const sequelizeDatabase = require('../../config/Database');
+const UserModel = require('./SequelizeUserRepository');
 const { DataTypes } = require('sequelize');
+const { FOREIGNKEYS } = require('sequelize/lib/query-types');
 
 // Define the Sequelize model for Payroll
 const PayrollModel = sequelizeDatabase.getConnection().define('Payroll', {
@@ -43,6 +45,10 @@ const PayrollModel = sequelizeDatabase.getConnection().define('Payroll', {
   schema: 'users',
   timestamps: false,
 });
+
+// CONTOH GABUNGIN FROEIGN KEY
+// UserModel.hasMany(PayrollModel);
+// PayrollModel.belongsTo(UserModel, {foreignKey: 'prlUserId'});
 
 class SequelizePayrollRepository extends PayrollRepository {
   async create(payrollData) {

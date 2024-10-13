@@ -1,9 +1,14 @@
+const { response } = require('express');
 const SequelizeUserRepository = require('../../interface_adapters/repositories/SequelizeUserRepository');
 const argon2 = require('argon2');
 
 class AuthController {
+    constructor() {
+        this.userRepository = new SequelizeUserRepository();
+    }
+
     async Login(req, res) {
-        const user = await SequelizeUserRepository.findOne({
+        const user = await userRepository.findOne({
             where: {
                 usrUsername: req.body.usrUsername
             }
