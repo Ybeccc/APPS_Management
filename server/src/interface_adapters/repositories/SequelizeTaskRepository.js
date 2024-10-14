@@ -55,12 +55,12 @@ class SequelizeTaskRepository extends TaskRepository {
     return createdtask;
   }
   async findById(taskId) {
-    const att = await TaskModel.findOne({
+    const tsk = await TaskModel.findOne({
       where: {
-        att_id: taskId,
+        tsk_id: taskId,
       }
     });
-    return att
+    return tsk
   }
   async getAll() {
     return await TaskModel.findAll();
@@ -69,7 +69,7 @@ class SequelizeTaskRepository extends TaskRepository {
     const [affectedRows] = await TaskModel.update(
         taskData,  
       {
-        where: { attId: taskId } 
+        where: { tskId: taskId } 
       }
     );
 

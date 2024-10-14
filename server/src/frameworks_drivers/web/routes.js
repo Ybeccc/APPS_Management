@@ -57,13 +57,13 @@ router.get('/classcourse', (req, res) => classCourseController.getAll(req, res))
 router.post('/appointment', (req, res) => appointmentController.createAppointment(req, res));
 router.get('/appointment/:id', (req, res) => appointmentController.getAppointmentById(req, res));
 router.get('/appointment', (req, res) => appointmentController.getAll(req, res));
-router.post('/appointment/payrolls', (req, res) => appointmentController.updateAppointment(req, res));
+router.post('/appointment/update', (req, res) => appointmentController.updateAppointment(req, res));
 
 // attendance routes
 router.post('/attendance', (req, res) => attendanceController.createAttendance(req, res));
 router.get('/attendance/:id', (req, res) => attendanceController.getAttendanceById(req, res));
 router.get('/attendance', (req, res) => attendanceController.getAll(req, res));
-router.post('/attendance/payrolls', (req, res) => attendanceController.updateAttendance(req, res));
+router.post('/attendance/update', (req, res) => attendanceController.updateAttendance(req, res));
 
 // schedule routes
 router.post('/schedule', (req, res) => scheduleController.createSchedule(req, res));
@@ -74,6 +74,6 @@ router.get('/schedule', (req, res) => scheduleController.getAll(req, res));
 router.post('/task', (req, res) => taskController.createTask(req, res));
 router.get('/task/:id', (req, res) => taskController.getTaskById(req, res));
 router.get('/task', (req, res) => taskController.getAll(req, res));
-router.post('/task/payrolls', (req, res) => taskController.updateTask(req, res));
+router.post('/task/update', (req, res) => taskController.updateTask(req, res));
 
 module.exports = router;

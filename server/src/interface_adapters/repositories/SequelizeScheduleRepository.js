@@ -45,12 +45,12 @@ class SequelizeScheduleRepository extends ScheduleRepository {
     return createdschedule;
   }
   async findById(scheduleId) {
-    const att = await ScheduleModel.findOne({
+    const sch = await ScheduleModel.findOne({
       where: {
-        att_id: scheduleId,
+        sch_id: scheduleId,
       }
     });
-    return att
+    return sch
   }
   async getAll() {
     return await ScheduleModel.findAll();
