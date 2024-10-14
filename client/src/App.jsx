@@ -13,6 +13,8 @@ import DetailKehadiran from "./pages/DetailKehadiran";
 import DetailManajemenTugas from "./pages/DetailManajemenTugas";
 import TambahPenggajian from "./pages/TambahPenggajian";
 import EditPenggajian from "./pages/EditPenggajian";
+import TambahTugas from "./pages/TambahTugas";
+import EditTugas from "./pages/EditTugas";
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
         <Route path="/manajementugas/detail" element={<DetailManajemenTugas />} />
         <Route path="/penggajian/tambah" element={<TambahPenggajian />} />
         <Route path="/penggajian/edit" element={<EditPenggajian />} />
+        <Route path="/manajementugas/tambah" element={<TambahTugas />} />
+        <Route path="/manajementugas/edit" element={<EditTugas />} />
       </Routes>
     </Router>
   );

@@ -11,12 +11,12 @@ class UpdateAttendanceUseCase {
         const response = new Response();
 
         try {
-        let attendanceInserted = await this.getAttendanceUseCase.findById(attendanceData.prlId);
+        let attendanceInserted = await this.getAttendanceUseCase.findById(attendanceData.attId);
         if (!attendanceInserted.data) {
             throw new Error('attendance not found');
         }
 
-        let attendanceUpdated = await this.attendanceRepository.update(attendanceData.prlId, attendanceData)
+        let attendanceUpdated = await this.attendanceRepository.update(attendanceData.attId, attendanceData)
         if (!attendanceUpdated) {
             throw new Error('attendance failed update');
         }

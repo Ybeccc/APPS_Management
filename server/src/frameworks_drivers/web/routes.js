@@ -7,6 +7,8 @@ const CoursesController = require('../../interfaces/rest/CoursesController');
 const ClassCourseController = require('../../interfaces/rest/ClassCourseController');
 const AppointmentController = require('../../interfaces/rest/AppointmentController');
 const AttendanceController = require('../../interfaces/rest/AttendanceController');
+const ScheduleController = require('../../interfaces/rest/ScheduleController');
+const TaskController = require('../../interfaces/rest/TaskController');
 
 const router = express.Router();
 
@@ -19,6 +21,8 @@ const coursesController = new CoursesController();
 const classCourseController = new ClassCourseController();
 const appointmentController = new AppointmentController();
 const attendanceController = new AttendanceController();
+const scheduleController = new ScheduleController();
+const taskController = new TaskController();
 
 // user routes
 router.post('/users', (req, res) => userController.createUser(req, res));
@@ -60,5 +64,16 @@ router.post('/attendance', (req, res) => attendanceController.createAttendance(r
 router.get('/attendance/:id', (req, res) => attendanceController.getAttendanceById(req, res));
 router.get('/attendance', (req, res) => attendanceController.getAll(req, res));
 router.post('/attendance/payrolls', (req, res) => attendanceController.updateAttendance(req, res));
+
+// schedule routes
+router.post('/schedule', (req, res) => scheduleController.createSchedule(req, res));
+router.get('/schedule/:id', (req, res) => scheduleController.getScheduleById(req, res));
+router.get('/schedule', (req, res) => scheduleController.getAll(req, res));
+
+// task routes
+router.post('/task', (req, res) => taskController.createTask(req, res));
+router.get('/task/:id', (req, res) => taskController.getTaskById(req, res));
+router.get('/task', (req, res) => taskController.getAll(req, res));
+router.post('/task/payrolls', (req, res) => taskController.updateTask(req, res));
 
 module.exports = router;

@@ -16,7 +16,7 @@ class UpdatePayrollUseCase {
             throw new Error('Payroll not found');
         }
 
-        let payrollUpdated = await this.userRepository.update(payrollData.prlId, payrollData)
+        let payrollUpdated = await this.payrollRepository.update(payrollData.prlId, payrollData)
         if (!payrollUpdated) {
             throw new Error('Payroll failed update');
         }

@@ -11,12 +11,12 @@ class UpdateAppointmentUseCase {
         const response = new Response();
 
         try {
-        let appointmentInserted = await this.getAppointmentUseCase.findById(appointmentData.prlId);
+        let appointmentInserted = await this.getAppointmentUseCase.findById(appointmentData.aptId);
         if (!appointmentInserted.data) {
             throw new Error('appointment not found');
         }
 
-        let appointmentUpdated = await this.appointmentRepository.update(appointmentData.prlId, appointmentData)
+        let appointmentUpdated = await this.appointmentRepository.update(appointmentData.aptId, appointmentData)
         if (!appointmentUpdated) {
             throw new Error('appointment failed update');
         }
