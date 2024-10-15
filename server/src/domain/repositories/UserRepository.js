@@ -11,6 +11,12 @@ class UserRepository {
     update(user) {
       throw new Error('Method not implemented');
     }
+    listPracticumAst(user) {
+      throw new Error('Method not implemented');
+    }
+    listStudentAst(user) {
+      throw new Error('Method not implemented');
+    }
   }
   
 module.exports = UserRepository;

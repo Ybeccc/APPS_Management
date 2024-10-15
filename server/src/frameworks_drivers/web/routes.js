@@ -14,7 +14,7 @@ const TaskController = require('../../interfaces/rest/TaskController');
 
 const router = express.Router();
 
-// Instantiate the controller
+// Initiate the controller
 const userController = new UserController();
 const authController = new AuthController();
 const payrollController = new PayrollController();
