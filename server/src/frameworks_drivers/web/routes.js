@@ -1,4 +1,6 @@
 const express = require('express');
+const db = require("../../config/Database.js");
+
 const UserController = require('../../interfaces/rest/UserController');
 const AuthController = require('../../interfaces/rest/AuthController');
 const PayrollController = require('../../interfaces/rest/PayrollController');
@@ -32,8 +34,19 @@ router.post('/update/users', (req, res) => userController.updateUser(req, res));
 
 // auth routes
 router.get('/me', (req, res) => authController.Me(req, res));
-router.post('/login', (req, res) => authController.Login(req, res));
+// router.post('/login', (req, res) => authController.Login(req, res));
 router.delete('/logout', (req, res) => authController.logOut(req, res));
+router.post('/login', (req, res) => {
+    const pg = "SELECT * FROM users.user WHERE usr_username = ? AND usr_password = ?";
+    const values = [
+        req.body.usr_username,
+        req.body.usr_password,
+    ]
+    db.query(pg, [values], (err, data) => {
+        if(err) return res.json("Login failed");
+        return res.json(data);
+    })
+});
 
 // payroll routes
 router.post('/payrolls', (req, res) => payrollController.createPayroll(req, res));

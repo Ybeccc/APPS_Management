@@ -14,11 +14,14 @@ const Login = () => {
   );
 
   useEffect(() => {
-    if (user || isSuccess) {
+    if (isSuccess) {
       navigate("/beranda");
     }
-    dispatch(reset());
-  }, [user, isSuccess, dispatch, navigate]);
+  
+    return () => {
+      dispatch(reset());
+    };
+  }, [isSuccess, dispatch, navigate]);
   
   const Auth = (e) => {
     e.preventDefault();

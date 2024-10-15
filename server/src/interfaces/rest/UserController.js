@@ -51,6 +51,24 @@ class UserController {
     }
   }
 
+  async listPracticumAst(req, res) {
+    try {
+      const response = await this.getUserUseCase.execute();
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(500).json(response);
+    }
+  }
+
+  async listStudentAst(req, res) {
+    try {
+      const response = await this.getUserUseCase.execute();
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(500).json(response);
+    }
+  }
+
   async updateUser(req, res) {
     try {
       const userData = req.body;

@@ -20,7 +20,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        {/* <Route path="/" element={<Login />} /> */}
 
         {/* MAIN ROUTING MENU */}
         <Route path="/beranda" element={<Beranda />} />
@@ -32,8 +32,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
 
         {/* SUB ROUTING MENU */}
-        <Route path="/kehadiran/detail" element={<DetailKehadiran />} />
-        <Route path="/manajementugas/detail" element={<DetailManajemenTugas />} />
+        <Route path="/kehadiran/detail/:id" element={<DetailKehadiran />} />
+        <Route path="/manajementugas/detail/:id" element={<DetailManajemenTugas />} />
         <Route path="/penggajian/tambah" element={<TambahPenggajian />} />
         <Route path="/penggajian/edit" element={<EditPenggajian />} />
         <Route path="/manajementugas/tambah" element={<TambahTugas />} />

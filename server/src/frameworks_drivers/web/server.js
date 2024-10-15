@@ -1,5 +1,7 @@
 const express = require('express');
-const routes = require('./routes'); // Import the routes
+const cors = require("cors");
+const session = require("express-session");
+const routes = require('./routes');
 
 class Server {
   constructor() {
@@ -9,6 +11,10 @@ class Server {
 
   initializeMiddleware() {
     this.app.use(express.json());
+    this.app.use(cors({
+      origin: 'http://localhost:5173',
+      credentials: true
+    }));
   }
 
   initializeRoutes() {
