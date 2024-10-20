@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require("cors");
 const session = require("express-session");
 const routes = require('./routes');
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
+const sequelizeDatabase = require('../../config/Database'); // Ensure this is correctly configured
 
 class Server {
   constructor() {
@@ -14,6 +16,19 @@ class Server {
     this.app.use(cors({
       origin: 'http://localhost:5173',
       credentials: true
+    }));
+
+    // Initialize session middleware with Sequelize store
+    this.app.use(session({
+      secret: 'your-secret-key',
+      store: new SequelizeStore({ db: sequelizeDatabase.getConnection() }),
+      resave: false,
+      saveUninitialized: false,
+      cookie: { 
+        secure: false, // Set true only in production with HTTPS
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 // 1 hour session
+      }
     }));
   }
 

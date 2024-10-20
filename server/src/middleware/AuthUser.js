@@ -1,29 +1,45 @@
 const SequelizeUserRepository = require('../interface_adapters/repositories/SequelizeUserRepository');
 
-export const verifyUser = async (req, res, next) =>{
-    if(!req.session.userId){
-        return res.status(401).json({msg: "Mohon login ke akun Anda!"});
-    }
-    const user = await SequelizeUserRepository.findOne({
-        where: {
-            uuid: req.session.userId
-        }
-    });
-    if(!user) return res.status(404).json({msg: "User tidak ditemukan"});
-    req.userId = user.id;
-    req.role = user.role; 
-    next();
-}
+// Instantiate the repository class
+const userRepository = new SequelizeUserRepository();
 
-export const adminOnly = async (req, res, next) =>{
-    const user = await SequelizeUserRepository.findOne({
-        where: {
-            usrId: req.session.userId
+export const verifyUser = async (req, res, next) => {
+    try {
+        if (!req.session.usrId) {
+            return res.status(401).json({ msg: "Mohon login ke akun Anda!" });
         }
-    });
-    if(!user) return res.status(404).json({msg: "User tidak ditemukan"});
-    if (user.role !== 1 && user.role !== 2) {
-        return res.status(403).json({ msg: "Akses terlarang" });
-    }    
-    next();
-}
+
+        const user = await userRepository.findOne({
+            where: { usrId: req.session.usrId }
+        });
+
+        if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
+
+        req.usrId = user.usrId;
+        req.usrRoleId = user.usrRoleId; 
+        next();
+    } catch (error) {
+        console.error("verifyUser error:", error);
+        res.status(500).json({ msg: "Internal server error" });
+    }
+};
+
+export const adminOnly = async (req, res, next) => {
+    try {
+        const user = await userRepository.findOne({
+            where: { usrId: req.session.usrId }
+        });
+
+        if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
+
+        // Assuming `usrRoleId` determines access levels
+        if (user.usrRoleId !== 1 && user.usrRoleId !== 2) {
+            return res.status(403).json({ msg: "Akses terlarang" });
+        }
+
+        next();
+    } catch (error) {
+        console.error("adminOnly error:", error);
+        res.status(500).json({ msg: "Internal server error" });
+    }
+};
