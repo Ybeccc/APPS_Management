@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 
 import Login from './components/Login'; // Import the Login component
 import Beranda from './pages/Beranda';
@@ -18,6 +20,7 @@ import EditTugas from "./pages/EditTugas";
 
 function App() {
   return (
+    <Provider store={store}>
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -40,6 +43,7 @@ function App() {
         <Route path="/manajementugas/edit" element={<EditTugas />} />
       </Routes>
     </Router>
+    </Provider>
   );
 }
 

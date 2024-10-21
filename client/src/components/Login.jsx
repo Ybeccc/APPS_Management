@@ -5,8 +5,8 @@ import { LoginUser, reset } from "../features/authSlice";
 import { landing } from '../assets';
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [usrUsername, setusrUsername] = useState("");
+  const [usrPassword, setusrPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isError, isSuccess, isLoading, message } = useSelector(
@@ -14,18 +14,15 @@ const Login = () => {
   );
 
   useEffect(() => {
-    if (isSuccess) {
+    if (user || isSuccess) {
       navigate("/beranda");
     }
-  
-    return () => {
-      dispatch(reset());
-    };
-  }, [isSuccess, dispatch, navigate]);
-  
+    dispatch(reset());
+  }, [user, isSuccess, dispatch, navigate]);
+
   const Auth = (e) => {
     e.preventDefault();
-    dispatch(LoginUser({ username, password }));
+    dispatch(LoginUser({ usrUsername, usrPassword }));
   };
 
   return (
@@ -44,8 +41,8 @@ const Login = () => {
               <input
                 type="text"
                 id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={usrUsername}
+                onChange={(e) => setusrUsername(e.target.value)}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 placeholder="Enter your username"
                 required
@@ -58,8 +55,8 @@ const Login = () => {
               <input
                 type="password"
                 id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={usrPassword}
+                onChange={(e) => setusrPassword(e.target.value)}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 placeholder="Enter your password"
                 required
