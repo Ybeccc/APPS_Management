@@ -11,10 +11,13 @@ class UserRepository {
     update(user) {
       throw new Error('Method not implemented');
     }
-    listPracticumAst(user) {
+    Login(user) {
       throw new Error('Method not implemented');
     }
-    listStudentAst(user) {
+    Me(user) {
+      throw new Error('Method not implemented');
+    }
+    Logout(user) {
       throw new Error('Method not implemented');
     }
   }

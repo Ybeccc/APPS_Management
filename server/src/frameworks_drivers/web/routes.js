@@ -1,8 +1,9 @@
 const express = require('express');
 const db = require("../../config/Database.js");
 
+const SequelizeUserRepository = require('../../interface_adapters/repositories/SequelizeUserRepository.js');
 const UserController = require('../../interfaces/rest/UserController');
-const AuthController = require('../../interfaces/rest/AuthController');
+// const AuthController = require('../../interfaces/rest/AuthController');
 const PayrollController = require('../../interfaces/rest/PayrollController');
 const ClassesController = require('../../interfaces/rest/ClassesController');
 const CoursesController = require('../../interfaces/rest/CoursesController');
@@ -15,8 +16,9 @@ const TaskController = require('../../interfaces/rest/TaskController');
 const router = express.Router();
 
 // Initiate the controller
+const suser = new SequelizeUserRepository();
 const userController = new UserController();
-const authController = new AuthController();
+// const authController = new AuthController();
 const payrollController = new PayrollController();
 const classesController = new ClassesController();
 const coursesController = new CoursesController();
@@ -33,9 +35,9 @@ router.get('/users', (req, res) => userController.getAll(req, res));
 router.post('/update/users', (req, res) => userController.updateUser(req, res));
 
 // auth routes
-router.get('/me', (req, res) => authController.Me(req, res));
-router.post('/login', (req, res) => authController.Login(req, res));
-router.delete('/logout', (req, res) => authController.logOut(req, res));
+router.get('/me', (req, res) => suser.Me(req, res));
+router.post('/login', (req, res) => suser.Login(req, res));
+router.delete('/logout', (req, res) => suser.logOut(req, res));
 
 // payroll routes
 router.post('/payrolls', (req, res) => payrollController.createPayroll(req, res));

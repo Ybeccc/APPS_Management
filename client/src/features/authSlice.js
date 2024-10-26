@@ -28,7 +28,7 @@ export const LoginUser = createAsyncThunk("user/LoginUser", async (user, thunkAP
 // Async thunk for getting user session (Me endpoint)
 export const getMe = createAsyncThunk("user/getMe", async (_, thunkAPI) => {
     try {
-        const response = await axios.get('http://localhost:3001/me');
+        const response = await axios.get('http://localhost:3001/me', { withCredentials: true });
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -37,6 +37,7 @@ export const getMe = createAsyncThunk("user/getMe", async (_, thunkAPI) => {
         }
     }
 });
+
 
 // Async thunk for logging out the user
 export const LogOut = createAsyncThunk("user/LogOut", async () => {
