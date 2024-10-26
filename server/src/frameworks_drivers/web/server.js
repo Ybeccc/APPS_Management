@@ -20,6 +20,7 @@ class Server {
 
     // Initialize session middleware with Sequelize store
     this.app.use(session({
+      key: "usrId",
       secret: 'your-secret-key',
       store: new SequelizeStore({ db: sequelizeDatabase.getConnection() }),
       resave: false,

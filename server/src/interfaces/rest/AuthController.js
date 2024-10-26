@@ -1,6 +1,13 @@
 const sequelizeDatabase = require('../../config/Database');
+const SequelizeUserRepository = require('../../interface_adapters/repositories/SequelizeUserRepository');
+const GetUserUseCase = require('../../application/usecases/GetUserUseCase');
 
 class AuthController {
+    constructor() {
+        this.userRepository = new SequelizeUserRepository();
+        this.getUserUseCase = new GetUserUseCase(this.userRepository);
+      }
+
     async Login(req, res) {
         try {
             const [user] = await sequelizeDatabase.getConnection().query(
@@ -17,10 +24,10 @@ class AuthController {
                 return res.status(400).json({ msg: "Wrong Password" });
             }
 
-            req.session.usrId = user.usrId;
-            const usrId = user.usrId;
-            const usrFullName = user.usrFullName;
-            const usrRole = user.usrRole;
+            req.session.usrId = user.usr_id;
+            const usrId = user.usr_id;
+            const usrFullName = user.usr_fullName;
+            const usrRole = user.usr_role;
             res.status(200).json({usrId, usrFullName, usrRole});
         } catch (error) {
             console.error("Login error:", error);
@@ -34,10 +41,7 @@ class AuthController {
         }
 
         try {
-            const user = await this.userRepository.findOne({
-                attributes: ['usrId', 'usrFullName', 'usrUsername', 'usrRoleId'],
-                where: { usrId: req.session.usrId }
-            });
+            const user = await this.getUserUseCase.findById(req.session.usrId);
 
             if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
 
