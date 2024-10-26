@@ -17,8 +17,11 @@ class AuthController {
                 return res.status(400).json({ msg: "Wrong Password" });
             }
 
-            req.session.usrId = user.usr_id;
-            res.status(200).json(user);
+            req.session.usrId = user.usrId;
+            const usrId = user.usrId;
+            const usrFullName = user.usrFullName;
+            const usrRole = user.usrRole;
+            res.status(200).json({usrId, usrFullName, usrRole});
         } catch (error) {
             console.error("Login error:", error);
             res.status(500).json({ msg: "Internal server error" });
