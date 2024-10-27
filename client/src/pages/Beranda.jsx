@@ -11,14 +11,17 @@ const Beranda = () => {
   const { isError } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    console.log("Dispatching getMe"); // Debug log
     dispatch(getMe());
   }, [dispatch]);
 
   useEffect(() => {
-    if (isError) {
-      navigate("/");
-    }
+      if (isError) {
+          console.log("Error detected, navigating to login page"); // Debug log
+          navigate("/");
+      }
   }, [isError, navigate]);
+
 
   return (
     <Layout>
@@ -27,4 +30,4 @@ const Beranda = () => {
   );
 };
 
-export default Beranda;
+export default Beranda;
