@@ -8,6 +8,14 @@ const sequelizeDatabase = new Sequelize('vacancy-dbs', 'postgres', 'admin', {
   dialect: 'postgres',
 });
 
+sequelizeDatabase.sync()
+    .then(() => {
+        console.log('Database and tables synced');
+    })
+    .catch(err => {
+        console.error('Database sync error:', err);
+    });
+
 // Test the connection
 (async () => {
   try {

@@ -2,16 +2,19 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiCheckCircle, FiHome, FiList } from 'react-icons/fi';
 import { MdGroups, MdOutlinePersonOutline, MdPayment } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 
 import { logo } from '../assets';
 
 const Sidebar = () => {
-    const location = useLocation(); // Get current route path
+    const location = useLocation();
+    const { user } = useSelector((state) => state.auth);
 
+    // Sidebar links with 'requiredRole' specifying access level
     const SIDEBAR_LINKS = [
         { id: 1, path: "/beranda", name: "Beranda", icon: FiHome },
-        { id: 2, path: "/asistenpraktikum", name: "Asisten Praktikum", icon: MdGroups },
-        { id: 3, path: "/asistenmahasiswa", name: "Asisten Mahasiswa", icon: MdGroups },
+        { id: 2, path: "/asistenpraktikum", name: "Asisten Praktikum", icon: MdGroups, requiredRole: 1 },
+        { id: 3, path: "/asistenmahasiswa", name: "Asisten Mahasiswa", icon: MdGroups, requiredRole: 2 },
         { id: 4, path: "/kehadiran", name: "Kehadiran", icon: FiCheckCircle },
         { id: 5, path: "/manajementugas", name: "Manajemen Tugas", icon: FiList },
         { id: 6, path: "/penggajian", name: "Penggajian", icon: MdPayment },
@@ -25,15 +28,17 @@ const Sidebar = () => {
             </div>
             <ul className='mt-6 space-y-6'>
                 {SIDEBAR_LINKS.map((link) => (
-                    <li 
-                        key={link.id} 
-                        className={`font-poppins font-medium rounded-md py-2 px-5 hover:bg-gray-100 hover:text-indigo-500 ${location.pathname === link.path ? "bg-indigo-100 text-indigo-500" : ""}`}
-                    >
-                        <Link to={link.path} className='flex justify-center md:justify-start md:space-x-4'>
-                            <span>{<link.icon />}</span>
-                            <span className='text-sm text-gray-500 hidden md:flex'>{link.name}</span>
-                        </Link>
-                    </li>
+                    (!link.requiredRole || link.requiredRole === user?.data?.usrRoleId) && (
+                        <li 
+                            key={link.id} 
+                            className={`font-poppins font-medium rounded-md py-2 px-5 hover:bg-gray-100 hover:text-indigo-500 ${location.pathname === link.path ? "bg-indigo-100 text-indigo-500" : ""}`}
+                        >
+                            <Link to={link.path} className='flex justify-center md:justify-start md:space-x-4'>
+                                <span>{<link.icon />}</span>
+                                <span className='text-sm text-gray-500 hidden md:flex'>{link.name}</span>
+                            </Link>
+                        </li>
+                    )
                 ))}
             </ul>
         </div>

@@ -1,17 +1,42 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}\\server\\src\\application\\usecases\\GetUserUseCase.js"
-        }
+      {
+        "name": "Launch Vite Dev Server",
+        "type": "pwa-node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "dev"],
+        "cwd": "${workspaceFolder}/client", // Adjust if your Vite app is in a different folder
+        "console": "integratedTerminal",
+        "port": 5173
+      },
+      {
+        "name": "Attach to Vite React App",
+        "type": "pwa-chrome",
+        "request": "launch",
+        "url": "http://localhost:5173",
+        "webRoot": "${workspaceFolder}/client/src",
+        "sourceMaps": true,
+        "trace": true,
+        "smartStep": true
+      },
+      {
+        "name": "Launch Node.js Server",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/server/src/frameworks_drivers/web/server.js",
+        "skipFiles": ["<node_internals>/**"],
+        "env": {
+          "NODE_ENV": "development"
+        },
+        "console": "integratedTerminal"
+      }
+    ],
+    "compounds": [
+      {
+        "name": "Launch Vite React and Node.js Server",
+        "configurations": ["Launch Vite Dev Server", "Attach to Vite React App", "Launch Node.js Server"]
+      }
     ]
-}
+  }

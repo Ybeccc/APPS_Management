@@ -13,6 +13,7 @@ class Server {
 
   initializeMiddleware() {
     this.app.use(express.json());
+
     this.app.use(cors({
       origin: 'http://localhost:5173',
       credentials: true
@@ -25,11 +26,19 @@ class Server {
       resave: false,
       saveUninitialized: false,
       cookie: { 
-        secure: false, // Set true only in production with HTTPS
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 // 1 hour session
+          secure: false,
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 // 1-hour session
       }
     }));
+
+    // Logging middleware (for debugging)
+    this.app.use((req, res, next) => {
+      console.log("Middleware sessionID:", req.sessionID);
+      console.log("Middleware session details:", req.session);
+      next();
+    });
+
   }
 
   initializeRoutes() {
