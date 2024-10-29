@@ -60,6 +60,7 @@ router.post('/appointment', (req, res) => appointmentController.createAppointmen
 router.get('/appointment/:id', (req, res) => appointmentController.getAppointmentById(req, res));
 router.get('/appointment', (req, res) => appointmentController.getAll(req, res));
 router.post('/appointment/update', (req, res) => appointmentController.updateAppointment(req, res));
+router.get('/appointment/role/:id', (req, res) => appointmentController.getAppointmentByRoleId(req, res));
 
 // attendance routes
 router.post('/attendance', (req, res) => attendanceController.createAttendance(req, res));
