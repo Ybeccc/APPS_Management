@@ -53,7 +53,7 @@ class UserController {
 
   async listPracticumAst(req, res) {
     try {
-      const response = await this.getUserUseCase.execute();
+      const response = await this.getUserUseCase.listPracticumAst();
       res.status(200).json(response);
     } catch (error) {
       res.status(500).json(response);
@@ -62,7 +62,7 @@ class UserController {
 
   async listStudentAst(req, res) {
     try {
-      const response = await this.getUserUseCase.execute();
+      const response = await this.getUserUseCase.listStudentAst();
       res.status(200).json(response);
     } catch (error) {
       res.status(500).json(response);

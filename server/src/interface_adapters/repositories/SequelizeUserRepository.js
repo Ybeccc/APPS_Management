@@ -101,6 +101,34 @@ class SequelizeUserRepository extends UserRepository {
     const updatedUser = await UserModel.findByPk(userId);
     return updatedUser;
   }
+
+  async listPracticumAst() {
+    try {
+      const users = await UserModel.findAll({
+        where: { usrRoleId: 3 },  // Use correct field name
+        attributes: ['usrFullName', 'usrNim', 'usrBankAccount'],
+      });
+  
+      return users;
+    } catch (error) {
+      console.error('Error fetching practicum assistants:', error);
+      throw error;
+    }
+  }
+  
+  async listStudentAst() {
+    try {
+      const users = await UserModel.findAll({
+        where: { usrRoleId: 4 },  // Use correct field name
+        attributes: ['usrFullName', 'usrNim', 'usrBankAccount'],
+      });
+  
+      return users;
+    } catch (error) {
+      console.error('Error fetching student assistants:', error);
+      throw error;
+    }
+  }  
 }
 
 module.exports = SequelizeUserRepository;

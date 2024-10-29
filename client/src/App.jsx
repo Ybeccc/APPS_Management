@@ -38,7 +38,7 @@ function App() {
         <Route path="/kehadiran/detail/:id" element={<DetailKehadiran />} />
         <Route path="/manajementugas/detail/:id" element={<DetailManajemenTugas />} />
         <Route path="/penggajian/tambah" element={<TambahPenggajian />} />
-        <Route path="/penggajian/edit" element={<EditPenggajian />} />
+        <Route path="/penggajian/edit/:id" element={<EditPenggajian />} />
         <Route path="/manajementugas/tambah" element={<TambahTugas />} />
         <Route path="/manajementugas/edit" element={<EditTugas />} />
       </Routes>
