@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../pages/Layout"; // Layout wrapper component
-import styles from "../style"; // Importing external styles if required
+import styles from "../style";
 import axios from "axios";
 
 const MT_Koordinator = () => {
@@ -40,9 +39,7 @@ const MT_Koordinator = () => {
 
   return (
     <div className="p-2">
-      <h1 className={`${styles.heading2} mb-6`}>
-        Manajemen Tugas
-      </h1>
+      <h1 className={`${styles.heading2} mb-6`}>Manajemen Tugas</h1>
 
       {/* Filter Section */}
       <div className="mb-6 flex gap-4">

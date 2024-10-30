@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux"; // Import useSelector to get user info from Redux
 import Layout from "./Layout";
 
 const TambahTugas = () => {
@@ -8,24 +9,34 @@ const TambahTugas = () => {
     tskTaskName: "",
     tskDescription: "",
     tskNotes: "",
-    tskAptId: "", // Appointment ID (maps to the selected course)
+    tskAptId: "", // Store the selected apt_id
+    tskCreatedBy: "", // Store the user ID (creator)
   });
-  const [courses, setCourses] = useState([]); // Holds course data from the appointment API
+
+  const [appointments, setAppointments] = useState([]); // Store fetched appointments
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth); // Get the authenticated user info from Redux
 
-  // Fetch courses on component mount
+  // Fetch appointments on component mount
   useEffect(() => {
-    fetchCourses();
-  }, []);
+    fetchAppointments();
 
-  const fetchCourses = async () => {
+    // Set the user ID as the creator (tskCreatedBy)
+    if (user && user.data) {
+      setTask((prev) => ({ ...prev, tskCreatedBy: user.data.usrId }));
+    }
+  }, [user]);
+
+  const fetchAppointments = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3001/appointment/role/2" // Adjust role ID as needed
+        "http://localhost:3001/appointment/user/3" // Replace 3 with dynamic user_id if needed
       );
-      setCourses(response.data.data); // Assuming response.data.data contains the course appointments
+      setAppointments(response.data.data); // Store the fetched appointments
+      console.log("Appointments fetched:", response.data.data); // Debug log
     } catch (error) {
-      console.error("Error fetching courses:", error);
+      console.error("Error fetching appointments:", error);
+      alert("Gagal mengambil data appointment.");
     }
   };
 
@@ -36,22 +47,40 @@ const TambahTugas = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Validate input fields
+    if (!task.tskTaskName || !task.tskDescription || !task.tskAptId) {
+      alert("Semua kolom wajib diisi.");
+      return;
+    }
+  
     try {
-      await axios.post("http://localhost:3001/task", task);
-      navigate("/mt-asisten"); // Redirect to the tasks list after submission
+      const response = await axios.post("http://localhost:3001/task", task);
+      console.log("Task created:", response.data); // Debug log
+  
+      // Check if the response code is 200 and status is 'success'
+      if (response.data.code === "200" && response.data.status === "success") {
+        alert("Tugas berhasil ditambahkan!");
+        navigate("/manajementugas"); // Redirect to tasks list after success
+      } else {
+        // If the response is not a success, show the error message
+        alert(`Gagal menambahkan tugas: ${response.data.message || "Unknown error."}`);
+      }
     } catch (error) {
       console.error("Error creating task:", error);
+      alert("Terjadi kesalahan saat menambahkan tugas.");
     }
   };
+  
 
   return (
     <Layout>
       <h1 className="text-2xl font-bold mb-6">Tambah Tugas</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Course Dropdown */}
+        {/* Appointment Dropdown */}
         <div className="space-y-1">
           <label htmlFor="tskAptId" className="block font-semibold">
-            Pilih Mata Kuliah:
+            Pilih Mata Kuliah - Kelas:
           </label>
           <select
             name="tskAptId"
@@ -60,10 +89,10 @@ const TambahTugas = () => {
             className="border border-gray-300 rounded px-4 py-2 w-full"
             required
           >
-            <option value="">Select Course</option>
-            {courses.map((course, index) => (
-              <option key={index} value={course.user_nim}>
-                {course.course_name}
+            <option value="">Select Course - Class</option>
+            {appointments.map((appointment) => (
+              <option key={appointment.apt_id} value={appointment.apt_id}>
+                {`${appointment.course_name} - ${appointment.class_name}`}
               </option>
             ))}
           </select>

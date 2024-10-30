@@ -1,114 +1,87 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import navigation hook
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import styles from "../style"; // Import external styles
+import { FaEdit } from "react-icons/fa";
+import styles from "../style";
 
 const MT_Asisten = () => {
   const [tasks, setTasks] = useState([]);
-  const navigate = useNavigate(); // Use navigate to route to TambahTugas page
+  const navigate = useNavigate(); // Use navigate for redirection
 
-  // Fetch tasks on component mount
   useEffect(() => {
-    getTasks();
+    fetchTasks();
   }, []);
 
-  const getTasks = async () => {
+  const fetchTasks = async () => {
     try {
       const response = await axios.get("http://localhost:3001/task");
-      if (Array.isArray(response.data.data)) {
+      console.log("Tasks fetched:", response.data); // Debug log
+
+      if (response.data.data) {
         setTasks(response.data.data);
-      } else {
-        console.error("Expected an array but got:", response.data);
       }
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
   };
 
-  const handleEdit = (task) => {
-    // Redirect to a dedicated Edit page, or handle editing inline
-    navigate(`/edit-task/${task.tskId}`, { state: task });
-  };
-
-  const handleAddTask = () => {
-    navigate("/manajementugas/tambah"); // Redirect to the Add Task page
-  };
-
   return (
-    <div className="p-4">
+    <div className="p-0">
       <h1 className={`${styles.heading2} mb-6`}>Manajemen Tugas</h1>
-
-      <div className="flex justify-between mb-6">
-        <button
-          onClick={handleAddTask}
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Tambah Tugas
+      <Link to="/manajementugas/tambah">
+        <button className="bg-blue-500 text-white px-4 py-2 mb-4 rounded">
+          + Tambah Tugas
         </button>
-      </div>
+      </Link>
 
       <div className="overflow-x-auto">
-        <table className="table-auto w-full text-left border-collapse bg-white mb-6">
+        <table className="table-auto w-full text-left border-collapse bg-white">
           <thead>
-            <tr>
-              <th className="font-poppins border border-black bg-white px-4 py-2 w-28">
-                Tanggal
-              </th>
-              <th className="font-poppins border border-black bg-white px-4 py-2 w-40">
-                Nama
-              </th>
-              <th className="font-poppins border border-black bg-white px-4 py-2 w-40">
-                Mata Kuliah
-              </th>
-              <th className="font-poppins border border-black bg-white px-4 py-2 w-24">
-                Kelas
-              </th>
-              <th className="font-poppins border border-black bg-white px-4 py-2 w-64">
-                Deskripsi Tugas
-              </th>
-              <th className="font-poppins border border-black bg-white px-4 py-2 w-64">
-                Catatan
-              </th>
-              <th className="font-poppins border border-black bg-white px-4 py-2">
-                Actions
-              </th>
+            <tr className="bg-[#7b2cbf]">
+              {["Tanggal", "Nama", "Deskripsi Tugas", "Actions"].map(
+                (header, index) => (
+                  <th
+                    key={index}
+                    className="border border-gray-300 px-4 py-2 text-center text-white font-semibold text-sm"
+                  >
+                    {header}
+                  </th>
+                )
+              )}
             </tr>
           </thead>
           <tbody>
             {tasks.length > 0 ? (
               tasks.map((task, index) => (
                 <tr key={index}>
-                  <td className="font-poppins border border-black px-4 text-[14px]">
-                    {new Date(task.tsk_created_at).toLocaleDateString()}
+                  <td className="border px-4 py-2 text-center">
+                    {new Date(task.tskCreatedAt).toLocaleDateString("id-ID", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
                   </td>
-                  <td className="font-poppins border border-black px-4 text-[14px]">
-                    {task.user_fullname}
+                  <td className="border px-4 py-2 text-center">
+                    {task.tskTaskName}
                   </td>
-                  <td className="font-poppins border border-black px-4 text-[14px]">
-                    {task.course_name}
+                  <td className="border px-4 py-2 text-center">
+                    {task.tskDescription}
                   </td>
-                  <td className="font-poppins border border-black px-4 text-[14px]">
-                    {task.class_name}
-                  </td>
-                  <td className="font-poppins border border-black px-4 text-[14px]">
-                    {task.tsk_description}
-                  </td>
-                  <td className="font-poppins border border-black px-4 text-[14px]">
-                    {task.tsk_notes}
-                  </td>
-                  <td className="font-poppins border border-black px-4">
-                    <button
-                      onClick={() => handleEdit(task)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                    >
-                      Edit
-                    </button>
+                  <td className="border px-4 py-2 text-center">
+                    <div className="flex justify-center">
+                      <button
+                        className="flex items-center text-green-500 hover:text-green-700 transition"
+                        onClick={() => navigate(`/penggajian/edit/${task.tskId}`)}
+                      >
+                        <FaEdit className="mr-1" /> Ubah
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center py-4 text-gray-500">
+                <td colSpan="4" className="text-center py-4">
                   Tidak ada tugas untuk ditampilkan.
                 </td>
               </tr>
