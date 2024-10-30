@@ -7,32 +7,29 @@ const TambahPenggajian = () => {
   const [selectedAssistant, setSelectedAssistant] = useState('');
   const [nominal, setNominal] = useState('');
   const [status, setStatus] = useState('pending');
-  const [assistants, setAssistants] = useState([]); // State to hold assistant list
+  const [assistants, setAssistants] = useState([]);
   const navigate = useNavigate();
 
-  // Function to fetch assistants based on usrRoleId
   const fetchAssistants = async (roleId) => {
     try {
       const endpoint = roleId === 1 
         ? 'http://localhost:3001/practicumast' 
         : 'http://localhost:3001/studentast';
       const response = await axios.get(endpoint);
-      
-      // Check if response is successful and data is an array
+
       if (response.data.code === "200" && response.data.status === "success") {
         setAssistants(Array.isArray(response.data.data) ? response.data.data : []);
       } else {
-        setAssistants([]); // Set an empty array if no data
+        setAssistants([]);
       }
     } catch (error) {
       console.error('Error fetching assistants:', error);
-      setAssistants([]); // Fallback to empty array on error
+      setAssistants([]);
     }
   };
 
-  // Initial fetch when component mounts, assuming `usrRoleId` is known here
   useEffect(() => {
-    const usrRoleId = 1; // Change this to 2 if you need to fetch student assistants
+    const usrRoleId = 1; 
     fetchAssistants(usrRoleId);
   }, []);
 
@@ -45,7 +42,7 @@ const TambahPenggajian = () => {
         status,
       });
       alert('Gaji berhasil ditambahkan!');
-      navigate('/penggajian'); // Navigate back to payroll list
+      navigate('/penggajian');
     } catch (error) {
       console.error('Error adding payroll:', error);
       alert('Terjadi kesalahan saat menambahkan gaji.');
@@ -56,6 +53,12 @@ const TambahPenggajian = () => {
     <Layout>
       <div className="p-6">
         <h1 className="text-3xl font-bold mb-6">Tambah Gaji</h1>
+        <button
+          className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
+          onClick={() => navigate(-1)} // Back button
+        >
+          Kembali
+        </button>
 
         <form onSubmit={handleSubmit}>
           <div className="bg-white border rounded-lg shadow-md p-4">
@@ -69,7 +72,7 @@ const TambahPenggajian = () => {
                   required
                 >
                   <option value="">Pilih Asisten</option>
-                  {Array.isArray(assistants) && assistants.map((assistant, index) => (
+                  {assistants.map((assistant, index) => (
                     <option key={index} value={assistant.usrFullName}>
                       {assistant.usrFullName}
                     </option>

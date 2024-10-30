@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux"; // Import to get user info from Redux
 import { FaEdit } from "react-icons/fa";
 import styles from "../style";
 
 const MT_Asisten = () => {
   const [tasks, setTasks] = useState([]);
-  const navigate = useNavigate(); // Use navigate for redirection
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth); // Get authenticated user info from Redux
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    if (user && user.data) {
+      fetchTasks(user.data.usrId); // Pass the current user's ID dynamically
+    }
+  }, [user]);
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (usrId) => {
     try {
-      const response = await axios.get("http://localhost:3001/task");
-      console.log("Tasks fetched:", response.data); // Debug log
+      const response = await axios.get(`http://localhost:3001/task/user/${usrId}`);
+      console.log("Tasks fetched:", response.data);
 
       if (response.data.data) {
         setTasks(response.data.data);
@@ -55,17 +59,17 @@ const MT_Asisten = () => {
               tasks.map((task, index) => (
                 <tr key={index}>
                   <td className="border px-4 py-2 text-center">
-                    {new Date(task.tskCreatedAt).toLocaleDateString("id-ID", {
+                    {new Date(task.tsk_created).toLocaleDateString("id-ID", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
                     })}
                   </td>
                   <td className="border px-4 py-2 text-center">
-                    {task.tskTaskName}
+                    {task.course_name}
                   </td>
                   <td className="border px-4 py-2 text-center">
-                    {task.tskDescription}
+                    {task.description}
                   </td>
                   <td className="border px-4 py-2 text-center">
                     <div className="flex justify-center">

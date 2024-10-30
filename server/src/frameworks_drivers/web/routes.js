@@ -82,5 +82,6 @@ router.post('/task', (req, res) => taskController.createTask(req, res));
 router.get('/task/:id', (req, res) => taskController.getTaskById(req, res));
 router.get('/task', (req, res) => taskController.getAll(req, res));
 router.post('/task/update', (req, res) => taskController.updateTask(req, res));
+router.get('/task/user/:id', (req, res) => taskController.getTaskByUserId(req, res));
 
 module.exports = router;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux"; // Import useSelector to get user info from Redux
+import { useSelector } from "react-redux"; 
 import Layout from "./Layout";
 
 const TambahTugas = () => {
@@ -9,31 +9,26 @@ const TambahTugas = () => {
     tskTaskName: "",
     tskDescription: "",
     tskNotes: "",
-    tskAptId: "", // Store the selected apt_id
-    tskCreatedBy: "", // Store the user ID (creator)
+    tskAptId: "", 
+    tskCreatedBy: "", 
   });
 
-  const [appointments, setAppointments] = useState([]); // Store fetched appointments
+  const [appointments, setAppointments] = useState([]);
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth); // Get the authenticated user info from Redux
+  const { user } = useSelector((state) => state.auth);
 
-  // Fetch appointments on component mount
   useEffect(() => {
-    fetchAppointments();
-
-    // Set the user ID as the creator (tskCreatedBy)
     if (user && user.data) {
+      fetchAppointments(user.data.usrId);
       setTask((prev) => ({ ...prev, tskCreatedBy: user.data.usrId }));
     }
   }, [user]);
 
-  const fetchAppointments = async () => {
+  const fetchAppointments = async (usrId) => {
     try {
-      const response = await axios.get(
-        "http://localhost:3001/appointment/user/3" // Replace 3 with dynamic user_id if needed
-      );
-      setAppointments(response.data.data); // Store the fetched appointments
-      console.log("Appointments fetched:", response.data.data); // Debug log
+      const response = await axios.get(`http://localhost:3001/appointment/user/${usrId}`);
+      setAppointments(response.data.data);
+      console.log("Appointments fetched:", response.data.data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
       alert("Gagal mengambil data appointment.");
@@ -47,23 +42,19 @@ const TambahTugas = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Validate input fields
     if (!task.tskTaskName || !task.tskDescription || !task.tskAptId) {
       alert("Semua kolom wajib diisi.");
       return;
     }
-  
+
     try {
       const response = await axios.post("http://localhost:3001/task", task);
-      console.log("Task created:", response.data); // Debug log
-  
-      // Check if the response code is 200 and status is 'success'
+      console.log("Task created:", response.data);
+
       if (response.data.code === "200" && response.data.status === "success") {
         alert("Tugas berhasil ditambahkan!");
-        navigate("/manajementugas"); // Redirect to tasks list after success
+        navigate("/manajementugas");
       } else {
-        // If the response is not a success, show the error message
         alert(`Gagal menambahkan tugas: ${response.data.message || "Unknown error."}`);
       }
     } catch (error) {
@@ -71,13 +62,17 @@ const TambahTugas = () => {
       alert("Terjadi kesalahan saat menambahkan tugas.");
     }
   };
-  
 
   return (
     <Layout>
       <h1 className="text-2xl font-bold mb-6">Tambah Tugas</h1>
+      <button
+        className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
+        onClick={() => navigate(-1)} // Navigate back to the previous page
+      >
+        Kembali
+      </button>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Appointment Dropdown */}
         <div className="space-y-1">
           <label htmlFor="tskAptId" className="block font-semibold">
             Pilih Mata Kuliah - Kelas:
@@ -98,7 +93,6 @@ const TambahTugas = () => {
           </select>
         </div>
 
-        {/* Task Name */}
         <div className="space-y-1">
           <label htmlFor="tskTaskName" className="block font-semibold">
             Nama Tugas:
@@ -114,7 +108,6 @@ const TambahTugas = () => {
           />
         </div>
 
-        {/* Task Description */}
         <div className="space-y-1">
           <label htmlFor="tskDescription" className="block font-semibold">
             Deskripsi:
@@ -129,7 +122,6 @@ const TambahTugas = () => {
           />
         </div>
 
-        {/* Task Notes */}
         <div className="space-y-1">
           <label htmlFor="tskNotes" className="block font-semibold">
             Catatan (Optional):
