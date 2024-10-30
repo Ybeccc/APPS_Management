@@ -74,6 +74,18 @@ class PayrollController {
             .json(response);
         }
     }
+    async getAllPayroll(req, res) {
+        try {
+        const response = await this.getPayrollUseCase.findAllPayroll();
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
 }
 
 module.exports = PayrollController;

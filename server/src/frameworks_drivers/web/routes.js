@@ -45,6 +45,7 @@ router.get('/payrolls/:id', (req, res) => payrollController.getPayrollById(req, 
 router.get('/payrolls', (req, res) => payrollController.getAll(req, res));
 router.post('/update/payrolls', (req, res) => payrollController.updatePayroll(req, res));
 router.delete('/delete/payrolls/:id', (req, res) => payrollController.deletePayroll(req, res));
+router.get('/payroll', (req, res) => payrollController.getAllPayroll(req, res));
 
 // class routes
 router.get('/classes', (req, res) => classesController.getAll(req, res));
@@ -63,6 +64,7 @@ router.get('/appointment/:id', (req, res) => appointmentController.getAppointmen
 router.get('/appointment', (req, res) => appointmentController.getAll(req, res));
 router.post('/appointment/update', (req, res) => appointmentController.updateAppointment(req, res));
 router.get('/appointment/role/:id', (req, res) => appointmentController.getAppointmentByRoleId(req, res));
+router.get('/appointment/user/:id', (req, res) => appointmentController.getAppointmentByUserId(req, res));
 
 // attendance routes
 router.post('/attendance', (req, res) => attendanceController.createAttendance(req, res));

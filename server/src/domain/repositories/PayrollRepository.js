@@ -14,6 +14,9 @@ class PayrollRepository {
     delete(payroll) {
       throw new Error('Method not implemented');
     }
+    findAllPayroll() {
+      throw new Error('Method not implemented');
+    }
   }
   
 module.exports = PayrollRepository;
