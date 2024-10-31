@@ -42,7 +42,7 @@ const MT_Asisten = () => {
         <table className="table-auto w-full text-left border-collapse bg-white">
           <thead>
             <tr className="bg-[#7b2cbf]">
-              {["Tanggal", "Nama", "Deskripsi Tugas", "Actions"].map(
+              {["Tanggal", "Nama Mata Kuliah", "Kelas", "Deskripsi Tugas", "Catatan", "Nama Asisten", "Edit"].map(
                 (header, index) => (
                   <th
                     key={index}
@@ -69,7 +69,16 @@ const MT_Asisten = () => {
                     {task.course_name}
                   </td>
                   <td className="border px-4 py-2 text-center">
+                    {task.class_name}
+                  </td>
+                  <td className="border px-4 py-2 max-w-xs">
                     {task.description}
+                  </td>
+                  <td className="border px-4 py-2 ">
+                    {task.notes}
+                  </td>
+                  <td className="border px-4 py-2 text-center">
+                    {task.user_fullname}
                   </td>
                   <td className="border px-4 py-2 text-center">
                     <div className="flex justify-center">
@@ -85,7 +94,7 @@ const MT_Asisten = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="text-center py-4">
+                <td colSpan="7" className="text-center py-4">
                   Tidak ada tugas untuk ditampilkan.
                 </td>
               </tr>
