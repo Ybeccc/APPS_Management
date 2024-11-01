@@ -106,6 +106,23 @@ class SequelizePayrollRepository extends PayrollRepository {
       throw error;
     }
   }
+  async getByUserId(userId) {
+    const sequelize = sequelizeDatabase.getConnection();
+
+    try {
+      const results = await sequelize.query(
+        'SELECT * FROM users.get_payroll_by_user_id(:userId)', // Call the stored function
+        {
+          replacements: { userId }, 
+          type: sequelize.QueryTypes.SELECT
+        }
+      );
+      return Array.isArray(results) ? results : results ? [results] : [];
+    } catch (error) {
+      console.error('Error calling stored function:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = SequelizePayrollRepository;

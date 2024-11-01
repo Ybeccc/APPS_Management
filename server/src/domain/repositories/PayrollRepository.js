@@ -17,6 +17,9 @@ class PayrollRepository {
     findAllPayroll() {
       throw new Error('Method not implemented');
     }
+    getByUserId(userId) {
+      throw new Error('Method not implemented');
+    }
   }
   
 module.exports = PayrollRepository;

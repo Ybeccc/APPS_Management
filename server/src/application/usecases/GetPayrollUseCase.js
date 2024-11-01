@@ -65,6 +65,26 @@ class GetPayrollUseCase {
       return response;
     }
 
+    async findByUserId(userId) {
+      const response = new Response();
+      try {
+          let prlUserData = await this.payrollRepository.getByUserId(userId);
+          if (!prlUserData) {
+              throw new Error('payroll not found');
+          }
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'payroll found';
+          response.data = prlUserData;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'payroll not found';
+          response.error = error;      
+        }
+      return response;
+    }
+
 }
 
 module.exports = GetPayrollUseCase

@@ -18,12 +18,12 @@ const AttendanceModel = sequelizeDatabase.getConnection().define('Attendance', {
         field: 'att_apt_id'
     },
     attCheckIn: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.TIME,
         allowNull: true,
         field: 'att_check_in'
     },
     attCheckOut: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.TIME,
         allowNull: true,
         field: 'att_check_out'
     },
@@ -75,6 +75,23 @@ class SequelizeAttendanceRepository extends AttendanceRepository {
 
     const updatedAttendance = await AttendanceModel.findByPk(attendanceId);
     return updatedAttendance;
+  }
+  async getByRoleId(roleId) {
+    const sequelize = sequelizeDatabase.getConnection();
+
+    try {
+      const results = await sequelize.query(
+        'SELECT * FROM users.get_all_attendance(:roleId)', // Call the stored function
+        {
+          replacements: { roleId }, 
+          type: sequelize.QueryTypes.SELECT
+        }
+      );
+      return Array.isArray(results) ? results : results ? [results] : [];
+    } catch (error) {
+      console.error('Error calling stored function:', error);
+      throw error;
+    }
   }
 }
 
