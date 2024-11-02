@@ -11,6 +11,8 @@ const AppointmentController = require('../../interfaces/rest/AppointmentControll
 const AttendanceController = require('../../interfaces/rest/AttendanceController');
 const ScheduleController = require('../../interfaces/rest/ScheduleController');
 const TaskController = require('../../interfaces/rest/TaskController');
+const EmailController = require('../../interfaces/rest/EmailController');
+
 
 const router = express.Router();
 
@@ -25,6 +27,7 @@ const appointmentController = new AppointmentController();
 const attendanceController = new AttendanceController();
 const scheduleController = new ScheduleController();
 const taskController = new TaskController();
+const emailController = new EmailController();
 
 // user routes
 router.post('/users', (req, res) => userController.createUser(req, res));
@@ -85,5 +88,8 @@ router.get('/task/:id', (req, res) => taskController.getTaskById(req, res));
 router.get('/task', (req, res) => taskController.getAll(req, res));
 router.post('/task/update', (req, res) => taskController.updateTask(req, res));
 router.get('/task/user/:id', (req, res) => taskController.getTaskByUserId(req, res));
+
+//email
+router.post('/email/send', (req, res) => emailController.sendEmail(req, res));
 
 module.exports = router;
