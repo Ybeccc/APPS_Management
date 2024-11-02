@@ -61,8 +61,8 @@ class AppointmentController {
     }
     async getAppointmentByRoleId(req, res) {
         try {
-        const roleId = req.params.id;
-        const response = await this.getAppointmentUseCase.findByRoleId(roleId);
+            const roleId = req.params.id;
+            const response = await this.getAppointmentUseCase.findByRoleId(roleId);
         res
             .status(200)
             .json(response);

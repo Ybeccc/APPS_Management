@@ -14,7 +14,7 @@ class PayrollRepository {
     delete(payroll) {
       throw new Error('Method not implemented');
     }
-    findAllPayroll() {
+    getByRoleId(roleId) {
       throw new Error('Method not implemented');
     }
     getByUserId(userId) {

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux"; // Import to get user info from Redux
+import { useSelector } from "react-redux";
 import { FaEdit } from "react-icons/fa";
 import styles from "../style";
 
 const MT_Asisten = () => {
   const [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth); // Get authenticated user info from Redux
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (user && user.data) {
-      fetchTasks(user.data.usrId); // Pass the current user's ID dynamically
+      fetchTasks(user.data.usrId);
     }
   }, [user]);
 

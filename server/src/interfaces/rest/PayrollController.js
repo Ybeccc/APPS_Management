@@ -74,9 +74,10 @@ class PayrollController {
             .json(response);
         }
     }
-    async getAllPayroll(req, res) {
+    async getPayrollByRoleId(req, res) {
         try {
-        const response = await this.getPayrollUseCase.findAllPayroll();
+            const roleId = req.params.id;
+            const response = await this.getPayrollUseCase.findByRoleId(roleId);
         res
             .status(200)
             .json(response);

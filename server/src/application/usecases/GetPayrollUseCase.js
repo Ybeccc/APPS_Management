@@ -45,17 +45,17 @@ class GetPayrollUseCase {
       return response;
     }
 
-    async findAllPayroll() {
+    async findByRoleId(roleId) {
       const response = new Response();
       try {
-          let allPayrollData = await this.payrollRepository.findAllPayroll();
-          if (!allPayrollData) {
+          let payrollData = await this.payrollRepository.getByRoleId(roleId);
+          if (!payrollData) {
               throw new Error('payroll not found');
           }
           response.code = '200';
           response.status = 'success';
           response.message = 'payroll found';
-          response.data = allPayrollData;
+          response.data = payrollData;
         } catch (error) {
           response.code = '400';
           response.status = 'failed';

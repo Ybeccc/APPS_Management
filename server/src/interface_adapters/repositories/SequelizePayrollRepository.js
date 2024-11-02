@@ -90,13 +90,14 @@ class SequelizePayrollRepository extends PayrollRepository {
     });
     return result;
   }
-  async findAllPayroll(roleId) {
+  async getByRoleId(roleId) {
     const sequelize = sequelizeDatabase.getConnection();
 
     try {
       const results = await sequelize.query(
-        'SELECT * FROM users.get_all_payroll()', // Call the stored function
+        'SELECT * FROM users.get_payroll_by_role_id(:roleId)', // Call the stored function
         {
+          replacements: { roleId }, 
           type: sequelize.QueryTypes.SELECT
         }
       );

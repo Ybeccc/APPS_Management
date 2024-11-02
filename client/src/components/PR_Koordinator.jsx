@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import Layout from '../pages/Layout';
 import styles from '../style';
 import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
+import { useSelector } from "react-redux"; // Assuming you're using Redux to get the current user
 
 const PR_Koordinator = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const { user } = useSelector((state) => state.auth); // Get current user from Redux store
 
   useEffect(() => {
-    fetchPayrollData();
-  }, []);
+    if (user && user.data) {
+      fetchPayrollData(user.data.usrId); // Pass usrId to fetchPayrollData
+    }
+  }, [user]);
 
-  const fetchPayrollData = async () => {
+  const fetchPayrollData = async (usrId) => {
     try {
-      const response = await axios.get('http://localhost:3001/payroll');
+      // Determine role_id based on usrId
+      const role_id = usrId === 1 ? 3 : usrId === 2 ? 4 : null;
+
+      if (!role_id) {
+        console.error("Invalid usrId for payroll data fetch");
+        return;
+      }
+
+      // Fetch payroll data with the specified role_id
+      const response = await axios.get(`http://localhost:3001/payroll/role/${role_id}`);
       console.log('Payroll Data:', response.data); // Debugging log
 
       if (response.data && response.data.data) {
@@ -47,7 +59,7 @@ const PR_Koordinator = () => {
   };
 
   return (
-    <Layout>
+    <div className="p-0">
       <h1 className={`${styles.heading2} mb-6`}>Penggajian</h1>
 
       <div className="flex justify-between items-center mb-4">
@@ -121,8 +133,8 @@ const PR_Koordinator = () => {
           </tbody>
         </table>
       </div>
-    </Layout>
+    </div>
   )
 }
 
-export default PR_Koordinator
+export default PR_Koordinator;

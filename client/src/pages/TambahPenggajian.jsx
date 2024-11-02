@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 const TambahPenggajian = () => {
@@ -10,11 +11,24 @@ const TambahPenggajian = () => {
   const [assistants, setAssistants] = useState([]);
   const navigate = useNavigate();
 
+  // Get the current usrRoleId and usrUsername from the Redux state
+  const usrRoleId = useSelector((state) => state.auth.user.data.usrRoleId);
+  const usrUsername = useSelector((state) => state.auth.user.data.usrUsername);
+
   const fetchAssistants = async (roleId) => {
     try {
       const endpoint = roleId === 1 
         ? 'http://localhost:3001/practicumast' 
-        : 'http://localhost:3001/studentast';
+        : roleId === 2 
+        ? 'http://localhost:3001/studentast' 
+        : null;
+
+      if (!endpoint) {
+        console.warn('Invalid usrRoleId, no endpoint selected.');
+        setAssistants([]);
+        return;
+      }
+
       const response = await axios.get(endpoint);
 
       if (response.data.code === "200" && response.data.status === "success") {
@@ -29,20 +43,32 @@ const TambahPenggajian = () => {
   };
 
   useEffect(() => {
-    const usrRoleId = 1; 
-    fetchAssistants(usrRoleId);
-  }, []);
+    if (usrRoleId) {
+      fetchAssistants(usrRoleId);
+    }
+  }, [usrRoleId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3001/payrolls', {
-        fullname: selectedAssistant,
-        nominal,
-        status,
-      });
-      alert('Gaji berhasil ditambahkan!');
-      navigate('/penggajian');
+      // Creating the payload with usrUsername for prlCreatedBy
+      const payload = {
+        prlUserId: selectedAssistant, // Ensure this is the correct ID for the assistant
+        prlNominal: nominal,
+        prlPayrollStatus: status,
+        prlCreatedBy: usrUsername // Dynamically set the creator's username
+      };
+
+      const response = await axios.post('http://localhost:3001/payrolls', payload);
+      console.log('Server response:', response.data);
+      console.log('Payload being sent:', payload);
+
+      if (response.status === 200 || response.status === 201) {
+        alert('Gaji berhasil ditambahkan!');
+        navigate('/penggajian');
+      } else {
+        alert('Terjadi kesalahan saat menambahkan gaji. Mohon periksa kembali.');
+      }
     } catch (error) {
       console.error('Error adding payroll:', error);
       alert('Terjadi kesalahan saat menambahkan gaji.');
@@ -73,7 +99,8 @@ const TambahPenggajian = () => {
                 >
                   <option value="">Pilih Asisten</option>
                   {assistants.map((assistant, index) => (
-                    <option key={index} value={assistant.usrFullName}>
+                    // Set the value to assistant.usrId instead of assistant.usrFullName
+                    <option key={index} value={assistant.usrId}>
                       {assistant.usrFullName}
                     </option>
                   ))}

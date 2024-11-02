@@ -86,7 +86,7 @@ const KH_Asisten = () => {
     try {
       const payload = {
         attAptId: attendanceData.attAptId,
-        attCheckIn: formatTime(new Date()), // Format time as HH:MM:SS
+        attCheckIn: formatTime(new Date()),
         attCreatedBy: attendanceData.attCreatedBy,
       };
       console.log("Check-in payload:", payload);
@@ -94,7 +94,6 @@ const KH_Asisten = () => {
       const response = await axios.post('http://localhost:3001/attendance', payload);
       console.log("Check-in response:", response.data);
 
-      // Set currentAttendanceId if attId is returned
       if (response.data && response.data.data && response.data.data.attId) {
         setCurrentAttendanceId(response.data.data.attId);
         console.log("Set currentAttendanceId:", response.data.data.attId);
@@ -102,7 +101,7 @@ const KH_Asisten = () => {
         console.error("attId not found in response");
       }
 
-      fetchAttendanceData(); // Refresh the attendance data
+      fetchAttendanceData();
       alert('Check-in successful!');
     } catch (error) {
       console.error('Error checking in:', error);
@@ -112,7 +111,7 @@ const KH_Asisten = () => {
 
   const handleCheckOut = async () => {
     console.log("currentAttendanceId before check-out:", currentAttendanceId);
-    
+  
     if (!currentAttendanceId) {
       alert('Check-in is required before check-out.');
       return;
@@ -121,21 +120,21 @@ const KH_Asisten = () => {
     try {
       const payload = {
         attId: currentAttendanceId,
-        attCheckOut: formatTime(new Date()), // Format time as HH:MM:SS
+        attCheckOut: formatTime(new Date()),
       };
       console.log("Check-out payload:", payload);
   
       const response = await axios.post('http://localhost:3001/attendance/update', payload);
-      console.log("Check-out response:", response.data); // Log the response
+      console.log("Check-out response:", response.data);
   
       if (response.data.code === '200') {
         alert('Check-out successful!');
       } else {
-        alert('Failed to check out.'); // Show error if update was not successful
+        alert('Failed to check out.');
       }
   
-      setCurrentAttendanceId(null); // Reset the attendance ID after check-out
-      fetchAttendanceData(); // Refresh the attendance data
+      setCurrentAttendanceId(null);
+      fetchAttendanceData();
     } catch (error) {
       console.error('Error checking out:', error);
       alert('Failed to check out.');
@@ -147,7 +146,6 @@ const KH_Asisten = () => {
     setAttendanceData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Monitor changes to currentAttendanceId for debugging purposes
   useEffect(() => {
     console.log("currentAttendanceId updated:", currentAttendanceId);
   }, [currentAttendanceId]);

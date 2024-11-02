@@ -81,7 +81,7 @@ class SequelizeAttendanceRepository extends AttendanceRepository {
 
     try {
       const results = await sequelize.query(
-        'SELECT * FROM users.get_all_attendance(:roleId)', // Call the stored function
+        'SELECT * FROM users.get_attendance_by_role_id(:roleId)', // Call the stored function
         {
           replacements: { roleId }, 
           type: sequelize.QueryTypes.SELECT

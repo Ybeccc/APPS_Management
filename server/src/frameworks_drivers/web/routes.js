@@ -48,7 +48,7 @@ router.get('/payrolls/:id', (req, res) => payrollController.getPayrollById(req, 
 router.get('/payrolls', (req, res) => payrollController.getAll(req, res));
 router.post('/update/payrolls', (req, res) => payrollController.updatePayroll(req, res));
 router.delete('/delete/payrolls/:id', (req, res) => payrollController.deletePayroll(req, res));
-router.get('/payroll', (req, res) => payrollController.getAllPayroll(req, res));
+router.get('/payroll/role/:id', (req, res) => payrollController.getPayrollByRoleId(req, res));
 router.get('/payroll/user/:id', (req, res) => payrollController.getPayrollByUserId(req, res));
 
 // class routes

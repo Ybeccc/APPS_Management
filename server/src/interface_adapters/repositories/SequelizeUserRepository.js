@@ -106,7 +106,7 @@ class SequelizeUserRepository extends UserRepository {
     try {
       const users = await UserModel.findAll({
         where: { usrRoleId: 3 },  // Use correct field name
-        attributes: ['usrFullName', 'usrNim', 'usrBankAccount'],
+        attributes: ['usrId', 'usrFullName', 'usrNim', 'usrBankAccount'],
       });
   
       return users;
@@ -120,7 +120,7 @@ class SequelizeUserRepository extends UserRepository {
     try {
       const users = await UserModel.findAll({
         where: { usrRoleId: 4 },  // Use correct field name
-        attributes: ['usrFullName', 'usrNim', 'usrBankAccount'],
+        attributes: ['usrId', 'usrFullName', 'usrNim', 'usrBankAccount'],
       });
   
       return users;
