@@ -93,9 +93,6 @@ const PR_Asisten = () => {
       ) : (
         <div className="text-center">No payroll data found.</div>
       )}
-      <div className="text-right mt-4">
-        <button className="text-blue-500 underline">See all</button>
-      </div>
     </div>
   );
 };

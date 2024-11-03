@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import { FaTrash } from 'react-icons/fa';  // Import the FaTrash icon
 import styles from "../style";
 
 const PROFILE_Asisten = () => {
@@ -15,9 +16,8 @@ const PROFILE_Asisten = () => {
     bankAccount: '',
     bankAccountNumber: '',
     status: '',
-    createdBy: '',
-    createdAt: '',
   });
+  const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -33,7 +33,7 @@ const PROFILE_Asisten = () => {
         const response = await axios.get(`http://localhost:3001/users/${userId}`);
         console.log('API Response:', response.data);
 
-        if (response.data.code == 200) { 
+        if (parseInt(response.data.code, 10) === 200) {
           const userData = response.data.data;
           setFormData({
             fullName: userData.usrFullName || '',
@@ -42,8 +42,6 @@ const PROFILE_Asisten = () => {
             bankAccount: userData.usrBankAccount || '',
             bankAccountNumber: userData.usrBankAccountNumber || '',
             status: userData.usrStatus || '',
-            createdBy: userData.usrCreatedBy || '',
-            createdAt: userData.usrCreatedAt || '',
           });
         } else {
           setError('Error fetching user data: Invalid response code');
@@ -51,18 +49,53 @@ const PROFILE_Asisten = () => {
       } catch (error) {
         setError(`Error fetching user data: ${error.message}`);
         console.error('Error:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchUserData();
+    const fetchAppointments = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/appointment/user/${userId}`);
+        console.log('Appointments Response Data:', response.data);
+
+        if (parseInt(response.data.code, 10) === 200) {
+          setAppointments(response.data.data);
+        } else {
+          setError('Error fetching appointments data: Invalid response code');
+        }
+      } catch (error) {
+        setError(`Error fetching appointments data: ${error.message}`);
+        console.error('Error:', error);
+      }
+    };
+
+    const fetchData = async () => {
+      setLoading(true);
+      await fetchUserData();
+      await fetchAppointments();
+      setLoading(false);
+    };
+
+    fetchData();
   }, [userId]);
 
   const handleLogout = () => {
-    // Dispatch a logout action or handle logout logic here
-    // For example: dispatch(logoutAction());
     console.log("User logged out");
+  };
+
+  const handleDeleteAppointment = async (appointmentId) => {
+    try {
+      await axios.delete(`http://localhost:3001/appointment/${appointmentId}`);
+      setAppointments((prevAppointments) => 
+        prevAppointments.filter((appointment) => appointment.apt_id !== appointmentId)
+      );
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+    }
+  };
+
+  const handleAddAppointment = () => {
+    console.log("Add Appointment clicked");
+    // Implement add appointment logic here
   };
 
   if (loading) {
@@ -83,18 +116,21 @@ const PROFILE_Asisten = () => {
         Logout
       </button>
 
-      <h1 className={`${styles.heading2} mb-6`}>Profile</h1>
+      <h1 className={`${styles.heading2} mb-6 text-center`}>Profile Asisten</h1>
+
       <div className="bg-white shadow-md rounded-lg p-6">
+        {/* Header for the Profile Box */}
+        <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">Profile Asisten</h2>
+
+        {/* Profile Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[
+          {[ 
             { label: 'Full Name', value: formData.fullName },
             { label: 'Username', value: formData.username },
             { label: 'NIM', value: formData.nim },
             { label: 'Bank Account', value: formData.bankAccount },
             { label: 'Bank Account Number', value: formData.bankAccountNumber },
             { label: 'Status', value: formData.status },
-            { label: 'Created By', value: formData.createdBy },
-            { label: 'Created At', value: new Date(formData.createdAt).toLocaleString() },
           ].map((item, index) => (
             <div key={index} className="bg-gray-100 rounded-lg p-4 flex justify-between items-center shadow-sm">
               <span className="font-medium text-gray-700">{item.label}:</span>
@@ -103,20 +139,58 @@ const PROFILE_Asisten = () => {
           ))}
         </div>
       </div>
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 text-white py-2 px-4 rounded-lg shadow hover:bg-red-600 transition"
-      >
-        Reset Password
-      </button>
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 text-white py-2 px-4 rounded-lg shadow hover:bg-red-600 transition"
-      >
-        Update Profile
-      </button>
+
+      {/* Centered Buttons */}
+      <div className="flex justify-center mt-6 mb-6 space-x-4">
+        <button
+          onClick={handleLogout}
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
+        >
+          Reset Password
+        </button>
+        <button
+          onClick={handleLogout}
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
+        >
+          Update Profile
+        </button>
+      </div>
+
+      <div className="bg-white shadow-md rounded-lg p-6">
+        {/* Header for Daftar Assist Mata Kuliah */}
+        <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">Daftar Mata Kuliah</h2>
+
+        {/* Display Appointments */}
+        <div className="grid grid-cols-1 gap-4">
+          {appointments.length > 0 ? (
+            appointments.map((appointment, index) => (
+              <div key={index} className="bg-gray-100 rounded-lg p-4 shadow-sm flex justify-between items-center">
+                <span className="font-medium text-gray-900">
+                  {appointment.course_name} - {appointment.class_name}
+                </span>
+                <button
+                  onClick={() => handleDeleteAppointment(appointment.apt_id)}
+                  className="text-red-500 hover:text-red-600 transition flex items-center"
+                >
+                  <FaTrash /> {/* Trash icon from react-icons */}
+                </button>
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-gray-500">No appointments found.</div>
+          )}
+        </div>
+      </div>
+      
+      {/* Add Appointment Button */}
+      <div className="flex justify-center mt-6">
+          <button
+            onClick={handleAddAppointment}
+            className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
+          >
+            Add Appointment
+          </button>
+        </div>
     </div>
   );
 };
