@@ -74,6 +74,32 @@ class PayrollController {
             .json(response);
         }
     }
+    async getPayrollByRoleId(req, res) {
+        try {
+            const roleId = req.params.id;
+            const response = await this.getPayrollUseCase.findByRoleId(roleId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
+    async getPayrollByUserId(req, res) {
+        try {
+        const userId = req.params.id;
+        const response = await this.getPayrollUseCase.findByUserId(userId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
 }
 
 module.exports = PayrollController;

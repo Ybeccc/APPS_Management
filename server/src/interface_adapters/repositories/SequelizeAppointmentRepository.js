@@ -66,6 +66,40 @@ class SequelizeAppointmentRepository extends AppointmentRepository {
     const updatedAppointment = await AppointmentModel.findByPk(appointmentId);
     return updatedAppointment;
   }
+  async getByRoleId(roleId) {
+    const sequelize = sequelizeDatabase.getConnection();
+
+    try {
+      const results = await sequelize.query(
+        'SELECT * FROM users.get_appointment_by_role_id(:roleId)', // Call the stored function
+        {
+          replacements: { roleId }, 
+          type: sequelize.QueryTypes.SELECT
+        }
+      );
+      return Array.isArray(results) ? results : results ? [results] : [];
+    } catch (error) {
+      console.error('Error calling stored function:', error);
+      throw error;
+    }
+  }
+  async getByUserId(userId) {
+    const sequelize = sequelizeDatabase.getConnection();
+
+    try {
+      const results = await sequelize.query(
+        'SELECT * FROM users.get_appointment_by_user_id(:userId)', // Call the stored function
+        {
+          replacements: { userId }, 
+          type: sequelize.QueryTypes.SELECT
+        }
+      );
+      return Array.isArray(results) ? results : results ? [results] : [];
+    } catch (error) {
+      console.error('Error calling stored function:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = SequelizeAppointmentRepository;

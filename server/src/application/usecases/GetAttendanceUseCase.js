@@ -45,6 +45,45 @@ class GetAttendanceUseCase {
         return response;
     }
 
+    async findByRoleId(roleId) {
+      const response = new Response();
+      try {
+          let attendanceData = await this.attendanceRepository.getByRoleId(roleId);
+          if (!attendanceData) {
+              throw new Error('attendance not found');
+          }
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'attendance found';
+          response.data = attendanceData;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'attendance not found';
+          response.error = error;      
+        }
+      return response;
+    }
+
+    async findByUsrIdToday(usrId) {
+      const response = new Response();
+      try {
+          let attendanceData = await this.attendanceRepository.getByUsrId(usrId);
+          if (!attendanceData) {
+              throw new Error('attendance not found');
+          }
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'attendance found';
+          response.data = attendanceData;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'attendance not found';
+          response.error = error;      
+        }
+      return response;
+    }
 }
 
 module.exports = GetAttendanceUseCase

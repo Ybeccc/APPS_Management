@@ -11,6 +11,8 @@ const AppointmentController = require('../../interfaces/rest/AppointmentControll
 const AttendanceController = require('../../interfaces/rest/AttendanceController');
 const ScheduleController = require('../../interfaces/rest/ScheduleController');
 const TaskController = require('../../interfaces/rest/TaskController');
+const EmailController = require('../../interfaces/rest/EmailController');
+
 
 const router = express.Router();
 
@@ -25,12 +27,15 @@ const appointmentController = new AppointmentController();
 const attendanceController = new AttendanceController();
 const scheduleController = new ScheduleController();
 const taskController = new TaskController();
+const emailController = new EmailController();
 
 // user routes
 router.post('/users', (req, res) => userController.createUser(req, res));
 router.get('/users/:id', (req, res) => userController.getUserById(req, res));
 router.get('/users', (req, res) => userController.getAll(req, res));
 router.post('/update/users', (req, res) => userController.updateUser(req, res));
+router.get('/practicumast', (req, res) => userController.listPracticumAst(req, res));
+router.get('/studentast', (req, res) => userController.listStudentAst(req, res));
 
 // auth routes
 router.get('/me', (req, res) => authController.Me(req, res));
@@ -43,6 +48,8 @@ router.get('/payrolls/:id', (req, res) => payrollController.getPayrollById(req, 
 router.get('/payrolls', (req, res) => payrollController.getAll(req, res));
 router.post('/update/payrolls', (req, res) => payrollController.updatePayroll(req, res));
 router.delete('/delete/payrolls/:id', (req, res) => payrollController.deletePayroll(req, res));
+router.get('/payroll/role/:id', (req, res) => payrollController.getPayrollByRoleId(req, res));
+router.get('/payroll/user/:id', (req, res) => payrollController.getPayrollByUserId(req, res));
 
 // class routes
 router.get('/classes', (req, res) => classesController.getAll(req, res));
@@ -60,12 +67,16 @@ router.post('/appointment', (req, res) => appointmentController.createAppointmen
 router.get('/appointment/:id', (req, res) => appointmentController.getAppointmentById(req, res));
 router.get('/appointment', (req, res) => appointmentController.getAll(req, res));
 router.post('/appointment/update', (req, res) => appointmentController.updateAppointment(req, res));
+router.get('/appointment/role/:id', (req, res) => appointmentController.getAppointmentByRoleId(req, res));
+router.get('/appointment/user/:id', (req, res) => appointmentController.getAppointmentByUserId(req, res));
 
 // attendance routes
 router.post('/attendance', (req, res) => attendanceController.createAttendance(req, res));
 router.get('/attendance/:id', (req, res) => attendanceController.getAttendanceById(req, res));
+router.get('/attendance/today/:usrId', (req, res) => attendanceController.getTodayAttendanceByUsrId(req, res));
 router.get('/attendance', (req, res) => attendanceController.getAll(req, res));
 router.post('/attendance/update', (req, res) => attendanceController.updateAttendance(req, res));
+router.get('/attendance/role/:id', (req, res) => attendanceController.getAttendanceByRoleId(req, res));
 
 // schedule routes
 router.post('/schedule', (req, res) => scheduleController.createSchedule(req, res));
@@ -77,5 +88,9 @@ router.post('/task', (req, res) => taskController.createTask(req, res));
 router.get('/task/:id', (req, res) => taskController.getTaskById(req, res));
 router.get('/task', (req, res) => taskController.getAll(req, res));
 router.post('/task/update', (req, res) => taskController.updateTask(req, res));
+router.get('/task/user/:id', (req, res) => taskController.getTaskByUserId(req, res));
+
+//email
+router.post('/email/send', (req, res) => emailController.sendEmail(req, res));
 
 module.exports = router;

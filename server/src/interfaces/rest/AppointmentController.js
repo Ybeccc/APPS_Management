@@ -59,6 +59,32 @@ class AppointmentController {
           res.status(500).json(response);
         }
     }
+    async getAppointmentByRoleId(req, res) {
+        try {
+            const roleId = req.params.id;
+            const response = await this.getAppointmentUseCase.findByRoleId(roleId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
+    async getAppointmentByUserId(req, res) {
+        try {
+        const userId = req.params.id;
+        const response = await this.getAppointmentUseCase.findByUserId(userId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
 }
 
 module.exports = AppointmentController;

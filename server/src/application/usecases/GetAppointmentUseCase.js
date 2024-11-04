@@ -45,6 +45,46 @@ class GetAppointmentUseCase {
         return response;
     }
 
+    async findByRoleId(roleId) {
+      const response = new Response();
+      try {
+          let appointmentData = await this.appointmentRepository.getByRoleId(roleId);
+          if (!appointmentData) {
+              throw new Error('appointment not found');
+          }
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'appointment found';
+          response.data = appointmentData;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'appointment not found';
+          response.error = error;      
+        }
+      return response;
+    }
+
+    async findByUserId(userId) {
+      const response = new Response();
+      try {
+          let aptUserData = await this.appointmentRepository.getByUserId(userId);
+          if (!aptUserData) {
+              throw new Error('appointment not found');
+          }
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'appointment found';
+          response.data = aptUserData;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'appointment not found';
+          response.error = error;      
+        }
+      return response;
+    }
+
 }
 
 module.exports = GetAppointmentUseCase

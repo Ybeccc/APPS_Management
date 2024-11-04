@@ -26,23 +26,43 @@ class GetTaskUseCase {
     }
 
     async getAll() {
-        const response = new Response();
-        try {
-            let TaskAll = await this.taskRepository.getAll();
-            if (!TaskAll) {
-                throw new Error('task not found');
-            }
-            response.code = '200';
-            response.status = 'success';
-            response.message = 'task found';
-            response.data = TaskAll;
-          } catch (error) {
-            response.code = '400';
-            response.status = 'failed';
-            response.message = 'task not found';
-            response.error = error;      
+      const response = new Response();
+      try {
+          let TaskAll = await this.taskRepository.getAll();
+          if (!TaskAll) {
+              throw new Error('task not found');
           }
-        return response;
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'task found';
+          response.data = TaskAll;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'task not found';
+          response.error = error;      
+        }
+      return response;
+    }
+
+    async findByUserId(userId) {
+      const response = new Response();
+      try {
+          let tskUserData = await this.taskRepository.getByUserId(userId);
+          if (!tskUserData) {
+              throw new Error('task not found');
+          }
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'task found';
+          response.data = tskUserData;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'task not found';
+          response.error = error;      
+        }
+      return response;
     }
 
 }

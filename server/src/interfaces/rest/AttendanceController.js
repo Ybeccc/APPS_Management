@@ -59,6 +59,33 @@ class AttendanceController {
           res.status(500).json(response);
         }
     }
+    async getAttendanceByRoleId(req, res) {
+        try {
+        const roleId = req.params.id;
+        const response = await this.getAttendanceUseCase.findByRoleId(roleId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
+
+    async getTodayAttendanceByUsrId(req, res) {
+        try {
+        const usrId = req.params.usrId;
+        const response = await this.getAttendanceUseCase.findByUsrIdToday(usrId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
 }
 
 module.exports = AttendanceController;

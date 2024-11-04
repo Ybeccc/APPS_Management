@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getMe } from "../features/authSlice";
 import styles from '../style';
 
-import ListAM from '../components/ListAM';
+import ListAP from '../components/ListAP';
 
 const AsistenPraktikum = () => {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ const AsistenPraktikum = () => {
           Daftar Asisten Praktikum
         </h1>
       </div>
-      <ListAM />
+      <ListAP />
     </Layout>
   );
 };

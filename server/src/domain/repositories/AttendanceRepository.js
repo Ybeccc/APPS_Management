@@ -11,6 +11,9 @@ class AttendanceRepository {
     update(attendance) {
       throw new Error('Method not implemented');
     }
+    getByRoleId(roleId) {
+      throw new Error('Method not implemented');
+    }
   }
   
 module.exports = AttendanceRepository;
