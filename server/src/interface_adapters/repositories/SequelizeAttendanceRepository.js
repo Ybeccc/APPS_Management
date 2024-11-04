@@ -93,6 +93,23 @@ class SequelizeAttendanceRepository extends AttendanceRepository {
       throw error;
     }
   }
+  async getByUsrId(usrId) {
+    const sequelize = sequelizeDatabase.getConnection();
+
+    try {
+      const results = await sequelize.query(
+        'SELECT * FROM users.get_attendance_today_by_usr_id(:usrId)', // Call the stored function
+        {
+          replacements: { usrId }, 
+          type: sequelize.QueryTypes.SELECT
+        }
+      );
+      return Array.isArray(results) ? results : results ? [results] : [];
+    } catch (error) {
+      console.error('Error calling stored function:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = SequelizeAttendanceRepository;

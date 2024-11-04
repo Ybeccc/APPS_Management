@@ -7,19 +7,18 @@ class CreateAttendanceUseCase {
     }
 
     async execute(attendanceData) {
-        const attendance = {
-            attAptId: attendanceData.attAptId,
-            attCheckIn: attendanceData.attCheckIn,
-            attCheckOut: attendanceData.attCheckOut,
-            attCreatedBy: attendanceData.attCreatedBy,
-        };
-
         const response = new Response();
 
         try {
+            const attendance = {
+                attAptId: attendanceData.attAptId,
+                attCheckIn: this.getCurrentTime(),
+                attCreatedBy: attendanceData.attCreatedBy,
+            };
+
             let CreatedAttendance = await this.attendanceRepository.create(attendance);
             if (!CreatedAttendance) {
-            throw new Error('Attendance not found');
+            throw new Error('Failed Insert Attendance');
             }
             response.code = '200';
             response.status = 'success';
@@ -32,7 +31,12 @@ class CreateAttendanceUseCase {
             response.error = error;      
         }
 
-    return response;
+        return response;
+    }    
+
+    getCurrentTime() {
+        const now = new Date();
+        return now.toTimeString().split(' ')[0];  // Extract only the time part (HH:MM:SS)
     }
 }
  

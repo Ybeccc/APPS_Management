@@ -72,6 +72,20 @@ class AttendanceController {
             .json(response);
         }
     }
+
+    async getTodayAttendanceByUsrId(req, res) {
+        try {
+        const usrId = req.params.usrId;
+        const response = await this.getAttendanceUseCase.findByUsrIdToday(usrId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
 }
 
 module.exports = AttendanceController;
