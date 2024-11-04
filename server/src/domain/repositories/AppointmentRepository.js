@@ -8,7 +8,7 @@ class AppointmentRepository {
     getAll(appointment) {
       throw new Error('Method not implemented');
     }
-    update(appointment) {
+    updateAttendanceCheckOut(appointmentId, checkOutTime) {
       throw new Error('Method not implemented');
     }
     getByRoleId(roleId) {

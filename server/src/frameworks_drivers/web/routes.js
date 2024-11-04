@@ -71,11 +71,11 @@ router.get('/appointment/role/:id', (req, res) => appointmentController.getAppoi
 router.get('/appointment/user/:id', (req, res) => appointmentController.getAppointmentByUserId(req, res));
 
 // attendance routes
-router.post('/attendance', (req, res) => attendanceController.createAttendance(req, res));
+router.post('/attendance/in', (req, res) => attendanceController.createAttendance(req, res));
+router.post('/attendance/out', (req, res) => attendanceController.updateAttendance(req, res));
 router.get('/attendance/:id', (req, res) => attendanceController.getAttendanceById(req, res));
 router.get('/attendance/today/:usrId', (req, res) => attendanceController.getTodayAttendanceByUsrId(req, res));
 router.get('/attendance', (req, res) => attendanceController.getAll(req, res));
-router.post('/attendance/update', (req, res) => attendanceController.updateAttendance(req, res));
 router.get('/attendance/role/:id', (req, res) => attendanceController.getAttendanceByRoleId(req, res));
 
 // schedule routes
