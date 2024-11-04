@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
 import axios from 'axios';
 import styles from "../style";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import AttendancePDFDocument from "../components/pdf/AttendancePDFDocument";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
 const KH_Koordinator = () => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -12,6 +19,10 @@ const KH_Koordinator = () => {
       fetchAttendanceData(user.data.usrId);
     }
   }, [user]);
+
+  useEffect(() => {
+    filterData();
+  }, [selectedMonth, selectedYear, data]);
 
   const fetchAttendanceData = async (usrId) => {
     try {
@@ -33,21 +44,65 @@ const KH_Koordinator = () => {
     }
   };
 
-  // Function to format date to DD/MM/YYYY
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
     return date.toLocaleDateString('en-GB');
   };
 
+  const filterData = () => {
+    let filtered = data;
+    if (selectedMonth) {
+      filtered = filtered.filter(
+        (item) => new Date(item.created_date).getMonth() + 1 === parseInt(selectedMonth)
+      );
+    }
+    if (selectedYear) {
+      filtered = filtered.filter(
+        (item) => new Date(item.created_date).getFullYear() === parseInt(selectedYear)
+      );
+    }
+    setFilteredData(filtered);
+  };
+
   return (
     <div className="p-0">
       <h1 className={`${styles.heading2} mb-6`}>Kehadiran</h1>
+
+      {/* Filter Section */}
+      <div className="flex space-x-4 mb-2">
+        <select
+          className="border px-4 py-2 rounded"
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+        >
+          <option value="">Pilih Bulan</option>
+          {[...Array(12)].map((_, i) => (
+            <option key={i} value={i + 1}>
+              {format(new Date(0, i), "MMMM", { locale: id })}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="border px-4 py-2 rounded"
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+        >
+          <option value="">Pilih Tahun</option>
+          {[2023, 2024, 2025].map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="overflow-x-auto">
         <table className="w-full table-auto bg-white shadow-md rounded-lg">
           <thead>
             <tr className="bg-[#7b2cbf] text-white">
+              <th className="border border-gray-300 px-4 py-2 text-center font-semibold text-sm">No</th>
               {["Tanggal", "Nama Asisten", "Mata Kuliah", "Kelas", "Check-in", "Check-out"].map((header, index) => (
                 <th
                   key={index}
@@ -59,15 +114,16 @@ const KH_Koordinator = () => {
             </tr>
           </thead>
           <tbody>
-            {data.length === 0 ? (
+            {filteredData.length === 0 ? (
               <tr>
-                <td colSpan="6" className="text-center py-4 text-gray-500">
-                  -
+                <td colSpan="7" className="text-center py-4 text-gray-500">
+                  Tidak ada kehadiran untuk ditampilkan.
                 </td>
               </tr>
             ) : (
-              data.map((row, index) => (
+              filteredData.map((row, index) => (
                 <tr key={index} className="hover:bg-gray-50">
+                  <td className="border border-gray-300 px-4 py-2 text-center">{index + 1}</td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {formatDate(row.created_date) || "-"}
                   </td>
@@ -93,15 +149,26 @@ const KH_Koordinator = () => {
         </table>
       </div>
 
+      {/* Conditional PDF Button */}
       <div className="mt-4">
-        <button
-          className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded transition"
-          onClick={() => {
-            alert('Generate PDF feature coming soon!');
-          }}
-        >
-          Generate PDF
-        </button>
+        {selectedMonth && selectedYear ? (
+          <PDFDownloadLink
+            document={<AttendancePDFDocument data={filteredData} />}
+            fileName="Attendance_Report.pdf"
+          >
+            {({ loading }) =>
+              loading ? "Loading PDF..." : (
+                <button className="bg-blue-500 text-white px-4 py-2 rounded transition">
+                  Generate PDF
+                </button>
+              )
+            }
+          </PDFDownloadLink>
+        ) : (
+          <button className="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed" disabled>
+            Pilih Bulan dan Tahun untuk melakukan Generate PDF
+          </button>
+        )}
       </div>
     </div>
   );

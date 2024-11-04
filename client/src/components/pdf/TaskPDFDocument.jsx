@@ -8,9 +8,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    marginBottom: 10,
+    marginBottom: 10, 
     textAlign: "center",
-    color: "#7b2cbf",
   },
   table: {
     display: "table",
@@ -23,6 +22,14 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: "row",
   },
+  tableColHeader: {
+    width: "20%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 5,
+    backgroundColor: "#f0f0f0",
+  },
   tableCol: {
     width: "20%",
     borderStyle: "solid",
@@ -30,8 +37,15 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     padding: 5,
   },
+  tableCellHeader: {
+    fontSize: 12,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
   tableCell: {
-    fontSize: 10,
+    fontSize: 9,
+    fontWeight: "normal",
+    textAlign: "left",
   },
 });
 
@@ -43,8 +57,8 @@ const TaskPDFDocument = ({ tasks }) => (
         {/* Table Headers */}
         <View style={styles.tableRow}>
           {["Tanggal", "Nama Tugas", "Deskripsi Tugas", "Catatan", "Nama Asisten"].map((header, index) => (
-            <View style={styles.tableCol} key={index}>
-              <Text style={styles.tableCell}>{header}</Text>
+            <View style={styles.tableColHeader} key={index}>
+              <Text style={styles.tableCellHeader}>{header}</Text>
             </View>
           ))}
         </View>
@@ -53,7 +67,11 @@ const TaskPDFDocument = ({ tasks }) => (
           <View style={styles.tableRow} key={index}>
             <View style={styles.tableCol}>
               <Text style={styles.tableCell}>
-                {new Date(task.tskCreatedAt).toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" })}
+                {new Date(task.tskCreatedAt).toLocaleDateString("id-ID", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
               </Text>
             </View>
             <View style={styles.tableCol}>
