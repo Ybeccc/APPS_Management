@@ -20,6 +20,7 @@ import EditTugas from "./pages/EditTugas";
 import EditProfile_Asisten from "./components/EditProfile_Asisten";
 import ResetPW from "./components/ResetPW";
 import AddAppointment from "./components/AddAppointment";
+import BuatAkun from "./pages/BuatAkun";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
         <Route path="/profile/edit" element={<EditProfile_Asisten />} />
         <Route path="/resetpassword" element={<ResetPW />} />
         <Route path="/appointment/add" element={<AddAppointment />} />
+        <Route path="/createaccount" element={<BuatAkun />} />
       </Routes>
     </Router>
     </Provider>
