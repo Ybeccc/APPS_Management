@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { FaTrash } from 'react-icons/fa';  // Import the FaTrash icon
+import { FaTrash } from 'react-icons/fa';
+import { LogOut } from "../features/authSlice";
+import { useNavigate } from 'react-router-dom';
 import styles from "../style";
 
 const PROFILE_Asisten = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const currentUser = useSelector((state) => state.auth.user);
   const userId = currentUser?.data?.usrId;
 
@@ -79,7 +82,13 @@ const PROFILE_Asisten = () => {
   }, [userId]);
 
   const handleLogout = () => {
-    console.log("User logged out");
+    dispatch(LogOut());
+
+    alert('Logout berhasil! Anda akan dialihkan ke halaman Login.');
+
+    setTimeout(() => {
+      navigate('/');
+    }, 1000);
   };
 
   const handleDeleteAppointment = async (appointmentId) => {
@@ -91,11 +100,6 @@ const PROFILE_Asisten = () => {
     } catch (error) {
       console.error('Error deleting appointment:', error);
     }
-  };
-
-  const handleAddAppointment = () => {
-    console.log("Add Appointment clicked");
-    // Implement add appointment logic here
   };
 
   if (loading) {
@@ -143,13 +147,13 @@ const PROFILE_Asisten = () => {
       {/* Centered Buttons */}
       <div className="flex justify-center mt-6 mb-6 space-x-4">
         <button
-          onClick={handleLogout}
+          onClick={() => navigate('/resetpassword')}
           className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
         >
           Reset Password
         </button>
         <button
-          onClick={handleLogout}
+          onClick={() => navigate('/profile/edit')}
           className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
         >
           Update Profile
@@ -185,10 +189,10 @@ const PROFILE_Asisten = () => {
       {/* Add Appointment Button */}
       <div className="flex justify-center mt-6">
           <button
-            onClick={handleAddAppointment}
+            onClick={() => navigate('/appointment/add')}
             className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
           >
-            Add Appointment
+            Tambah Mata Kuliah
           </button>
         </div>
     </div>

@@ -11,7 +11,7 @@ const MT_Asisten = () => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (user && user.data) {
+    if (user && user.data && user.data.usrId) {
       fetchTasks(user.data.usrId);
     }
   }, [user]);
@@ -23,6 +23,9 @@ const MT_Asisten = () => {
 
       if (response.data.data) {
         setTasks(response.data.data);
+      } else {
+        setTasks([]);
+        console.warn("No tasks found for the user.");
       }
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -74,7 +77,7 @@ const MT_Asisten = () => {
                   <td className="border px-4 py-2 max-w-xs">
                     {task.description}
                   </td>
-                  <td className="border px-4 py-2 ">
+                  <td className="border px-4 py-2">
                     {task.notes}
                   </td>
                   <td className="border px-4 py-2 text-center">
@@ -84,7 +87,10 @@ const MT_Asisten = () => {
                     <div className="flex justify-center">
                       <button
                         className="flex items-center text-green-500 hover:text-green-700 transition"
-                        onClick={() => navigate(`/penggajian/edit/${task.tskId}`)}
+                        onClick={() => {
+                          console.log("Navigating to edit task with ID:", task.usrid); // Use the usrid
+                          navigate(`/manajementugas/edit/${task.usrid}`);
+                        }}
                       >
                         <FaEdit className="mr-1" /> Ubah
                       </button>

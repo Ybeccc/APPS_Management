@@ -28,54 +28,35 @@ const KH_Asisten = () => {
       setCurrentTime(now.toLocaleTimeString('id-ID', options));
     }, 1000);
 
-    fetchAttendanceData();
-
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
     if (user && user.data) {
       fetchAppointments(user.data.usrId);
+      fetchTodayAttendance(user.data.usrId);
       setAttendanceData((prev) => ({ ...prev, attCreatedBy: user.data.usrId }));
     }
+
+    return () => clearInterval(timer);
   }, [user]);
-  
+
   const fetchAppointments = async (usrId) => {
     try {
-      console.log("Fetching appointments for usrId:", usrId);
       const response = await axios.get(`http://localhost:3001/appointment/user/${usrId}`);
-      console.log("Full fetched response:", response.data);
-  
-      if (response.data && response.data.data) {
-        setAppointments(response.data.data);
-      } else {
-        console.error("No appointment data found in response:", response.data);
-        setAppointments([]);
-      }
+      setAppointments(response.data.data || []);
     } catch (error) {
       console.error("Error fetching appointments:", error);
       alert("Failed to fetch appointments.");
     }
-  };  
-  
-  useEffect(() => {
-    console.log("Appointments state after fetch:", appointments);
-  }, [appointments]);
+  };
 
-  const fetchAttendanceData = async () => {
+  const fetchTodayAttendance = async (usrId) => {
     try {
-      const response = await axios.get('http://localhost:3001/attendance');
-      console.log('Fetched attendance data:', response.data);
-      setRecentActivities(response.data.recentActivities || []);
+      const response = await axios.get(`http://localhost:3001/attendance/today/${usrId}`);
+      // Set recentActivities with the "data" array from the response
+      setRecentActivities(response.data.data || []);
     } catch (error) {
-      console.error('Error fetching attendance data:', error);
+      console.error("Error fetching today's attendance data:", error);
       setRecentActivities([]);
     }
-  };
-
-  const formatTime = (date) => {
-    return date.toTimeString().split(' ')[0]; // Format to HH:MM:SS
-  };
+  };  
 
   const handleCheckIn = async () => {
     if (!attendanceData.attAptId) {
@@ -84,48 +65,42 @@ const KH_Asisten = () => {
     }
   
     try {
+      // Ensure the payload matches the expected structure
       const payload = {
-        attAptId: attendanceData.attAptId,
-        attCheckIn: formatTime(new Date()),
-        attCreatedBy: attendanceData.attCreatedBy,
+        attAptId: parseInt(attendanceData.attAptId, 10), // Convert to integer if needed
+        attCreatedBy: attendanceData.attCreatedBy, // Assuming this is a string
+        usrId: user.data.usrId, // Pass the usrId from the user state
       };
-      console.log("Check-in payload:", payload);
   
-      const response = await axios.post('http://localhost:3001/attendance', payload);
-      console.log("Check-in response:", response.data);
-
+      const response = await axios.post('http://localhost:3001/attendance/in', payload);
+  
       if (response.data && response.data.data && response.data.data.attId) {
         setCurrentAttendanceId(response.data.data.attId);
-        console.log("Set currentAttendanceId:", response.data.data.attId);
       } else {
         console.error("attId not found in response");
       }
-
-      fetchAttendanceData();
+  
+      fetchTodayAttendance(attendanceData.attCreatedBy);
       alert('Check-in successful!');
     } catch (error) {
       console.error('Error checking in:', error);
       alert('Failed to check in.');
     }
-  };
+  };  
 
   const handleCheckOut = async () => {
-    console.log("currentAttendanceId before check-out:", currentAttendanceId);
-  
-    if (!currentAttendanceId) {
+    if (!attendanceData.attAptId || !user.data.usrId) {
       alert('Check-in is required before check-out.');
       return;
     }
   
     try {
       const payload = {
-        attId: currentAttendanceId,
-        attCheckOut: formatTime(new Date()),
+        attAptId: parseInt(attendanceData.attAptId, 10), // Convert to integer if needed
+        usrId: user.data.usrId, // Include usrId from the user state
       };
-      console.log("Check-out payload:", payload);
   
-      const response = await axios.post('http://localhost:3001/attendance/update', payload);
-      console.log("Check-out response:", response.data);
+      const response = await axios.post('http://localhost:3001/attendance/out', payload);
   
       if (response.data.code === '200') {
         alert('Check-out successful!');
@@ -134,7 +109,7 @@ const KH_Asisten = () => {
       }
   
       setCurrentAttendanceId(null);
-      fetchAttendanceData();
+      fetchTodayAttendance(attendanceData.attCreatedBy);
     } catch (error) {
       console.error('Error checking out:', error);
       alert('Failed to check out.');
@@ -145,10 +120,6 @@ const KH_Asisten = () => {
     const { name, value } = e.target;
     setAttendanceData((prevData) => ({ ...prevData, [name]: value }));
   };
-
-  useEffect(() => {
-    console.log("currentAttendanceId updated:", currentAttendanceId);
-  }, [currentAttendanceId]);
 
   return (
     <div className="flex">
@@ -201,15 +172,15 @@ const KH_Asisten = () => {
             recentActivities.map((activity, index) => (
               <div key={index} className="flex justify-between border-b py-2">
                 <div>
-                  <p className="font-medium">{activity.type === 'check-in' ? 'Check-in' : 'Check-out'}</p>
-                  <p>{new Date(activity.date).toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}</p>
+                  <p className="font-medium">
+                    {`${activity.course_name} - ${activity.class}`}
+                  </p>
+                  <p>{currentDate}</p> {/* Assuming currentDate is today's date, as the API returns only today's attendance */}
                 </div>
-                <p>{new Date(activity.date).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
+                <div>
+                  <p>Check-in: {activity.check_in || 'N/A'}</p>
+                  <p>Check-out: {activity.check_out || 'N/A'}</p>
+                </div>
               </div>
             ))
           ) : (
