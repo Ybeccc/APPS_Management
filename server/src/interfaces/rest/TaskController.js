@@ -50,13 +50,20 @@ class TaskController {
     }
     async updateTask(req, res) {
         try {
-          const taskData = req.body;
-          const response = await this.updateTaskUseCase.updateTask(taskData);
-          res
-            .status(201)
-            .json(response);
+            const taskId = req.params.id;
+            const taskData = req.body;
+
+            let taskInserted = await this.getTaskUseCase.findById(taskId);
+            if (!taskInserted.data) {
+                throw new Error('task not found');
+            }
+
+            const response = await this.updateTaskUseCase.updateTask(taskId,taskData);
+            res
+                .status(201)
+                .json(response);
         } catch (error) {
-          res.status(500).json(response);
+            res.status(500).json({message: error.message});
         }
     }
     async getTaskByUserId(req, res) {
