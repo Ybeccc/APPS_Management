@@ -21,6 +21,8 @@ import EditProfile_Asisten from "./components/EditProfile_Asisten";
 import ResetPW from "./components/ResetPW";
 import AddAppointment from "./components/AddAppointment";
 import BuatAkun from "./pages/BuatAkun";
+import ClassCourse from "./components/ClassCourse";
+import Appointment from "./components/Appointment";
 
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
         <Route path="/resetpassword" element={<ResetPW />} />
         <Route path="/appointment/add" element={<AddAppointment />} />
         <Route path="/createaccount" element={<BuatAkun />} />
+        <Route path="/classcourse" element={<ClassCourse />} />
+        <Route path="/appointment" element={<Appointment />} />
       </Routes>
     </Router>
     </Provider>

@@ -46,6 +46,18 @@ class ClassCourseController {
             .json(response);
         }
     }
+    async getAllClassCourse(req, res) {
+        try {
+        const response = await this.getClassCourseUseCase.findAll();
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
 }
 
 module.exports = ClassCourseController;

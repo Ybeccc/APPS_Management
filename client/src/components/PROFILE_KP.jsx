@@ -4,6 +4,7 @@ import axios from 'axios';
 import { LogOut } from "../features/authSlice";
 import { useNavigate } from 'react-router-dom';
 import styles from "../style";
+import { FaUserEdit, FaUserPlus } from 'react-icons/fa';
 
 const PROFILE_Koordinator = () => {
   const [activeUsers, setActiveUsers] = useState([]);
@@ -42,8 +43,12 @@ const PROFILE_Koordinator = () => {
     navigate('/createaccount');
   };
 
+  const handleEditUser = (userId) => {
+    navigate(`/edituser/${userId}`);
+  };
+
   return (
-    <div className="p-0">
+    <div className="p-6">
       {/* Logout Button */}
       <button
         onClick={handleLogout}
@@ -58,21 +63,27 @@ const PROFILE_Koordinator = () => {
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-4">Active Users</h2>
         <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-          <ul className="pl-6">
+          <ul className="divide-y divide-gray-200">
             {activeUsers.length > 0 ? (
               activeUsers.map((user, index) => (
-                <li key={user.usrId} className="mb-2 flex justify-between items-center">
-                  <span>{index + 1}. {user.usrFullName} - {user.usrNim}</span>
+                <li
+                  key={user.usrId}
+                  className="py-4 flex justify-between items-center hover:bg-gray-50 transition"
+                >
+                  <div>
+                    <span className="text-gray-700 font-medium">{index + 1}. {user.usrFullName}</span>
+                    <p className="text-gray-500 text-sm">NIM: {user.usrNim}</p>
+                  </div>
                   <button
                     onClick={() => handleEditUser(user.usrId)}
-                    className="bg-yellow-500 text-white py-1 px-3 rounded-lg shadow hover:bg-yellow-600 transition"
+                    className="bg-yellow-500 text-white py-1 px-3 rounded-lg shadow flex items-center gap-1 hover:bg-yellow-600 transition"
                   >
-                    Edit
+                    <FaUserEdit /> Edit
                   </button>
                 </li>
               ))
             ) : (
-              <p>No active users found.</p>
+              <p className="text-gray-500">No active users found.</p>
             )}
           </ul>
         </div>
@@ -81,9 +92,9 @@ const PROFILE_Koordinator = () => {
       {/* Create Account Button */}
       <button
         onClick={handleCreateAccount}
-        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
+        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg shadow flex items-center gap-2 hover:bg-blue-600 transition"
       >
-        Create Account
+        <FaUserPlus /> Create Account
       </button>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiCheckCircle, FiHome, FiList } from 'react-icons/fi';
-import { MdGroups, MdOutlinePersonOutline, MdPayment } from 'react-icons/md';
+import { MdGroups, MdOutlinePersonOutline, MdPayment, MdOutlineHomeWork } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
 import { logo } from '../assets';
@@ -18,7 +18,8 @@ const Sidebar = () => {
         { id: 4, path: "/kehadiran", name: "Kehadiran", icon: FiCheckCircle },
         { id: 5, path: "/manajementugas", name: "Manajemen Tugas", icon: FiList },
         { id: 6, path: "/penggajian", name: "Penggajian", icon: MdPayment },
-        { id: 7, path: "/profile", name: "Profile", icon: MdOutlinePersonOutline },
+        { id: 7, path: "/lowongan", name: "Lowongan", icon: MdOutlineHomeWork, requiredRole: 1 },
+        { id: 8, path: "/profile", name: "Profile", icon: MdOutlinePersonOutline },
     ];
 
     return (

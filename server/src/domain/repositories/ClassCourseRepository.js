@@ -8,6 +8,9 @@ class ClassCourseRepository {
     getAll(classcourse) {
       throw new Error('Method not implemented');
     }
+    findAll(classcourse) {
+      throw new Error('Method not implemented');
+    }
   }
   
 module.exports = ClassCourseRepository;

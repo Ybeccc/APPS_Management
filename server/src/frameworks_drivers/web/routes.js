@@ -61,6 +61,7 @@ router.get('/courses', (req, res) => coursesController.getAll(req, res));
 router.post('/classcourse', (req, res) => classCourseController.createCC(req, res));
 router.get('/classcourse/:id', (req, res) => classCourseController.getCCById(req, res));
 router.get('/classcourse', (req, res) => classCourseController.getAll(req, res));
+router.get('/allclasscourse', (req, res) => classCourseController.getAllClassCourse(req, res));
 
 // appointment routes
 router.post('/appointment', (req, res) => appointmentController.createAppointment(req, res));
@@ -69,6 +70,7 @@ router.get('/appointment', (req, res) => appointmentController.getAll(req, res))
 router.post('/appointment/update', (req, res) => appointmentController.updateAppointment(req, res));
 router.get('/appointment/role/:id', (req, res) => appointmentController.getAppointmentByRoleId(req, res));
 router.get('/appointment/user/:id', (req, res) => appointmentController.getAppointmentByUserId(req, res));
+router.get('/allappointment', (req, res) => appointmentController.getAllAppointment(req, res));
 
 // attendance routes
 router.post('/attendance/in', (req, res) => attendanceController.createAttendance(req, res));

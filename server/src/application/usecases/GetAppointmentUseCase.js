@@ -85,6 +85,26 @@ class GetAppointmentUseCase {
       return response;
     }
 
+    async findAll() {
+      const response = new Response();
+      try {
+          let aptData = await this.appointmentRepository.findAll();
+          if (!aptData) {
+              throw new Error('appointment not found');
+          }
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'appointment found';
+          response.data = aptData;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'appointment not found';
+          response.error = error;      
+        }
+      return response;
+    }
+
 }
 
 module.exports = GetAppointmentUseCase

@@ -85,6 +85,18 @@ class AppointmentController {
             .json(response);
         }
     }
+    async getAllAppointment(req, res) {
+        try {
+        const response = await this.getAppointmentUseCase.findAll();
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
 }
 
 module.exports = AppointmentController;

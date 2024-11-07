@@ -25,7 +25,7 @@ const EditPenggajian = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3001/update/payrolls/${id}`, { // Change to PUT for update
+      await axios.post(`http://localhost:3001/update/payrolls`, { // Change to PUT for update
         nominal,
         status,
       });

@@ -17,6 +17,9 @@ class AppointmentRepository {
     getByUserId(userId) {
       throw new Error('Method not implemented');
     }
+    findAll(appointment) {
+      throw new Error('Method not implemented');
+    }
   }
   
 module.exports = AppointmentRepository;
