@@ -4,6 +4,9 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { FaEdit } from "react-icons/fa";
 import styles from "../style";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import TaskPDFAssistantDoc from "../components/pdf/TaskPDFAssistantDoc";
+import logo from '../assets/logo.png';
 
 const MT_Asisten = () => {
   const [tasks, setTasks] = useState([]);
@@ -90,11 +93,14 @@ const MT_Asisten = () => {
           className="border border-gray-300 px-4 py-2"
         >
           <option value="">Pilih Tahun</option>
-          {Array.from({ length: 10 }, (_, i) => (
-            <option key={i} value={new Date().getFullYear() - i}>
-              {new Date().getFullYear() - i}
-            </option>
-          ))}
+          {Array.from({ length: 5 }, (_, i) => {
+            const year = new Date().getFullYear() - 2 + i; // 2 past, 1 current, 2 future
+            return (
+              <option key={i} value={year}>
+                {year}
+              </option>
+            );
+          })}
         </select>
       </div>
 
@@ -171,9 +177,13 @@ const MT_Asisten = () => {
       <div className="bottom-4 left-4 z-50 mt-5">
         {selectedMonth && selectedYear ? (
           <PDFDownloadLink
-            document={<TaskPDFDocument tasks={filteredTasks} />}
-            fileName="Manajemen_Tugas.pdf"
-          >
+          document={
+            <TaskPDFAssistantDoc 
+              tasks={filteredTasks} 
+              selectedMonth={selectedMonth} 
+              selectedYear={selectedYear}
+            />
+          }fileName="Manajemen_Tugas.pdf">
             {({ loading }) =>
               loading ? "Loading PDF..." : (
                 <button className="bg-blue-500 text-white px-4 py-2 rounded">

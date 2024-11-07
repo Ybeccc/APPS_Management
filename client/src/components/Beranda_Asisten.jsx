@@ -66,7 +66,8 @@ const Beranda_Asisten = () => {
     <div className="p-0">
       <Welcome />
       
-      <div className="mt-6">
+      {/* Attendance Section */}
+      <div className="mt-6 p-6 bg-white border rounded-lg shadow-lg">
         <h2 className="text-xl font-semibold mb-4">Rekap Kehadiran ({getCurrentMonthYear()})</h2>
         {attendanceData.length > 0 ? (
           attendanceData.map((attendance, index) => (
@@ -95,7 +96,8 @@ const Beranda_Asisten = () => {
         )}
       </div>
 
-      <div className="mt-6">
+      {/* Task Section */}
+      <div className="mt-6 p-6 bg-white border rounded-lg shadow-lg">
         <h2 className="text-xl font-semibold mb-4">Rekap Tugas ({getCurrentMonthYear()})</h2>
         {Object.keys(taskCountByCourse).length > 0 ? (
           Object.entries(taskCountByCourse).map(([courseName, count], index) => (
@@ -119,7 +121,8 @@ const Beranda_Asisten = () => {
         )}
       </div>
 
-      <div className="mt-6">
+      {/* Payroll Section */}
+      <div className="mt-6 p-6 bg-white border rounded-lg shadow-lg">
         <h2 className="text-xl font-semibold mb-4">Rekap Penggajian ({getCurrentMonthYear()})</h2>
         {filteredPayrollData.length > 0 ? (
           filteredPayrollData.map((payroll, index) => (
