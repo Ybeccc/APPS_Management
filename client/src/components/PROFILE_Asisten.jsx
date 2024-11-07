@@ -11,6 +11,7 @@ const PROFILE_Asisten = () => {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.auth.user);
   const userId = currentUser?.data?.usrId;
+  const userRoleId = currentUser?.data?.usrRoleId; // Add this line to get the user's role
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -160,41 +161,28 @@ const PROFILE_Asisten = () => {
         </button>
       </div>
 
-      <div className="bg-white shadow-md rounded-lg p-6">
-        {/* Header for Daftar Assist Mata Kuliah */}
-        <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">Daftar Mata Kuliah</h2>
+      {/* Conditional Rendering for Daftar Mata Kuliah */}
+      {userRoleId === 3 && (
+        <div className="bg-white shadow-md rounded-lg p-6">
+          {/* Header for Daftar Assist Mata Kuliah */}
+          <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">Daftar Mata Kuliah</h2>
 
-        {/* Display Appointments */}
-        <div className="grid grid-cols-1 gap-4">
-          {appointments.length > 0 ? (
-            appointments.map((appointment, index) => (
-              <div key={index} className="bg-gray-100 rounded-lg p-4 shadow-sm flex justify-between items-center">
-                <span className="font-medium text-gray-900">
-                  {appointment.course_name} - {appointment.class_name}
-                </span>
-                <button
-                  onClick={() => handleDeleteAppointment(appointment.apt_id)}
-                  className="text-red-500 hover:text-red-600 transition flex items-center"
-                >
-                  <FaTrash /> {/* Trash icon from react-icons */}
-                </button>
-              </div>
-            ))
-          ) : (
-            <div className="text-center text-gray-500">No appointments found.</div>
-          )}
+          {/* Display Appointments */}
+          <div className="grid grid-cols-1 gap-4">
+            {appointments.length > 0 ? (
+              appointments.map((appointment, index) => (
+                <div key={index} className="bg-gray-100 rounded-lg p-4 shadow-sm flex justify-between items-center">
+                  <span className="font-medium text-gray-900">
+                    {appointment.course_name} - {appointment.class_name}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-500">No appointments found.</div>
+            )}
+          </div>
         </div>
-      </div>
-      
-      {/* Add Appointment Button */}
-      <div className="flex justify-center mt-6">
-          <button
-            onClick={() => navigate('/appointment/add')}
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
-          >
-            Tambah Mata Kuliah
-          </button>
-        </div>
+      )}
     </div>
   );
 };

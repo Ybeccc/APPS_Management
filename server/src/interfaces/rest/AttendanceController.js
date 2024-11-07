@@ -97,6 +97,20 @@ class AttendanceController {
         }
     }
 
+    async getAttendanceByUserId(req, res) {
+        try {
+        const userId = req.params.id;
+        const response = await this.getAttendanceUseCase.findByUserId(userId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
+
     async getTodayAttendanceByUsrId(req, res) {
         try {
         const usrId = req.params.usrId;

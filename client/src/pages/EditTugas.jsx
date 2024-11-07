@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux"; 
 import Layout from "./Layout";
+import styles from "../style";
 
 const EditTugas = () => {
   const { tskId } = useParams();
@@ -104,7 +105,7 @@ const EditTugas = () => {
 
   return (
     <Layout>
-      <h1 className="text-2xl font-bold mb-6">Edit Tugas</h1>
+      <h1 className={styles.heading2}>Edit Tugas</h1>
       <button
         className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
         onClick={() => navigate(-1)}

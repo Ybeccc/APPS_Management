@@ -45,7 +45,7 @@ const PR_Asisten = () => {
 
   return (
     <div className="p-0">
-      <h1 className={`${styles.heading2} mb-6`}>Penggajian</h1>
+      <h1 className={styles.heading2}>Penggajian</h1>
       <div className="bg-white p-4 mb-6 rounded-lg shadow-md">
         <div className="flex mb-2">
           <span className="font-semibold w-40">Nama Penerima</span>

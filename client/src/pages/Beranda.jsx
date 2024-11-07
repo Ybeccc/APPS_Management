@@ -6,6 +6,7 @@ import { getMe } from "../features/authSlice";
 
 import Beranda_KP from "../components/Beranda_KP";
 import Beranda_KL from "../components/Beranda_KL";
+import Beranda_Asisten from "../components/Beranda_Asisten";
 
 const Beranda = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,9 @@ const Beranda = () => {
       )}
       {user && (user.data.usrRoleId === 2) && (
         <Beranda_KL />
+      )}
+      {user && (user.data.usrRoleId === 3 || user.data.usrRoleId === 4) && (
+        <Beranda_Asisten />
       )}
     </Layout>
   );

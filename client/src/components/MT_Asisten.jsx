@@ -34,7 +34,7 @@ const MT_Asisten = () => {
 
   return (
     <div className="p-0">
-      <h1 className={`${styles.heading2} mb-6`}>Manajemen Tugas</h1>
+      <h1 className={styles.heading2}>Manajemen Tugas</h1>
       <Link to="/manajementugas/tambah">
         <button className="bg-blue-500 text-white px-4 py-2 mb-4 rounded">
           + Tambah Tugas

@@ -79,6 +79,7 @@ router.get('/attendance/:id', (req, res) => attendanceController.getAttendanceBy
 router.get('/attendance/today/:usrId', (req, res) => attendanceController.getTodayAttendanceByUsrId(req, res));
 router.get('/attendance', (req, res) => attendanceController.getAll(req, res));
 router.get('/attendance/role/:id', (req, res) => attendanceController.getAttendanceByRoleId(req, res));
+router.get('/attendance/user/:id', (req, res) => attendanceController.getAttendanceByUserId(req, res));
 
 // schedule routes
 router.post('/schedule', (req, res) => scheduleController.createSchedule(req, res));
