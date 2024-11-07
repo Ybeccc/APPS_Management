@@ -61,6 +61,7 @@ router.get('/courses', (req, res) => coursesController.getAll(req, res));
 router.post('/classcourse', (req, res) => classCourseController.createCC(req, res));
 router.get('/classcourse/:id', (req, res) => classCourseController.getCCById(req, res));
 router.get('/classcourse', (req, res) => classCourseController.getAll(req, res));
+router.get('/allclasscourse', (req, res) => classCourseController.getAllClassCourse(req, res));
 
 // appointment routes
 router.post('/appointment', (req, res) => appointmentController.createAppointment(req, res));
@@ -69,14 +70,16 @@ router.get('/appointment', (req, res) => appointmentController.getAll(req, res))
 router.post('/appointment/update', (req, res) => appointmentController.updateAppointment(req, res));
 router.get('/appointment/role/:id', (req, res) => appointmentController.getAppointmentByRoleId(req, res));
 router.get('/appointment/user/:id', (req, res) => appointmentController.getAppointmentByUserId(req, res));
+router.get('/allappointment', (req, res) => appointmentController.getAllAppointment(req, res));
 
 // attendance routes
-router.post('/attendance', (req, res) => attendanceController.createAttendance(req, res));
+router.post('/attendance/in', (req, res) => attendanceController.createAttendance(req, res));
+router.post('/attendance/out', (req, res) => attendanceController.updateAttendance(req, res));
 router.get('/attendance/:id', (req, res) => attendanceController.getAttendanceById(req, res));
 router.get('/attendance/today/:usrId', (req, res) => attendanceController.getTodayAttendanceByUsrId(req, res));
 router.get('/attendance', (req, res) => attendanceController.getAll(req, res));
-router.post('/attendance/update', (req, res) => attendanceController.updateAttendance(req, res));
 router.get('/attendance/role/:id', (req, res) => attendanceController.getAttendanceByRoleId(req, res));
+router.get('/attendance/user/:id', (req, res) => attendanceController.getAttendanceByUserId(req, res));
 
 // schedule routes
 router.post('/schedule', (req, res) => scheduleController.createSchedule(req, res));

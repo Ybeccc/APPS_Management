@@ -14,9 +14,16 @@ class AttendanceController {
 
     async createAttendance(req, res) {
         try {
-        const attendanceData = req.body;
-        const response = await this.createAttendanceUseCase.execute(attendanceData);
-        res
+            const attendanceData = req.body;
+            let insertedAttendance = await this.getAttendanceUseCase.findByUsrIdToday(attendanceData.usrId);
+            if (insertedAttendance.data.some(item => item.att_apt_id === attendanceData.attAptId)) {
+                return res
+                .status(400)
+                .json({message: "Attendance Already Exists"});
+            }
+
+            const response = await this.createAttendanceUseCase.execute(attendanceData);
+            res
             .status(201)
             .json(response);
         } catch (error) {
@@ -51,18 +58,49 @@ class AttendanceController {
     async updateAttendance(req, res) {
         try {
           const attendanceData = req.body;
-          const response = await this.updateAttendanceUseCase.updateAttendance(attendanceData);
-          res
-            .status(201)
-            .json(response);
+
+            let insertedAttendance = await this.getAttendanceUseCase.findByUsrIdToday(attendanceData.usrId);
+            if (!insertedAttendance.data.some(item => item.att_apt_id === attendanceData.attAptId)) {
+                return res
+                .status(400)
+                .json({message: "Attendance Not Exists"});
+            }
+
+            const attendance = insertedAttendance.data.find(item => item.att_apt_id === attendanceData.attAptId);
+
+            if(attendance.check_out){
+                return res
+                .status(400)
+                .json({message: "Attendance Checked Out"});
+            }
+
+            const attId = attendance ? attendance.att_id : null;
+            const response = await this.updateAttendanceUseCase.updateAttendance(attId);
+            res
+                .status(200)
+                .json(response);
         } catch (error) {
-          res.status(500).json(response);
+            res.status(500).json(response);
         }
     }
     async getAttendanceByRoleId(req, res) {
         try {
         const roleId = req.params.id;
         const response = await this.getAttendanceUseCase.findByRoleId(roleId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json(response);
+        }
+    }
+
+    async getAttendanceByUserId(req, res) {
+        try {
+        const userId = req.params.id;
+        const response = await this.getAttendanceUseCase.findByUserId(userId);
         res
             .status(200)
             .json(response);

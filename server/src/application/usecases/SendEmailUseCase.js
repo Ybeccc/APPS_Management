@@ -10,13 +10,20 @@ class SendEmailUseCase {
 
         try {
             const htmlTemplatePath = path.join(__dirname, '../..', 'template/email', 'email_example.html');
-            const htmlTemplate = fs.readFileSync(htmlTemplatePath, 'utf-8');
+            const htmlTemplate = fs.readFileSync(htmlTemplatePath, 'utf-8').replaceAll('{name}','Fernando');
+            const filePath = path.join(__dirname, '../..', 'file', 'CV_FERNANDO.pdf');
 
             const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: emailData.receiver, 
                 subject: emailData.subject,
-                html: htmlTemplate
+                html: htmlTemplate,
+                attachments: [
+                    {
+                      filename: "CV-ayang.pdf",
+                      path: filePath
+                    },
+                  ],
             };
 
             // Return a promise to handle the asynchronous behavior

@@ -37,7 +37,11 @@ const KH_Koordinator = () => {
       console.log('Attendance Data:', response.data);
 
       if (response.data && response.data.data) {
-        setData(response.data.data);
+        // Sort data from newest to oldest based on created_date
+        const sortedData = response.data.data.sort(
+          (a, b) => new Date(b.created_date) - new Date(a.created_date)
+        );
+        setData(sortedData);
       }
     } catch (error) {
       console.error('Error fetching attendance data:', error);
@@ -47,7 +51,7 @@ const KH_Koordinator = () => {
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB');
+    return format(date, "dd MMMM yyyy", { locale: id });
   };
 
   const filterData = () => {

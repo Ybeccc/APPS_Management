@@ -60,30 +60,48 @@ class SequelizeAttendanceRepository extends AttendanceRepository {
   async getAll() {
     return await AttendanceModel.findAll();
   }
-  async update(attendanceId, attendanceData){
-    const [affectedRows] = await AttendanceModel.update(
-        attendanceData,  
-      {
-        where: { attId: attendanceId } 
-      }
-    );
+  async updateAttendanceCheckOut(attId, newCheckOutTime) {
+    try {
+        const [updatedRows] = await AttendanceModel.update(
+            { attCheckOut: newCheckOutTime },
+            { where: { attId: attId } }
+        );
 
-    if (affectedRows === 0) {
-      console.log('No rows updated.');
-      return null;  
+        if (updatedRows === 0) {
+          return null;
+        } 
+
+        const updatedAttendance = await AttendanceModel.findOne({ where: { attId } });
+        return updatedAttendance;
+    } catch (error) {
+        return null;
     }
-
-    const updatedAttendance = await AttendanceModel.findByPk(attendanceId);
-    return updatedAttendance;
   }
   async getByRoleId(roleId) {
     const sequelize = sequelizeDatabase.getConnection();
 
     try {
       const results = await sequelize.query(
-        'SELECT * FROM users.get_attendance_by_role_id(:roleId)', // Call the stored function
+        'SELECT * FROM users.get_attendance_by_role_id(:roleId)',
         {
           replacements: { roleId }, 
+          type: sequelize.QueryTypes.SELECT
+        }
+      );
+      return Array.isArray(results) ? results : results ? [results] : [];
+    } catch (error) {
+      console.error('Error calling stored function:', error);
+      throw error;
+    }
+  }
+  async getByUserId(userId) {
+    const sequelize = sequelizeDatabase.getConnection();
+
+    try {
+      const results = await sequelize.query(
+        'SELECT * FROM users.get_attendance_by_user_id(:userId)',
+        {
+          replacements: { userId }, 
           type: sequelize.QueryTypes.SELECT
         }
       );

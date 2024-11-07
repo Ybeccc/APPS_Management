@@ -24,7 +24,11 @@ const MT_Koordinator = () => {
     try {
       const response = await axios.get("http://localhost:3001/task");
       if (Array.isArray(response.data.data)) {
-        setTasks(response.data.data);
+        // Sort tasks from newest to oldest based on tskCreatedAt
+        const sortedTasks = response.data.data.sort(
+          (a, b) => new Date(b.tskCreatedAt) - new Date(a.tskCreatedAt)
+        );
+        setTasks(sortedTasks);
       } else {
         console.error("Expected an array but got:", response.data);
       }
@@ -75,7 +79,7 @@ const MT_Koordinator = () => {
           onChange={(e) => setSelectedYear(e.target.value)}
         >
           <option value="">Pilih Tahun</option>
-          {[2023, 2024, 2025].map((year) => (
+          {[2024, 2025, 2026].map((year) => (
             <option key={year} value={year}>
               {year}
             </option>

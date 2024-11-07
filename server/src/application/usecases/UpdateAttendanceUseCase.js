@@ -2,21 +2,16 @@ const { response } = require('express');
 const Response = require('../../domain/entities/Response');
 
 class UpdateAttendanceUseCase {
-    constructor(attendanceRepository, getAttendanceUseCase) {
+    constructor(attendanceRepository) {
         this.attendanceRepository = attendanceRepository;
-        this.getAttendanceUseCase = getAttendanceUseCase;
     }
 
-    async updateAttendance(attendanceData) {
+    async updateAttendance(attId) {
         const response = new Response();
 
         try {
-        let attendanceInserted = await this.getAttendanceUseCase.findById(attendanceData.attId);
-        if (!attendanceInserted.data) {
-            throw new Error('attendance not found');
-        }
-
-        let attendanceUpdated = await this.attendanceRepository.update(attendanceData.attId, attendanceData)
+        const checkOutTime = this.getCurrentTime();
+        let attendanceUpdated = await this.attendanceRepository.updateAttendanceCheckOut(attId, checkOutTime)
         if (!attendanceUpdated) {
             throw new Error('attendance failed update');
         }
@@ -32,6 +27,11 @@ class UpdateAttendanceUseCase {
         response.error = error;      
         }
         return response;
+    }
+
+    getCurrentTime() {
+        const now = new Date();
+        return now.toTimeString().split(' ')[0];  // Extract only the time part (HH:MM:SS)
     }
 }
 

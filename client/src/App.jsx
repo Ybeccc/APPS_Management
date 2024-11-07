@@ -17,6 +17,12 @@ import TambahPenggajian from "./pages/TambahPenggajian";
 import EditPenggajian from "./pages/EditPenggajian";
 import TambahTugas from "./pages/TambahTugas";
 import EditTugas from "./pages/EditTugas";
+import EditProfile_Asisten from "./components/EditProfile_Asisten";
+import ResetPW from "./components/ResetPW";
+import AddAppointment from "./components/AddAppointment";
+import BuatAkun from "./pages/BuatAkun";
+import ClassCourse from "./components/ClassCourse";
+import Appointment from "./components/Appointment";
 
 function App() {
   return (
@@ -40,7 +46,13 @@ function App() {
         <Route path="/penggajian/tambah" element={<TambahPenggajian />} />
         <Route path="/penggajian/edit/:id" element={<EditPenggajian />} />
         <Route path="/manajementugas/tambah" element={<TambahTugas />} />
-        <Route path="/manajementugas/edit" element={<EditTugas />} />
+        <Route path="/manajementugas/edit/:tskId" element={<EditTugas />} />
+        <Route path="/profile/edit" element={<EditProfile_Asisten />} />
+        <Route path="/resetpassword" element={<ResetPW />} />
+        <Route path="/appointment/add" element={<AddAppointment />} />
+        <Route path="/createaccount" element={<BuatAkun />} />
+        <Route path="/classcourse" element={<ClassCourse />} />
+        <Route path="/appointment" element={<Appointment />} />
       </Routes>
     </Router>
     </Provider>

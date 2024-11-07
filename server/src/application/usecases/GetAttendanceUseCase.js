@@ -65,6 +65,26 @@ class GetAttendanceUseCase {
       return response;
     }
 
+    async findByUserId(userId) {
+      const response = new Response();
+      try {
+          let attUserData = await this.attendanceRepository.getByUserId(userId);
+          if (!attUserData) {
+              throw new Error('attendance not found');
+          }
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'attendance found';
+          response.data = attUserData;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'attendance not found';
+          response.error = error;      
+        }
+      return response;
+    }
+
     async findByUsrIdToday(usrId) {
       const response = new Response();
       try {

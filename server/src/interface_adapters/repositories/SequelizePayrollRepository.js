@@ -66,11 +66,11 @@ class SequelizePayrollRepository extends PayrollRepository {
   async getAll() {
     return await PayrollModel.findAll();
   }
-  async update(payrollId, payrollData){
+  async update(prlId, payrollData){
     const [affectedRows] = await PayrollModel.update(
       payrollData,  
       {
-        where: { prlId: payrollId } 
+        where: { prlId: prlId } 
       }
     );
 
@@ -79,7 +79,7 @@ class SequelizePayrollRepository extends PayrollRepository {
       return null;  
     }
 
-    const updatedPayroll = await PayrollModel.findByPk(payrollId);
+    const updatedPayroll = await PayrollModel.findOne({ where: { prlId } });
     return updatedPayroll;
   }
   async delete(payrollId) {
