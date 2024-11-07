@@ -17,7 +17,9 @@ const PR_Asisten = () => {
         const result = response.data;
 
         if (response.status === 200) {
-          setPayrollData(result.data);
+          // Sort the data by `created_date` (newest first)
+          const sortedData = result.data.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+          setPayrollData(sortedData);
         } else {
           setError(result.message);
         }
@@ -75,14 +77,14 @@ const PR_Asisten = () => {
             <tbody>
               {payrollData.map((payroll, index) => (
                 <tr key={index} className="text-center border-b">
-                  <td className="py-2 px-4 border-r">{index + 1}</td>
-                  <td className="py-2 px-4 border-r">
+                  <td className="py-2 px-4 border-r text-sm">{index + 1}</td>
+                  <td className="py-2 px-4 border-r text-sm">
                     {new Date(payroll.created_date).toLocaleDateString('en-GB')}
                   </td>
-                  <td className="py-2 px-4 border-r">
+                  <td className="py-2 px-4 border-r text-sm">
                     Rp{payroll.nominal.toLocaleString()}
                   </td>
-                  <td className="py-2 px-4">
+                  <td className="py-2 px-4 text-sm">
                     {payroll.payroll_status}
                   </td>
                 </tr>
