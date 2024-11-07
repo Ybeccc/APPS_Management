@@ -30,7 +30,7 @@ class CreateTaskUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'failed create task';
-            response.error = error;      
+            response.error = error.message;      
         }
 
     return response;

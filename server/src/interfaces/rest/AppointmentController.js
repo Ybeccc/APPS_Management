@@ -20,7 +20,8 @@ class AppointmentController {
             .status(201)
             .json(response);
         } catch (error) {
-        res.status(500).json(response);
+            res.status(500)
+            .json({message: error.message});
         }
     }
     async getAppointmentById(req, res) {
@@ -33,7 +34,7 @@ class AppointmentController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAll(req, res) {
@@ -45,7 +46,7 @@ class AppointmentController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async updateAppointment(req, res) {
@@ -56,7 +57,8 @@ class AppointmentController {
             .status(201)
             .json(response);
         } catch (error) {
-          res.status(500).json(response);
+          res.status(500)
+          .json({message: error.message});
         }
     }
     async getAppointmentByRoleId(req, res) {
@@ -69,7 +71,7 @@ class AppointmentController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAppointmentByUserId(req, res) {
@@ -82,7 +84,7 @@ class AppointmentController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAllAppointment(req, res) {
@@ -94,7 +96,7 @@ class AppointmentController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
 }

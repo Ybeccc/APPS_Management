@@ -22,8 +22,10 @@ class PayrollController {
             .status(201)
             .json(response);
         } catch (error) {
-        res.status(500).json(response);
-        }
+            res
+                .status(500)
+                .json({message: error.message});
+            }
     }
     async getPayrollById(req, res) {
         try {
@@ -35,7 +37,7 @@ class PayrollController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAll(req, res) {
@@ -47,18 +49,24 @@ class PayrollController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async updatePayroll(req, res) {
         try {
-          const payrollData = req.body;
-          const response = await this.updatePayrollUseCase.updatePayroll(payrollData);
+            const payrollId = req.params.id;
+            const payrollData = req.body;
+            let payrollInserted = await this.getPayrollUseCase.findById(payrollId);
+            if (!payrollInserted.data) {
+                throw new Error('Payroll not found');
+            }
+            const response = await this.updatePayrollUseCase.updatePayroll(payrollId,payrollData);
           res
             .status(201)
             .json(response);
         } catch (error) {
-          res.status(500).json(response);
+          res.status(500)
+          .json({message: error.message});
         }
     }
     async deletePayroll(req, res) {
@@ -71,7 +79,7 @@ class PayrollController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getPayrollByRoleId(req, res) {
@@ -84,7 +92,7 @@ class PayrollController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getPayrollByUserId(req, res) {
@@ -97,7 +105,7 @@ class PayrollController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
 }

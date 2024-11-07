@@ -20,7 +20,7 @@ class GetCoursesUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'Course not found';
-            response.error = error;      
+            response.error = error.message;      
           }
         return response;
     }

@@ -31,7 +31,7 @@ class UpdateTaskUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'failed update task';
-            response.error = error;      
+            response.error = error.message;      
         }
         return response;
     }

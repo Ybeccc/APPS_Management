@@ -7,29 +7,31 @@ class UpdatePayrollUseCase {
         this.getPayrollUseCase = getPayrollUseCase;
     }
 
-    async updatePayroll(payrollData) {
+    async updatePayroll(prlId,payrollData) {
         const response = new Response();
 
         try {
-        let payrollInserted = await this.getUserUseCase.findById(payrollData.prlId);
-        if (!payrollInserted.data) {
-            throw new Error('Payroll not found');
-        }
+            const payrollRequest = {
+                prlUserId: payrollData.prlUserId,
+                prlNominal: payrollData.prlNominal,
+                prlPayrollStatus: payrollData.prlPayrollStatus
+            };
+            
 
-        let payrollUpdated = await this.payrollRepository.update(payrollData.prlId, payrollData)
-        if (!payrollUpdated) {
-            throw new Error('Payroll failed update');
-        }
+            let payrollUpdated = await this.payrollRepository.update(prlId, payrollRequest)
+            if (!payrollUpdated) {
+                throw new Error('Payroll failed update');
+            }
 
-        response.code = '200';
-        response.status = 'success';
-        response.message = 'Payroll Updated';
-        response.data = payrollUpdated;
+            response.code = '200';
+            response.status = 'success';
+            response.message = 'Payroll Updated';
+            response.data = payrollUpdated;
         } catch (error) {
-        response.code = '400';
-        response.status = 'failed';
-        response.message = 'failed update payroll';
-        response.error = error;      
+            response.code = '400';
+            response.status = 'failed';
+            response.message = 'failed update payroll';
+            response.error = error.message;      
         }
         return response;
     }

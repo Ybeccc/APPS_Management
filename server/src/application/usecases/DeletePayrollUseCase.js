@@ -26,7 +26,7 @@ class DeletePayrollUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'Failed to delete payroll';
-            response.error = error.message;
+            response.error = error.message;      
         }
         
         return response;

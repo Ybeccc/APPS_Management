@@ -20,7 +20,7 @@ class GetTaskUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'task not found';
-            response.error = error;      
+            response.error = error.message;      
           }
         return response;
     }
@@ -40,7 +40,7 @@ class GetTaskUseCase {
           response.code = '400';
           response.status = 'failed';
           response.message = 'task not found';
-          response.error = error;      
+          response.error = error.message;      
         }
       return response;
     }
@@ -60,7 +60,7 @@ class GetTaskUseCase {
           response.code = '400';
           response.status = 'failed';
           response.message = 'task not found';
-          response.error = error;      
+          response.error = error.message;      
         }
       return response;
     }

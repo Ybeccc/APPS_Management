@@ -20,7 +20,8 @@ class TaskController {
             .status(201)
             .json(response);
         } catch (error) {
-        res.status(500).json(response);
+            res.status(500)
+            .json({message: error.message});
         }
     }
     async getTaskById(req, res) {
@@ -33,7 +34,7 @@ class TaskController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAll(req, res) {
@@ -45,7 +46,7 @@ class TaskController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async updateTask(req, res) {
@@ -76,7 +77,7 @@ class TaskController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
 }

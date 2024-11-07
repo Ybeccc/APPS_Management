@@ -20,7 +20,7 @@ class GetClassesUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'Class not found';
-            response.error = error;      
+            response.error = error.message;      
           }
         return response;
     }

@@ -20,7 +20,8 @@ class UserController {
         .status(201)
         .json(response);
     } catch (error) {
-      res.status(500).json(response);
+      res.status(500)
+      .json({message: error.message});
     }
   }
 
@@ -34,8 +35,8 @@ class UserController {
     } catch (error) {
       res
         .status(500)
-        .json(response);
-    }
+        .json({message: error.message});
+      }
   }
 
   async getAll(req, res) {
@@ -47,8 +48,8 @@ class UserController {
     } catch (error) {
       res
         .status(500)
-        .json(response);
-    }
+        .json({message: error.message});
+      }
   }
 
   async listPracticumAst(req, res) {
@@ -56,7 +57,8 @@ class UserController {
       const response = await this.getUserUseCase.listPracticumAst();
       res.status(200).json(response);
     } catch (error) {
-      res.status(500).json(response);
+      res.status(500)
+      .json({message: error.message});
     }
   }
 
@@ -65,7 +67,8 @@ class UserController {
       const response = await this.getUserUseCase.listStudentAst();
       res.status(200).json(response);
     } catch (error) {
-      res.status(500).json(response);
+      res.status(500)
+      .json({message: error.message});
     }
   }
 
@@ -77,7 +80,8 @@ class UserController {
         .status(201)
         .json(response);
     } catch (error) {
-      res.status(500).json(response);
+      res.status(500)
+      .json({message: error.message});
     }
   }
 }

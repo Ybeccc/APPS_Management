@@ -29,7 +29,7 @@ class CreatePayrollUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'failed create payroll';
-            response.error = error;      
+            response.error = error.message;      
         }
 
     return response;

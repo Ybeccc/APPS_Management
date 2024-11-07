@@ -29,8 +29,8 @@ class UpdateUserUseCase {
         response.code = '400';
         response.status = 'failed';
         response.message = 'failed update user';
-        response.error = error;      
-        }
+        response.error = error.message;      
+    }
         return response;
     }
 }

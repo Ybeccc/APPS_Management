@@ -17,7 +17,7 @@ class ClassesController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
 }
