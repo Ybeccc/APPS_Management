@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux"; 
+import { useSelector } from "react-redux";
 import Layout from "./Layout";
 import styles from "../style";
 
 const EditTugas = () => {
-  const { tskId } = useParams();
+  const { id } = useParams(); // Using 'id' as the parameter
   const [task, setTask] = useState({
     tskTaskName: "",
     tskDescription: "",
@@ -16,38 +16,45 @@ const EditTugas = () => {
   });
 
   const [appointments, setAppointments] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (user && user.data && tskId) {
-      fetchTaskDetails(tskId);
+    console.log("Received id from URL:", id); // Debugging
+    if (user && user.data && id) {
+      fetchTaskDetails(id);
       fetchAppointments(user.data.usrId);
     } else {
       console.error("User data or task ID is missing.");
       alert("Invalid task ID or user not logged in.");
       navigate("/manajementugas");
     }
-  }, [user, tskId]);
+  }, [user, id]);
 
   const fetchTaskDetails = async (taskId) => {
     try {
       const response = await axios.get(`http://localhost:3001/task/${taskId}`);
       const taskData = response.data.data;
-      console.log("Fetched Task Data:", taskData); 
+      console.log("Fetched Task Data:", taskData);
 
-      setTask({
-        tskTaskName: taskData.tskTaskName,
-        tskDescription: taskData.tskDescription,
-        tskNotes: taskData.tskNotes,
-        tskAptId: taskData.tskAptId,
-        tskCreatedBy: taskData.tskCreatedBy,
-      });
-      setIsLoading(false); // Set loading to false after task data is set
+      if (taskData) {
+        setTask({
+          tskTaskName: taskData.tskTaskName,
+          tskDescription: taskData.tskDescription,
+          tskNotes: taskData.tskNotes,
+          tskAptId: taskData.tskAptId,
+          tskCreatedBy: taskData.tskCreatedBy,
+        });
+      } else {
+        console.warn("Task data not found for ID:", taskId);
+        alert("Task data not found. Please check the task ID.");
+      }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching task details:", error);
-      alert("Gagal mengambil data tugas.");
+      alert("Failed to fetch task data. Please try again later.");
+      setIsLoading(false);
     }
   };
 
@@ -57,7 +64,7 @@ const EditTugas = () => {
       setAppointments(response.data.data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
-      alert("Gagal mengambil data appointment.");
+      alert("Failed to fetch appointment data.");
     }
   };
 
@@ -68,36 +75,34 @@ const EditTugas = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!task.tskTaskName || !task.tskDescription || !task.tskAptId) {
-      alert("Semua kolom wajib diisi.");
+      alert("All fields are required.");
       return;
     }
-  
+
     try {
-      // Sending the task data with tskId included from useParams
-      const response = await axios.post("http://localhost:3001/task/update", {
-        tskId: tskId,  // Pass tskId from URL params
+      const response = await axios.post(`http://localhost:3001/task/update/${id}`, {
+        tskAptId: task.tskAptId,
         tskTaskName: task.tskTaskName,
         tskDescription: task.tskDescription,
         tskNotes: task.tskNotes,
-        tskAptId: task.tskAptId,
-        tskCreatedBy: task.tskCreatedBy
+        tskCreatedBy: task.tskCreatedBy,
       });
-  
+
       console.log("Task updated:", response.data);
-  
+
       if (response.data.code === "200" && response.data.status === "success") {
-        alert("Tugas berhasil diupdate!");
+        alert("Task successfully updated!");
         navigate("/manajementugas");
       } else {
-        alert(`Gagal memperbarui tugas: ${response.data.message || "Unknown error."}`);
+        alert(`Failed to update task: ${response.data.message || "Unknown error."}`);
       }
     } catch (error) {
       console.error("Error updating task:", error);
-      alert("Terjadi kesalahan saat memperbarui tugas.");
+      alert("An error occurred while updating the task.");
     }
-  };  
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -112,7 +117,7 @@ const EditTugas = () => {
       >
         Kembali
       </button>
-      <form key={tskId} onSubmit={handleSubmit} className="space-y-4">
+      <form key={id} onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
           <label htmlFor="tskAptId" className="block font-semibold">
             Pilih Mata Kuliah - Kelas:
@@ -124,7 +129,7 @@ const EditTugas = () => {
             className="border border-gray-300 rounded px-4 py-2 w-full"
             required
           >
-            <option value="">Select Course - Class</option>
+            <option value="">Pilih Mata Kuliah - Kelas</option>
             {appointments.map((appointment) => (
               <option key={appointment.apt_id} value={appointment.apt_id}>
                 {`${appointment.course_name} - ${appointment.class_name}`}
@@ -142,7 +147,7 @@ const EditTugas = () => {
             name="tskTaskName"
             value={task.tskTaskName || ""}
             onChange={handleChange}
-            placeholder="Masukkan Nama Tugas"
+            placeholder="Enter Task Name"
             className="border border-gray-300 rounded px-4 py-2 w-full"
             required
           />
@@ -156,7 +161,7 @@ const EditTugas = () => {
             name="tskDescription"
             value={task.tskDescription || ""}
             onChange={handleChange}
-            placeholder="Masukkan Deskripsi Tugas"
+            placeholder="Enter Task Description"
             className="border border-gray-300 rounded px-4 py-2 w-full"
             required
           />
@@ -164,14 +169,14 @@ const EditTugas = () => {
 
         <div className="space-y-1">
           <label htmlFor="tskNotes" className="block font-semibold">
-            Catatan (Optional):
+            Catatan:
           </label>
           <input
             type="text"
             name="tskNotes"
             value={task.tskNotes || ""}
             onChange={handleChange}
-            placeholder="Masukkan Catatan Tambahan"
+            placeholder="Enter Additional Notes"
             className="border border-gray-300 rounded px-4 py-2 w-full"
           />
         </div>

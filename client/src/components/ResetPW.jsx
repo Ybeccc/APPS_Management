@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import styles from "../style";
+import Layout from "../pages/Layout";
+import { useNavigate } from 'react-router-dom';
 
 const ResetPW = () => {
   const [email, setEmail] = useState('');
@@ -7,6 +10,7 @@ const ResetPW = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
@@ -38,19 +42,13 @@ const ResetPW = () => {
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4 text-center">Reset Password</h2>
+    <Layout>
+      <h2 className={styles.heading2}>Reset Password</h2>
+      <button
+        className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
+        onClick={() => navigate(-1)}>Kembali</button>
+
       <form onSubmit={handleResetPassword}>
-        <div className="mb-4">
-          <label className="block text-gray-700">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="border border-gray-300 p-2 w-full rounded"
-          />
-        </div>
         <div className="mb-4">
           <label className="block text-gray-700">New Password</label>
           <input
@@ -77,7 +75,7 @@ const ResetPW = () => {
       </form>
       {message && <div className="text-green-500 mt-4">{message}</div>}
       {error && <div className="text-red-500 mt-4">{error}</div>}
-    </div>
+    </Layout>
   );
 };
 

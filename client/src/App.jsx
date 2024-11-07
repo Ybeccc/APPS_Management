@@ -46,7 +46,7 @@ function App() {
         <Route path="/penggajian/tambah" element={<TambahPenggajian />} />
         <Route path="/penggajian/edit/:id" element={<EditPenggajian />} />
         <Route path="/manajementugas/tambah" element={<TambahTugas />} />
-        <Route path="/manajementugas/edit/:tskId" element={<EditTugas />} />
+        <Route path="/manajementugas/edit/:id" element={<EditTugas />} />
         <Route path="/profile/edit" element={<EditProfile_Asisten />} />
         <Route path="/resetpassword" element={<ResetPW />} />
         <Route path="/appointment/add" element={<AddAppointment />} />

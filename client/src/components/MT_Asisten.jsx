@@ -61,7 +61,6 @@ const MT_Asisten = () => {
   }, [selectedMonth, selectedYear, tasks]);
 
   const handleGeneratePDF = () => {
-    // Logic to generate PDF based on selected month and year
     console.log(`Generating PDF for ${selectedMonth} ${selectedYear}`);
   };
 
@@ -123,7 +122,7 @@ const MT_Asisten = () => {
           <tbody>
             {filteredTasks.length > 0 ? (
               filteredTasks.map((task, index) => (
-                <tr key={index}>
+                <tr key={task.tsk_id}>
                   <td className="py-2 px-4 border-r text-center text-sm">{index + 1}</td>
                   <td className="border px-4 py-2 text-center text-sm">
                     {new Date(task.tsk_created).toLocaleDateString("id-ID", {
@@ -152,8 +151,8 @@ const MT_Asisten = () => {
                       <button
                         className="flex items-center text-green-500 hover:text-green-700 transition"
                         onClick={() => {
-                          console.log("Navigating to edit task with ID:", task.usrid);
-                          navigate(`/manajementugas/edit/${task.usrid}`);
+                          console.log("Navigating to edit task with ID:", task.tsk_id);
+                          navigate(`/manajementugas/edit/${task.tsk_id}`);
                         }}
                       >
                         <FaEdit className="mr-1" /> Ubah
@@ -172,18 +171,20 @@ const MT_Asisten = () => {
           </tbody>
         </table>
       </div>
-      
+
       {/* PDF Button */}
       <div className="bottom-4 left-4 z-50 mt-5">
         {selectedMonth && selectedYear ? (
           <PDFDownloadLink
-          document={
-            <TaskPDFAssistantDoc 
-              tasks={filteredTasks} 
-              selectedMonth={selectedMonth} 
-              selectedYear={selectedYear}
-            />
-          }fileName="Manajemen_Tugas.pdf">
+            document={
+              <TaskPDFAssistantDoc
+                tasks={filteredTasks}
+                selectedMonth={selectedMonth}
+                selectedYear={selectedYear}
+              />
+            }
+            fileName="Manajemen_Tugas.pdf"
+          >
             {({ loading }) =>
               loading ? "Loading PDF..." : (
                 <button className="bg-blue-500 text-white px-4 py-2 rounded">
@@ -198,7 +199,6 @@ const MT_Asisten = () => {
           </button>
         )}
       </div>
-
     </div>
   );
 };
