@@ -94,7 +94,7 @@ const PROFILE_Koordinator = () => {
         onClick={handleCreateAccount}
         className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg shadow flex items-center gap-2 hover:bg-blue-600 transition"
       >
-        <FaUserPlus /> Create Account
+        <FaUserPlus /> Buat Akun
       </button>
     </div>
   );
