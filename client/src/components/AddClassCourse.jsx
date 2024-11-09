@@ -13,22 +13,20 @@ const AddClassCourse = () => {
   const navigate = useNavigate();
 
   // Fetch classes and courses when component mounts
-    useEffect(() => {
-        const fetchClassesAndCourses = async () => {
-        try {
-            const classResponse = await axios.get('http://localhost:3001/classes');
-            const courseResponse = await axios.get('http://localhost:3001/courses');
-            
-            // Access the nested data array
-            setClasses(classResponse.data.data);
-            setCourses(courseResponse.data.data);
-        } catch (err) {
-            setError('Error loading data!');
-        }
-        };
-        fetchClassesAndCourses();
-    }, []);
-  
+  useEffect(() => {
+    const fetchClassesAndCourses = async () => {
+      try {
+        const classResponse = await axios.get('http://localhost:3001/classes');
+        const courseResponse = await axios.get('http://localhost:3001/courses');
+
+        setClasses(classResponse.data.data);
+        setCourses(courseResponse.data.data);
+      } catch (err) {
+        setError('Error loading data!');
+      }
+    };
+    fetchClassesAndCourses();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,15 +34,25 @@ const AddClassCourse = () => {
       setError('Please select both class and course!');
       return;
     }
+
     try {
-      await axios.post('http://localhost:3001/classcourse', {
-        classId: selectedClass,
-        courseId: selectedCourse,
+      const response = await axios.post('http://localhost:3001/classcourse', {
+        ccCrsId: selectedCourse,
+        ccCssId: selectedClass,
       });
-      alert('Class-course relation created successfully!');
-      setSelectedClass('');
-      setSelectedCourse('');
-      setError('');
+
+      console.log("Server Response:", response.data);
+
+      if (response.data.code === "200" && response.data.status === "success") {
+        alert('Mata Kuliah - Kelas Baru Berhasil Ditambahkan!');
+        setSelectedClass('');
+        setSelectedCourse('');
+        setError('');
+        
+        navigate('/classcourse');
+      } else {
+        setError('Gagal untuk membuat mata kuliah - kelas baru');
+      }
     } catch (err) {
       setError('Error creating class-course relationship!');
     }
@@ -63,38 +71,38 @@ const AddClassCourse = () => {
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700">Pilih Kelas</label>
-          <select
-            value={selectedClass}
-            onChange={(e) => setSelectedClass(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg"
-            required
-            >
-            <option value="">Pilih Kelas</option>
-            {classes.map((cls) => (
-                <option key={cls.cssId} value={cls.cssId}>
-                {cls.cssClassName}
-                </option>
-            ))}
-            </select>
-        </div>
-        <div className="mb-4">
           <label className="block text-gray-700">Pilih Mata Kuliah</label>
           <select
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-lg"
             required
-            >
+          >
             <option value="">Pilih Mata Kuliah</option>
             {courses.map((course) => (
-                <option key={course.crsId} value={course.crsId}>
+              <option key={course.crsId} value={course.crsId}>
                 {course.crsCourseName} ({course.crsCode})
-                </option>
+              </option>
             ))}
-            </select>
+          </select>
         </div>
-        <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-yellow-600">
+        <div className="mb-4">
+          <label className="block text-gray-700">Pilih Kelas</label>
+          <select
+            value={selectedClass}
+            onChange={(e) => setSelectedClass(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg"
+            required
+          >
+            <option value="">Pilih Kelas</option>
+            {classes.map((cls) => (
+              <option key={cls.cssId} value={cls.cssId}>
+                {cls.cssClassName}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
           Buat
         </button>
       </form>

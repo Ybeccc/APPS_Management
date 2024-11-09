@@ -14,7 +14,11 @@ const Class = () => {
     axios.get('http://localhost:3001/classes')
       .then((response) => {
         if (response.data.code === "200") {
-          setClasses(response.data.data);
+          // Sort classes alphabetically by `cssClassName`
+          const sortedClasses = response.data.data.sort((a, b) =>
+            a.cssClassName.localeCompare(b.cssClassName)
+          );
+          setClasses(sortedClasses);
         } else {
           setError('Error fetching classes');
         }
@@ -39,7 +43,7 @@ const Class = () => {
       <h1 className={`${styles.heading2} text-2xl mb-6`}>Available Classes</h1>
       <button
         className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
-        onClick={() => navigate(-1)} // Back button
+        onClick={() => navigate(-1)}
       >
         Kembali
       </button>

@@ -14,7 +14,11 @@ const Course = () => {
     axios.get('http://localhost:3001/courses')
       .then((response) => {
         if (response.data.code === "200") {
-          setCourses(response.data.data);
+          // Sort courses alphabetically by `crsCourseName`
+          const sortedCourses = response.data.data.sort((a, b) =>
+            a.crsCourseName.localeCompare(b.crsCourseName)
+          );
+          setCourses(sortedCourses);
         } else {
           setError('Error fetching courses');
         }
@@ -39,7 +43,7 @@ const Course = () => {
       <h1 className={`${styles.heading2} text-2xl mb-6`}>Daftar Mata Kuliah</h1>
       <button
         className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
-        onClick={() => navigate(-1)} // Back button
+        onClick={() => navigate(-1)}
       >Kembali</button>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">

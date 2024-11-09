@@ -12,14 +12,33 @@ const AddCourse = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!crsCourseName || crsCourseName.length > 100) {
+      setError('Course name is required and must be under 100 characters.');
+      return;
+    }
+    if (!crsCode || crsCode.length > 7) {
+      setError('Course code is required and must be under 7 characters.');
+      return;
+    }
+
     try {
-      await axios.post('http://localhost:3001/courses', { crsCourseName, crsCode });
+      // Send POST request to add a new course
+      const response = await axios.post('http://localhost:3001/courses', { crsCourseName, crsCode });
+      
+      console.log("Server Response:", response.data);
+      
       setCrsCourseName('');
       setCrsCode('');
       setError('');
-      alert('Course added successfully!');
+      alert('Mata Kuliah Baru Berhasil Ditambahkan!');
+      
+      navigate('/course');
+      
     } catch (err) {
-      setError('Error adding course!');
+      const serverError = err.response?.data?.message || 'Error adding course!';
+      setError(serverError);
+      console.error("Error Response:", err.response?.data);
     }
   };
 
@@ -27,6 +46,7 @@ const AddCourse = () => {
     <Layout>
       <h2 className={styles.heading2}>Buat Mata Kuliah Baru</h2>
       {error && <div className="mb-4 text-red-500">{error}</div>}
+      
       <button
         className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
         onClick={() => navigate(-1)} // Back button
@@ -57,7 +77,7 @@ const AddCourse = () => {
             required
           />
         </div>
-        <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-green-600">
+        <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
           Buat
         </button>
       </form>

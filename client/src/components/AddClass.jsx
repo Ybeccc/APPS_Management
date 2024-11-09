@@ -11,13 +11,26 @@ const AddClass = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!cssClassName) {
+      setError('Class name is required!');
+      return;
+    }
+
     try {
-      await axios.post('http://localhost:3001/classes', { cssClassName });
+      const response = await axios.post('http://localhost:3001/classes', { cssClassName });
+      console.log("Server Response:", response.data);
+      
       setCssClassName('');
       setError('');
-      alert('Class added successfully!');
+
+      alert('Kelas Baru Berhasil Ditambahkan!');
+      
+      navigate('/class');
     } catch (err) {
-      setError('Error adding class!');
+      const serverError = err.response?.data?.message || 'Error adding class!';
+      setError(serverError);
+      console.error("Error Response:", err.response?.data);
     }
   };
 
@@ -25,6 +38,7 @@ const AddClass = () => {
     <Layout>
       <h2 className={styles.heading2}>Buat Kelas Baru</h2>
       {error && <div className="mb-4 text-red-500">{error}</div>}
+      
       <button
         className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
         onClick={() => navigate(-1)} // Back button
