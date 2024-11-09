@@ -35,6 +35,10 @@ const CoursesModel = sequelizeDatabase.getConnection().define('Course', {
 });
 
 class SequelizeCoursesRepository extends CourseRepository {
+  async create(coursesData) {
+    const createdCourses = await CoursesModel.create(coursesData);
+    return createdCourses;
+  }
   async getAll() {
     return await CoursesModel.findAll();
   }

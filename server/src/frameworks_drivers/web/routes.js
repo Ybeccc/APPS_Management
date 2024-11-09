@@ -52,9 +52,11 @@ router.get('/payroll/role/:id', (req, res) => payrollController.getPayrollByRole
 router.get('/payroll/user/:id', (req, res) => payrollController.getPayrollByUserId(req, res));
 
 // class routes
+router.post('/classes', (req, res) => classesController.createClass(req, res));
 router.get('/classes', (req, res) => classesController.getAll(req, res));
 
 // course routes
+router.post('/courses', (req, res) => coursesController.createCourse(req, res));
 router.get('/courses', (req, res) => coursesController.getAll(req, res));
 
 // classcourse routes

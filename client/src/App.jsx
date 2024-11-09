@@ -23,6 +23,11 @@ import AddAppointment from "./components/AddAppointment";
 import BuatAkun from "./pages/BuatAkun";
 import ClassCourse from "./components/ClassCourse";
 import Appointment from "./components/Appointment";
+import Course from "./components/Course";
+import Class from "./components/Class";
+import AddCourse from "./components/AddCourse";
+import AddClass from "./components/AddClass";
+import AddClassCourse from "./components/AddClassCourse";
 
 function App() {
   return (
@@ -49,10 +54,15 @@ function App() {
         <Route path="/manajementugas/edit/:id" element={<EditTugas />} />
         <Route path="/profile/edit" element={<EditProfile_Asisten />} />
         <Route path="/resetpassword" element={<ResetPW />} />
-        <Route path="/appointment/add" element={<AddAppointment />} />
         <Route path="/createaccount" element={<BuatAkun />} />
         <Route path="/classcourse" element={<ClassCourse />} />
+        <Route path="/classcourse/add" element={<AddClassCourse />} />
         <Route path="/appointment" element={<Appointment />} />
+        <Route path="/appointment/add" element={<AddAppointment />} />
+        <Route path="/course" element={<Course />} />
+        <Route path="/course/add" element={<AddCourse />} />
+        <Route path="/class" element={<Class />} />
+        <Route path="/class/add" element={<AddClass />} />
       </Routes>
     </Router>
     </Provider>

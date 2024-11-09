@@ -10,16 +10,14 @@ const ClassCourse = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch data from the API endpoint on port 3001
     axios.get('http://localhost:3001/allclasscourse')
       .then(response => {
         if (response.data.code === "200" && response.data.status === "success") {
-          // Sort the data alphabetically by appointment_name before setting it to state
           const sortedData = response.data.data.sort((a, b) => 
             a.appointment_name.localeCompare(b.appointment_name)
           );
-          setClassCourses(sortedData); // Set the sorted data to state
-          setError(null); // Clear any existing error
+          setClassCourses(sortedData);
+          setError(null);
         } else {
           setError("Failed to load class courses");
         }
@@ -31,7 +29,6 @@ const ClassCourse = () => {
 
   return (
     <Layout>
-        {/* Page Title */}
         <h1 className={`${styles.heading2} mb-4`}>Daftar Mata Kuliah dan Kelas</h1>
         <button
             className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
@@ -62,9 +59,9 @@ const ClassCourse = () => {
       {/* Create Class Course Button */}
       <button 
         className="mt-6 bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
-        onClick={() => navigate('/createclasscourse')} // Navigate to the create class course page
+        onClick={() => navigate('/classcourse/add')}
       >
-        Create Class Course
+        Buat Mata Kuliah - Kelas
       </button>
     </Layout>
   );
