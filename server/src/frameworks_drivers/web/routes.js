@@ -37,6 +37,7 @@ router.post('/update/users', (req, res) => userController.updateUser(req, res));
 router.get('/practicumast', (req, res) => userController.listPracticumAst(req, res));
 router.get('/studentast', (req, res) => userController.listStudentAst(req, res));
 router.post('/users/update/status/:id', (req, res) => userController.updateUserStatus(req, res));
+router.post('/users/update/password/:id', (req, res) => userController.updateUserPassword(req, res));
 
 // auth routes
 router.get('/me', (req, res) => authController.Me(req, res));

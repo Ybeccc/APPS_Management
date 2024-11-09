@@ -99,6 +99,21 @@ class UserController {
       .json({message: error.message});
     }
   }
+
+  async updateUserPassword(req, res) {
+    try {
+      const passwordData = req.body;
+      const usrId = req.params.id;
+
+      const response = await this.updateUserUseCase.updateUserPassword(usrId,passwordData);
+      res
+        .status(201)
+        .json(response);
+    } catch (error) {
+      res.status(500)
+      .json({message: error.message});
+    }
+  }
 }
 
 module.exports = UserController;

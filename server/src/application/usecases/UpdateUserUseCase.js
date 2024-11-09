@@ -78,6 +78,55 @@ class UpdateUserUseCase {
     }
         return response;
     }
+
+    async updateUserPassword(usrId, passwordData) {
+        const response = new Response();
+
+        try {
+        let userInserted = await this.getUserUseCase.findById(usrId);
+        if (!userInserted.data) {
+            throw new Error('User not found');
+        }
+
+        if(userInserted.data.usrPassword !== passwordData.oldPassword){
+            throw new Error('Wrong Password');
+        }
+
+        if(passwordData.newPassword === passwordData.oldPassword){
+            throw new Error('Use a different Password with old password');
+        }
+
+        const userObject = {
+            usrId: userInserted.data.usrId,
+            usrRoleId: userInserted.data.usrRoleId,
+            usrFullName: userInserted.data.usrFullName,
+            usrUsername: userInserted.data.usrUsername,
+            usrPassword: passwordData.newPassword,
+            usrNim: userInserted.data.usrNim,
+            usrBankAccount: userInserted.data.usrBankAccount,
+            usrBankAccountNumber: userInserted.data.usrBankAccountNumber,
+            usrStatus: userInserted.data.usrStatus,
+            usrCreatedBy: userInserted.data.usrCreatedBy,
+            usrCreatedAt: userInserted.data.usrCreatedAt
+          };
+
+        let userUpdated = await this.userRepository.update(usrId, userObject)
+        if (!userUpdated) {
+            throw new Error('User failed update');
+        }
+
+        response.code = '200';
+        response.status = 'success';
+        response.message = 'User Updated';
+        response.data = userUpdated;
+        } catch (error) {
+        response.code = '400';
+        response.status = 'failed';
+        response.message = 'failed update user';
+        response.error = error.message;      
+    }
+        return response;
+    }
 }
 
 module.exports = UpdateUserUseCase;
