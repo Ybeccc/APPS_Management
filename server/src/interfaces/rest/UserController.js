@@ -9,7 +9,7 @@ class UserController {
     this.userRepository = new SequelizeUserRepository();
     this.createUserUseCase = new CreateUserUseCase(this.userRepository);
     this.getUserUseCase = new GetUserUseCase(this.userRepository);
-    this.updateUserUseCase = new UpdateUserUseCase(this.userRepository);
+    this.updateUserUseCase = new UpdateUserUseCase(this.userRepository, this.getUserUseCase);
   }
 
   async createUser(req, res) {
@@ -76,6 +76,21 @@ class UserController {
     try {
       const userData = req.body;
       const response = await this.updateUserUseCase.updateUser(userData);
+      res
+        .status(201)
+        .json(response);
+    } catch (error) {
+      res.status(500)
+      .json({message: error.message});
+    }
+  }
+
+  async updateUserStatus(req, res) {
+    try {
+      const status = req.body.usrStatus;
+      const usrId = req.params.id;
+
+      const response = await this.updateUserUseCase.updateUserStatus(usrId,status);
       res
         .status(201)
         .json(response);
