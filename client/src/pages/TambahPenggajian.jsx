@@ -3,6 +3,7 @@ import Layout from './Layout';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import styles from "../style";
 
 const TambahPenggajian = () => {
   const [selectedAssistant, setSelectedAssistant] = useState('');
@@ -51,12 +52,11 @@ const TambahPenggajian = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Creating the payload with usrUsername for prlCreatedBy
       const payload = {
-        prlUserId: selectedAssistant, // Ensure this is the correct ID for the assistant
+        prlUserId: selectedAssistant,
         prlNominal: nominal,
         prlPayrollStatus: status,
-        prlCreatedBy: usrUsername // Dynamically set the creator's username
+        prlCreatedBy: usrUsername
       };
 
       const response = await axios.post('http://localhost:3001/payrolls', payload);
@@ -77,8 +77,8 @@ const TambahPenggajian = () => {
 
   return (
     <Layout>
-      <div className="p-6">
-        <h1 className="text-3xl font-bold mb-6">Tambah Gaji</h1>
+      <div className="p-0">
+        <h1 className={styles.heading2}>Tambah Gaji</h1>
         <button
           className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
           onClick={() => navigate(-1)} // Back button
@@ -97,9 +97,8 @@ const TambahPenggajian = () => {
                   className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3"
                   required
                 >
-                  <option value="">Pilih Asisten</option>
+                  <option value="">-- Pilih Asisten --</option>
                   {assistants.map((assistant, index) => (
-                    // Set the value to assistant.usrId instead of assistant.usrFullName
                     <option key={index} value={assistant.usrId}>
                       {assistant.usrFullName}
                     </option>

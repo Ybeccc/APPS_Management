@@ -104,6 +104,26 @@ class GetAttendanceUseCase {
         }
       return response;
     }
+
+    async getAssistantAttendance(userId) {
+      const response = new Response();
+      try {
+          let attendanceData = await this.attendanceRepository.getAssistantAttendance(userId);
+          if (!attendanceData) {
+              throw new Error('attendance not found');
+          }
+          response.code = '200';
+          response.status = 'success';
+          response.message = 'attendance found';
+          response.data = attendanceData;
+        } catch (error) {
+          response.code = '400';
+          response.status = 'failed';
+          response.message = 'attendance not found';
+          response.error = error.message;      
+        }
+      return response;
+    }
 }
 
 module.exports = GetAttendanceUseCase

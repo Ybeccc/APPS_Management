@@ -60,6 +60,7 @@ router.get('/classes', (req, res) => classesController.getAll(req, res));
 // course routes
 router.post('/courses', (req, res) => coursesController.createCourse(req, res));
 router.get('/courses', (req, res) => coursesController.getAll(req, res));
+router.get('/course/listassistant/:id', (req, res) => coursesController.getListAssistantByCourse(req, res));
 
 // classcourse routes
 router.post('/classcourse', (req, res) => classCourseController.createCC(req, res));
@@ -84,6 +85,7 @@ router.get('/attendance/today/:usrId', (req, res) => attendanceController.getTod
 router.get('/attendance', (req, res) => attendanceController.getAll(req, res));
 router.get('/attendance/role/:id', (req, res) => attendanceController.getAttendanceByRoleId(req, res));
 router.get('/attendance/user/:id', (req, res) => attendanceController.getAttendanceByUserId(req, res));
+router.get('/assistant/attendance/:id', (req, res) => attendanceController.getAssistantAttendance(req, res));
 
 // schedule routes
 router.post('/schedule', (req, res) => scheduleController.createSchedule(req, res));
@@ -96,6 +98,7 @@ router.get('/task/:id', (req, res) => taskController.getTaskById(req, res));
 router.get('/task', (req, res) => taskController.getAll(req, res));
 router.post('/task/update/:id', (req, res) => taskController.updateTask(req, res));
 router.get('/task/user/:id', (req, res) => taskController.getTaskByUserId(req, res));
+router.get('/task/role/:id', (req, res) => taskController.getTaskByRoleId(req, res));
 
 //email
 router.post('/email/send', (req, res) => emailController.sendEmail(req, res));

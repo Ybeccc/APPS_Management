@@ -26,6 +26,8 @@ const PR_Koordinator = () => {
       }
 
       const response = await axios.get(`http://localhost:3001/payroll/role/${role_id}`);
+      console.log('Payroll Data:', response.data);
+
       if (response.data && response.data.data) {
         setData(response.data.data);
       }
@@ -34,10 +36,10 @@ const PR_Koordinator = () => {
     }
   };
 
-  const handleDelete = (user_ba_number) => {
-    axios.delete(`http://localhost:3001/delete/payroll/${user_ba_number}`)
+  const handleDelete = (prl_id) => {
+    axios.delete(`http://localhost:3001/delete/payroll/${prl_id}`)
       .then(() => {
-        setData(data.filter((item) => item.user_ba_number !== user_ba_number));
+        setData(data.filter((item) => item.prl_id !== prl_id));
         alert('Data berhasil dihapus');
       })
       .catch((error) => console.error('Error deleting payroll:', error));
@@ -71,7 +73,7 @@ const PR_Koordinator = () => {
         <table className="w-full table-auto bg-white shadow-md rounded-lg">
           <thead>
             <tr className="bg-[#7b2cbf]">
-              {["No", "Tanggal", "Nama", "Nominal", "Status", "Edit", "Delete"].map((header, index) => (
+              {["No", "Tanggal", "Nama", "Nomor Rekening", "Bank", "Nominal", "Status", "Edit"].map((header, index) => (
                 <th
                   key={index}
                   className="border border-gray-300 px-4 py-2 text-center text-white font-semibold text-sm"
@@ -84,13 +86,13 @@ const PR_Koordinator = () => {
           <tbody>
             {data.length === 0 ? (
               <tr>
-                <td colSpan="7" className="text-center py-4 text-gray-500">
+                <td colSpan="9" className="text-center py-4 text-gray-500">
                   Tidak ada data gaji yang tersedia
                 </td>
               </tr>
             ) : (
               data.map((row, index) => (
-                <tr key={index} className="hover:bg-gray-50">
+                <tr key={row.prl_id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {index + 1}
                   </td>
@@ -99,6 +101,12 @@ const PR_Koordinator = () => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {row.user_fullname}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    {row.user_ba_number}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    {row.user_ba}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {formatCurrency(row.nominal)}
@@ -110,19 +118,9 @@ const PR_Koordinator = () => {
                     <div className="flex justify-center">
                       <button
                         className="flex items-center text-green-500 hover:text-green-700 transition"
-                        onClick={() => navigate(`/penggajian/edit/${row.user_ba_number}`)}
+                        onClick={() => navigate(`/penggajian/edit/${row.prl_id}`)}
                       >
                         <FaEdit className="mr-1" /> Ubah
-                      </button>
-                    </div>
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">
-                    <div className="flex justify-center">
-                      <button
-                        className="flex items-center text-red-500 hover:text-red-700 transition"
-                        onClick={() => handleDelete(row.user_ba_number)}
-                      >
-                        <FaTrash className="mr-1" /> Hapus
                       </button>
                     </div>
                   </td>
@@ -133,7 +131,7 @@ const PR_Koordinator = () => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default PR_Koordinator;

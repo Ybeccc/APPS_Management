@@ -78,7 +78,7 @@ const AddClassCourse = () => {
             className="w-full p-2 border border-gray-300 rounded-lg"
             required
           >
-            <option value="">Pilih Mata Kuliah</option>
+            <option value="">-- Pilih Mata Kuliah --</option>
             {courses.map((course) => (
               <option key={course.crsId} value={course.crsId}>
                 {course.crsCourseName} ({course.crsCode})
@@ -94,7 +94,7 @@ const AddClassCourse = () => {
             className="w-full p-2 border border-gray-300 rounded-lg"
             required
           >
-            <option value="">Pilih Kelas</option>
+            <option value="">-- Pilih Kelas --</option>
             {classes.map((cls) => (
               <option key={cls.cssId} value={cls.cssId}>
                 {cls.cssClassName}

@@ -126,6 +126,20 @@ class AttendanceController {
             .json({message: error.message});
         }
     }
+
+    async getAssistantAttendance(req, res) {
+        try {
+        const userId = req.params.id;
+        const response = await this.getAttendanceUseCase.getAssistantAttendance(userId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json({message: error.message});
+        }
+    }
 }
 
 module.exports = AttendanceController;

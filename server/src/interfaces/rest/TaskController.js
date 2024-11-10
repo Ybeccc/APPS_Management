@@ -80,6 +80,19 @@ class TaskController {
             .json({message: error.message});
         }
     }
+    async getTaskByRoleId(req, res) {
+        try {
+        const roleId = req.params.id;
+        const response = await this.getTaskUseCase.findByRoleId(roleId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json({message: error.message});
+        }
+    }
 }
 
 module.exports = TaskController;

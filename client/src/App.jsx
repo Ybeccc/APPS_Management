@@ -28,6 +28,9 @@ import Class from "./components/Class";
 import AddCourse from "./components/AddCourse";
 import AddClass from "./components/AddClass";
 import AddClassCourse from "./components/AddClassCourse";
+import KehadiranDaftarAsisten from "./components/KehadiranDaftarAsisten";
+import TugasDaftarAsisten from "./components/TugasDaftarAsisten";
+import EditStatus from "./components/EditStatus";
 
 function App() {
   return (
@@ -63,6 +66,9 @@ function App() {
         <Route path="/course/add" element={<AddCourse />} />
         <Route path="/class" element={<Class />} />
         <Route path="/class/add" element={<AddClass />} />
+        <Route path="/kehadiran/asisten/:id" element={<KehadiranDaftarAsisten />} />
+        <Route path="/tugas/asisten/:id" element={<TugasDaftarAsisten />} />
+        <Route path="/edituserstatus/:id" element={<EditStatus />} />
       </Routes>
     </Router>
     </Provider>

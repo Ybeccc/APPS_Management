@@ -44,7 +44,7 @@ const PROFILE_Koordinator = () => {
   };
 
   const handleEditUser = (userId) => {
-    navigate(`/edituser/${userId}`);
+    navigate(`/edituserstatus/${userId}`);
   };
 
   return (
@@ -78,7 +78,7 @@ const PROFILE_Koordinator = () => {
                     onClick={() => handleEditUser(user.usrId)}
                     className="bg-yellow-500 text-white py-1 px-3 rounded-lg shadow flex items-center gap-1 hover:bg-yellow-600 transition"
                   >
-                    <FaUserEdit /> Edit
+                    <FaUserEdit /> Ubah Status
                   </button>
                 </li>
               ))

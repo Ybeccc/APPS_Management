@@ -36,6 +36,20 @@ class ClassesController {
             .json({message: error.message});
         }
     }
+
+    async getListAssistantByCourse(req, res) {
+        try {
+            const roleId = req.params.id;
+            const response = await this.getCoursesUseCase.getListAssistantByCourse(roleId);
+        res
+            .status(200)
+            .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json({message: error.message});
+        }
+    }
 }
 
 module.exports = ClassesController;

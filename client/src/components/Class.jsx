@@ -40,7 +40,7 @@ const Class = () => {
 
   return (
     <Layout>
-      <h1 className={`${styles.heading2} text-2xl mb-6`}>Available Classes</h1>
+      <h1 className={`${styles.heading2} text-2xl mb-6`}>Daftar Kelas</h1>
       <button
         className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
         onClick={() => navigate(-1)}
