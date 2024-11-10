@@ -12,7 +12,7 @@ const AttendanceController = require('../../interfaces/rest/AttendanceController
 const ScheduleController = require('../../interfaces/rest/ScheduleController');
 const TaskController = require('../../interfaces/rest/TaskController');
 const EmailController = require('../../interfaces/rest/EmailController');
-
+const ApplicantController = require('../../interfaces/rest/ApplicantController');
 
 const router = express.Router();
 
@@ -28,6 +28,7 @@ const attendanceController = new AttendanceController();
 const scheduleController = new ScheduleController();
 const taskController = new TaskController();
 const emailController = new EmailController();
+const applicantController = new ApplicantController();
 
 // user routes
 router.post('/users', (req, res) => userController.createUser(req, res));
@@ -102,5 +103,9 @@ router.get('/task/role/:id', (req, res) => taskController.getTaskByRoleId(req, r
 
 //email
 router.post('/email/send', (req, res) => emailController.sendEmail(req, res));
+
+//applicant
+router.get('/applicant', (req, res) => applicantController.getAll(req, res));
+
 
 module.exports = router;
