@@ -29,16 +29,6 @@ const PROFILE_Koordinator = () => {
     fetchActiveUsers();
   }, []);
 
-  const handleLogout = () => {
-    dispatch(LogOut());
-
-    alert('Logout berhasil! Anda akan dialihkan ke halaman Login.');
-
-    setTimeout(() => {
-      navigate('/');
-    }, 1000);
-  };
-
   const handleCreateAccount = () => {
     navigate('/createaccount');
   };
@@ -49,13 +39,6 @@ const PROFILE_Koordinator = () => {
 
   return (
     <div className="p-6">
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="absolute mt-5 right-5 bg-red-500 text-white py-2 px-4 rounded-lg shadow hover:bg-red-600 transition"
-      >
-        Logout
-      </button>
 
       <h1 className={`${styles.heading2} mb-6 text-center`}>Profile Koordinator</h1>
 

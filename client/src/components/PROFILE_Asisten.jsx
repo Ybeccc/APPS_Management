@@ -82,27 +82,6 @@ const PROFILE_Asisten = () => {
     fetchData();
   }, [userId]);
 
-  const handleLogout = () => {
-    dispatch(LogOut());
-
-    alert('Logout berhasil! Anda akan dialihkan ke halaman Login.');
-
-    setTimeout(() => {
-      navigate('/');
-    }, 1000);
-  };
-
-  const handleDeleteAppointment = async (appointmentId) => {
-    try {
-      await axios.delete(`http://localhost:3001/appointment/${appointmentId}`);
-      setAppointments((prevAppointments) => 
-        prevAppointments.filter((appointment) => appointment.apt_id !== appointmentId)
-      );
-    } catch (error) {
-      console.error('Error deleting appointment:', error);
-    }
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -113,13 +92,6 @@ const PROFILE_Asisten = () => {
 
   return (
     <div className="p-0">
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="absolute mt-5 right-5 bg-red-500 text-white py-2 px-4 rounded-lg shadow hover:bg-red-600 transition"
-      >
-        Logout
-      </button>
 
       <h1 className={`${styles.heading2} mb-6 text-center`}>Profile Asisten</h1>
 
