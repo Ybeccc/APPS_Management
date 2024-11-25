@@ -5,18 +5,18 @@ import styles from "../style";
 import Layout from "../pages/Layout";
 
 const EditStatus = () => {
-  const { id } = useParams(); // Get user ID from the URL
-  const [status, setStatus] = useState("Active"); // Default status to "Active"
+  const { id } = useParams();
+  const [status, setStatus] = useState("Active");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post(`http://localhost:3001/users/update/status/${id}`, {
-        usrStatus: status, // Send the selected status
+        usrStatus: status,
       });
       alert("Status berhasil diperbarui!");
-      navigate("/profile"); // Redirect to the users page (or another page)
+      navigate("/profile");
     } catch (error) {
       console.error("Error updating status:", error);
       alert("Terjadi kesalahan saat memperbarui status.");

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Layout from "../pages/Layout";
 import styles from "../style";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import AttendancePDFDocument from "../components/pdf/AttendancePDFDocument";
 
 const KehadiranDaftarAsisten = () => {
   const { id } = useParams();
@@ -10,6 +12,8 @@ const KehadiranDaftarAsisten = () => {
   const [filteredAttendance, setFilteredAttendance] = useState([]);
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +21,8 @@ const KehadiranDaftarAsisten = () => {
   }, []);
 
   const fetchAttendance = async () => {
+    setIsLoading(true);
+    setError('');
     try {
       const response = await axios.get(`http://localhost:3001/assistant/attendance/${id}`);
       if (response.data && response.data.status === 'success') {
@@ -24,10 +30,12 @@ const KehadiranDaftarAsisten = () => {
         setAttendance(sortedData);
         setFilteredAttendance(sortedData);
       } else {
-        console.error('Error fetching attendance:', response.data.message);
+        setError('Error fetching attendance: ' + response.data.message);
       }
     } catch (error) {
-      console.error('Error fetching attendance:', error);
+      setError('Error fetching attendance: ' + error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,6 +72,12 @@ const KehadiranDaftarAsisten = () => {
         Kembali
       </button>
 
+      {/* Error Message */}
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+
+      {/* Loading Spinner */}
+      {isLoading && <div className="text-blue-500 mb-4">Loading data...</div>}
+
       {/* Dropdowns for Month and Year */}
       <div className="flex space-x-4 mb-4">
         <select 
@@ -72,18 +86,11 @@ const KehadiranDaftarAsisten = () => {
           className="border border-gray-300 px-4 py-2 rounded"
         >
           <option value="">-- Pilih Bulan --</option>
-          <option value="1">Januari</option>
-          <option value="2">Februari</option>
-          <option value="3">Maret</option>
-          <option value="4">April</option>
-          <option value="5">Mei</option>
-          <option value="6">Juni</option>
-          <option value="7">Juli</option>
-          <option value="8">Agustus</option>
-          <option value="9">September</option>
-          <option value="10">Oktober</option>
-          <option value="11">November</option>
-          <option value="12">Desember</option>
+          {Array.from({ length: 12 }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {new Date(0, i).toLocaleString('id-ID', { month: 'long' })}
+            </option>
+          ))}
         </select>
 
         <select 
@@ -92,9 +99,9 @@ const KehadiranDaftarAsisten = () => {
           className="border border-gray-300 px-4 py-2 rounded"
         >
           <option value="">-- Pilih Tahun --</option>
-          <option value="2024">2024</option>
-          <option value="2023">2023</option>
-          <option value="2022">2022</option>
+          {[2024, 2023, 2022].map((y) => (
+            <option key={y} value={y}>{y}</option>
+          ))}
         </select>
       </div>
 
@@ -137,6 +144,28 @@ const KehadiranDaftarAsisten = () => {
           )}
         </tbody>
       </table>
+
+      {/* Conditional PDF Button */}
+      <div className="mt-4">
+        {month && year ? (
+          <PDFDownloadLink
+            document={<AttendancePDFDocument data={filteredAttendance} />}
+            fileName={`Attendance_Report_${year}_${month}.pdf`}
+          >
+            {({ loading }) =>
+              loading ? "Loading PDF..." : (
+                <button className="bg-blue-500 text-white px-4 py-2 rounded transition">
+                  Generate PDF
+                </button>
+              )
+            }
+          </PDFDownloadLink>
+        ) : (
+          <button className="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed" disabled>
+            Pilih Bulan dan Tahun untuk melakukan Generate PDF
+          </button>
+        )}
+      </div>
     </Layout>
   );
 };

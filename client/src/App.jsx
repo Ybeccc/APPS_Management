@@ -9,6 +9,7 @@ import AsistenMahasiswa from './pages/AsistenMahasiswa';
 import Kehadiran from './pages/Kehadiran';
 import ManajemenTugas from './pages/ManajemenTugas';
 import Penggajian from './pages/Penggajian';
+import Lowongan from "./pages/Lowongan";
 import Profile from './pages/Profile';
 
 import DetailKehadiran from "./pages/DetailKehadiran";
@@ -46,6 +47,7 @@ function App() {
         <Route path="/kehadiran" element={<Kehadiran />} />
         <Route path="/manajementugas" element={<ManajemenTugas />} />
         <Route path="/penggajian" element={<Penggajian />} />
+        <Route path="/lowongan" element={<Lowongan />} />
         <Route path="/profile" element={<Profile />} />
 
         {/* SUB ROUTING MENU */}
