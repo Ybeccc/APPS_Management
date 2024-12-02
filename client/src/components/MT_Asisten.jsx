@@ -6,7 +6,7 @@ import { FaEdit } from "react-icons/fa";
 import styles from "../style";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import TaskPDFAssistantDoc from "../components/pdf/TaskPDFAssistantDoc";
-import logo from '../assets/logo.png';
+// import logo from '../assets/logo.png';
 
 const MT_Asisten = () => {
   const [tasks, setTasks] = useState([]);
@@ -30,10 +30,10 @@ const MT_Asisten = () => {
       if (response.data.data) {
         const sortedTasks = response.data.data.sort((a, b) => new Date(b.tsk_created) - new Date(a.tsk_created));
         setTasks(sortedTasks);
-        setFilteredTasks(sortedTasks); // Initially set filtered tasks to all tasks
+        setFilteredTasks(sortedTasks);
       } else {
         setTasks([]);
-        setFilteredTasks([]); // Ensure filtered tasks are empty
+        setFilteredTasks([]);
         console.warn("No tasks found for the user.");
       }
     } catch (error) {
@@ -93,7 +93,7 @@ const MT_Asisten = () => {
         >
           <option value="">Pilih Tahun</option>
           {Array.from({ length: 5 }, (_, i) => {
-            const year = new Date().getFullYear() - 2 + i; // 2 past, 1 current, 2 future
+            const year = new Date().getFullYear() - 2 + i;
             return (
               <option key={i} value={year}>
                 {year}
@@ -107,7 +107,7 @@ const MT_Asisten = () => {
         <table className="table-auto w-full text-left border-collapse bg-white">
           <thead>
             <tr className="bg-[#7b2cbf]">
-              {["No", "Tanggal", "Nama Mata Kuliah", "Kelas", "Deskripsi Tugas", "Catatan", "Nama Asisten", "Edit"].map(
+              {["No", "Tanggal", "Nama Tugas", "Kode Mata Kuliah", "Nama Mata Kuliah", "Kelas", "Deskripsi Tugas", "Catatan", "Nama Asisten", "Edit"].map(
                 (header, index) => (
                   <th
                     key={index}
@@ -132,6 +132,12 @@ const MT_Asisten = () => {
                     })}
                   </td>
                   <td className="border px-4 py-2 text-center text-sm">
+                    {task.tsk_name}
+                  </td>
+                  <td className="border px-4 py-2 text-center text-sm">
+                    {task.course_code}
+                  </td>
+                  <td className="border px-4 py-2 text-center text-sm">
                     {task.course_name}
                   </td>
                   <td className="border px-4 py-2 text-center text-sm">
@@ -151,7 +157,6 @@ const MT_Asisten = () => {
                       <button
                         className="flex items-center text-green-500 hover:text-green-700 transition"
                         onClick={() => {
-                          console.log("Navigating to edit task with ID:", task.tsk_id);
                           navigate(`/manajementugas/edit/${task.tsk_id}`);
                         }}
                       >
@@ -163,7 +168,7 @@ const MT_Asisten = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="text-center py-4 text-sm">
+                <td colSpan="10" className="text-center py-4 text-sm">
                   Tidak ada data untuk ditampilkan.
                 </td>
               </tr>
@@ -172,7 +177,6 @@ const MT_Asisten = () => {
         </table>
       </div>
 
-      {/* PDF Button */}
       <div className="bottom-4 left-4 z-50 mt-5">
         {selectedMonth && selectedYear ? (
           <PDFDownloadLink
