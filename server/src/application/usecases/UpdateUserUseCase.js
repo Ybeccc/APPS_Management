@@ -27,7 +27,7 @@ class UpdateUserUseCase {
             response.code = '200';
             response.status = 'success';
             response.message = 'user Updated';
-            response.data = taskUpdated;
+            response.data = userUpdated;
         } catch (error) {
             response.code = '400';
             response.status = 'failed';

@@ -98,7 +98,7 @@ class SequelizeUserRepository extends UserRepository {
       return null;  
     }
 
-    const updatedUser = await UserModel.findOne({ where: { usrId } })
+    const updatedUser = await UserModel.findOne({ where: { usrId: userId } })
     return updatedUser;
   }
 
