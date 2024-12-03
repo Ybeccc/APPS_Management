@@ -68,11 +68,11 @@ const BuatAkun = () => {
       <div className="p-6 max-w-md mx-auto bg-white shadow-lg rounded-lg">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Full Name</label>
+            <label className="block text-sm font-medium text-gray-700">Nama Lengkap</label>
             <input
               type="text"
               name="usrFullName"
-              placeholder="Enter full name"
+              placeholder="Masukkan Nama Lengkap"
               value={formData.usrFullName}
               onChange={handleChange}
               required
@@ -85,7 +85,7 @@ const BuatAkun = () => {
             <input
               type="text"
               name="usrUsername"
-              placeholder="Enter username"
+              placeholder="Masukkan username"
               value={formData.usrUsername}
               onChange={handleChange}
               required
@@ -98,7 +98,7 @@ const BuatAkun = () => {
             <input
               type="password"
               name="usrPassword"
-              placeholder="Enter password"
+              placeholder="Masukkan password"
               value={formData.usrPassword}
               onChange={handleChange}
               required
@@ -110,14 +110,14 @@ const BuatAkun = () => {
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition"
           >
-            Create Account
+            Buat Akun
           </button>
         </form>
         <button
           onClick={() => navigate(-1)}
           className="w-full mt-4 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow hover:bg-gray-400 transition"
         >
-          Back
+          Kembali
         </button>
       </div>
     </Layout>

@@ -5,28 +5,45 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import TaskPDFDocument from "../components/pdf/TaskPDFDocument";
+import { useSelector } from "react-redux";
 
 const MT_Koordinator = () => {
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
+  const { user } = useSelector((state) => state.auth); // Get current user data from Redux
 
   useEffect(() => {
-    getAllTasks();
-  }, []);
+    if (user && user.data) {
+      getTasksByRole(user.data.usrId);
+    }
+  }, [user]);
 
   useEffect(() => {
     filterTasks();
   }, [selectedMonth, selectedYear, tasks]);
 
-  const getAllTasks = async () => {
+  // Fetch tasks based on usrId and role_id
+  const getTasksByRole = async (usrId) => {
     try {
-      const response = await axios.get("http://localhost:3001/task");
+      let role_id;
+      if (usrId === 1) {
+        role_id = 3; // Set role_id to 3 if usrId is 1
+      } else if (usrId === 2) {
+        role_id = 4; // Set role_id to 4 if usrId is 2
+      }
+
+      if (!role_id) {
+        console.error("Invalid usrId for payroll data fetch");
+        return;
+      }
+
+      const response = await axios.get(`http://localhost:3001/task/role/${role_id}`);
       if (Array.isArray(response.data.data)) {
-        // Sort tasks from newest to oldest based on tskCreatedAt
+        // Sort tasks from newest to oldest based on tsk_created
         const sortedTasks = response.data.data.sort(
-          (a, b) => new Date(b.tskCreatedAt) - new Date(a.tskCreatedAt)
+          (a, b) => new Date(b.tsk_created) - new Date(a.tsk_created)
         );
         setTasks(sortedTasks);
       } else {
@@ -41,12 +58,12 @@ const MT_Koordinator = () => {
     let filtered = tasks;
     if (selectedMonth) {
       filtered = filtered.filter(
-        (task) => new Date(task.tskCreatedAt).getMonth() + 1 === parseInt(selectedMonth)
+        (task) => new Date(task.tsk_created).getMonth() + 1 === parseInt(selectedMonth)
       );
     }
     if (selectedYear) {
       filtered = filtered.filter(
-        (task) => new Date(task.tskCreatedAt).getFullYear() === parseInt(selectedYear)
+        (task) => new Date(task.tsk_created).getFullYear() === parseInt(selectedYear)
       );
     }
     setFilteredTasks(filtered);
@@ -64,7 +81,7 @@ const MT_Koordinator = () => {
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(e.target.value)}
         >
-          <option value="">Pilih Bulan</option>
+          <option value="">-- Pilih Bulan --</option>
           {[...Array(12)].map((_, i) => (
             <option key={i} value={i + 1}>
               {format(new Date(0, i), "MMMM", { locale: id })}
@@ -78,7 +95,7 @@ const MT_Koordinator = () => {
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
         >
-          <option value="">Pilih Tahun</option>
+          <option value="">-- Pilih Tahun --</option>
           {[2024, 2025, 2026].map((year) => (
             <option key={year} value={year}>
               {year}
@@ -93,7 +110,7 @@ const MT_Koordinator = () => {
           <thead>
             <tr className="bg-[#7b2cbf]">
               <th className="border border-gray-300 px-4 py-2 text-center text-white font-semibold text-sm">No</th>
-              {["Tanggal", "Nama Tugas", "Deskripsi Tugas", "Catatan", "Nama Asisten"].map((header, index) => (
+              {["Tanggal", "Mata Kuliah", "Kelas", "Nama Asisten", "Nama Tugas", "Deskripsi Tugas", "Catatan"].map((header, index) => (
                 <th
                   key={index}
                   className="border border-gray-300 px-4 py-2 text-center text-white font-semibold text-sm"
@@ -105,23 +122,25 @@ const MT_Koordinator = () => {
           </thead>
           <tbody>
             {filteredTasks.length > 0 ? (
-              filteredTasks.map((row, index) => (
-                <tr key={index}>
+              filteredTasks.map((task, index) => (
+                <tr key={task.tsk_id}>
                   <td className="border border-gray-300 px-4 py-2 text-center">{index + 1}</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {isNaN(new Date(row.tskCreatedAt).getTime())
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    {isNaN(new Date(task.tsk_created).getTime())
                       ? "Invalid Date"
-                      : format(new Date(row.tskCreatedAt), "dd MMMM yyyy", { locale: id })}
+                      : format(new Date(task.tsk_created), "dd MMMM yyyy", { locale: id })}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">{row.tskTaskName || "N/A"}</td>
-                  <td className="border border-gray-300 px-4 py-2 text-left max-w-xs">{row.tskDescription || "N/A"}</td>
-                  <td className="border border-gray-300 px-4 py-2 text-left max-w-xs">{row.tskNotes || "N/A"}</td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">{row.tskCreatedBy || "N/A"}</td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">{task.course_name || "N/A"}</td>
+                  <td className="border border-gray-300 px-4 py-2 text-left max-w-xs">{task.class_name || "N/A"}</td>
+                  <td className="border border-gray-300 px-4 py-2 text-left max-w-xs">{task.user_fullname || "N/A"}</td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">{task.tsk_name || "N/A"}</td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">{task.description || "N/A"}</td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">{task.notes || "N/A"}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="text-center py-4 text-gray-500">
+                <td colSpan="7" className="text-center py-4 text-gray-500">
                   Tidak ada tugas untuk ditampilkan.
                 </td>
               </tr>

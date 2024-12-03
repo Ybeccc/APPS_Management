@@ -37,7 +37,6 @@ const KH_Koordinator = () => {
       console.log('Attendance Data:', response.data);
 
       if (response.data && response.data.data) {
-        // Sort data from newest to oldest based on created_date
         const sortedData = response.data.data.sort(
           (a, b) => new Date(b.created_date) - new Date(a.created_date)
         );
@@ -52,6 +51,21 @@ const KH_Koordinator = () => {
     if (!dateString) return "-";
     const date = new Date(dateString);
     return format(date, "dd MMMM yyyy", { locale: id });
+  };
+
+  const calculateDuration = (checkIn, checkOut) => {
+    if (!checkIn || !checkOut) return "-";
+    const checkInDate = new Date(`1970-01-01T${checkIn}Z`);
+    const checkOutDate = new Date(`1970-01-01T${checkOut}Z`);
+    const diff = (checkOutDate - checkInDate) / 1000; // Difference in seconds
+
+    if (diff < 0) return "-"; // Check if duration is negative
+
+    const hours = String(Math.floor(diff / 3600)).padStart(2, '0');
+    const minutes = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+    const seconds = String(Math.floor(diff % 60)).padStart(2, '0');
+
+    return `${hours}:${minutes}:${seconds}`;
   };
 
   const filterData = () => {
@@ -80,7 +94,7 @@ const KH_Koordinator = () => {
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(e.target.value)}
         >
-          <option value="">Pilih Bulan</option>
+          <option value="">-- Pilih Bulan --</option>
           {[...Array(12)].map((_, i) => (
             <option key={i} value={i + 1}>
               {format(new Date(0, i), "MMMM", { locale: id })}
@@ -93,7 +107,7 @@ const KH_Koordinator = () => {
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
         >
-          <option value="">Pilih Tahun</option>
+          <option value="">-- Pilih Tahun --</option>
           {[2023, 2024, 2025].map((year) => (
             <option key={year} value={year}>
               {year}
@@ -107,7 +121,7 @@ const KH_Koordinator = () => {
           <thead>
             <tr className="bg-[#7b2cbf] text-white">
               <th className="border border-gray-300 px-4 py-2 text-center font-semibold text-sm">No</th>
-              {["Tanggal", "Nama Asisten", "Mata Kuliah", "Kelas", "Check-in", "Check-out"].map((header, index) => (
+              {["Tanggal", "Nama Asisten", "Mata Kuliah", "Kelas", "Check-in", "Check-out", "Durasi"].map((header, index) => (
                 <th
                   key={index}
                   className="border border-gray-300 px-4 py-2 text-center font-semibold text-sm"
@@ -120,7 +134,7 @@ const KH_Koordinator = () => {
           <tbody>
             {filteredData.length === 0 ? (
               <tr>
-                <td colSpan="7" className="text-center py-4 text-gray-500">
+                <td colSpan="8" className="text-center py-4 text-gray-500">
                   Tidak ada kehadiran untuk ditampilkan.
                 </td>
               </tr>
@@ -145,6 +159,9 @@ const KH_Koordinator = () => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {row.check_out || "-"}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    {calculateDuration(row.check_in, row.check_out)}
                   </td>
                 </tr>
               ))

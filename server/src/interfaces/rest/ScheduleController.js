@@ -18,8 +18,9 @@ class ScheduleController {
             .status(201)
             .json(response);
         } catch (error) {
-        res.status(500).json(response);
-        }
+        res.status(500)
+        .json({message: error.message});
+    }
     }
     async getScheduleById(req, res) {
         try {
@@ -31,7 +32,7 @@ class ScheduleController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAll(req, res) {
@@ -43,7 +44,7 @@ class ScheduleController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
 }

@@ -27,8 +27,9 @@ class AttendanceController {
             .status(201)
             .json(response);
         } catch (error) {
-        res.status(500).json(response);
-        }
+        res.status(500)
+        .json({message: error.message});
+    }
     }
     async getAttendanceById(req, res) {
         try {
@@ -40,7 +41,7 @@ class AttendanceController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAll(req, res) {
@@ -52,7 +53,7 @@ class AttendanceController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async updateAttendance(req, res) {
@@ -80,7 +81,8 @@ class AttendanceController {
                 .status(200)
                 .json(response);
         } catch (error) {
-            res.status(500).json(response);
+            res.status(500)
+            .json({message: error.message});
         }
     }
     async getAttendanceByRoleId(req, res) {
@@ -93,7 +95,7 @@ class AttendanceController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
 
@@ -107,7 +109,7 @@ class AttendanceController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
 
@@ -121,7 +123,21 @@ class AttendanceController {
         } catch (error) {
         res
             .status(500)
+            .json({message: error.message});
+        }
+    }
+
+    async getAssistantAttendance(req, res) {
+        try {
+        const userId = req.params.id;
+        const response = await this.getAttendanceUseCase.getAssistantAttendance(userId);
+        res
+            .status(200)
             .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json({message: error.message});
         }
     }
 }

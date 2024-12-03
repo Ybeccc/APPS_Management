@@ -20,7 +20,7 @@ class GetScheduleUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'schedule not found';
-            response.error = error;      
+            response.error = error.message;      
           }
         return response;
     }
@@ -40,7 +40,7 @@ class GetScheduleUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'schedule not found';
-            response.error = error;      
+            response.error = error.message;      
           }
         return response;
     }

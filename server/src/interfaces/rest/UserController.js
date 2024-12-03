@@ -9,7 +9,7 @@ class UserController {
     this.userRepository = new SequelizeUserRepository();
     this.createUserUseCase = new CreateUserUseCase(this.userRepository);
     this.getUserUseCase = new GetUserUseCase(this.userRepository);
-    this.updateUserUseCase = new UpdateUserUseCase(this.userRepository);
+    this.updateUserUseCase = new UpdateUserUseCase(this.userRepository, this.getUserUseCase);
   }
 
   async createUser(req, res) {
@@ -20,7 +20,8 @@ class UserController {
         .status(201)
         .json(response);
     } catch (error) {
-      res.status(500).json(response);
+      res.status(500)
+      .json({message: error.message});
     }
   }
 
@@ -34,8 +35,8 @@ class UserController {
     } catch (error) {
       res
         .status(500)
-        .json(response);
-    }
+        .json({message: error.message});
+      }
   }
 
   async getAll(req, res) {
@@ -47,8 +48,8 @@ class UserController {
     } catch (error) {
       res
         .status(500)
-        .json(response);
-    }
+        .json({message: error.message});
+      }
   }
 
   async listPracticumAst(req, res) {
@@ -56,7 +57,8 @@ class UserController {
       const response = await this.getUserUseCase.listPracticumAst();
       res.status(200).json(response);
     } catch (error) {
-      res.status(500).json(response);
+      res.status(500)
+      .json({message: error.message});
     }
   }
 
@@ -65,19 +67,58 @@ class UserController {
       const response = await this.getUserUseCase.listStudentAst();
       res.status(200).json(response);
     } catch (error) {
-      res.status(500).json(response);
+      res.status(500)
+      .json({message: error.message});
     }
   }
 
   async updateUser(req, res) {
     try {
+      const userId = req.params.id
       const userData = req.body;
-      const response = await this.updateUserUseCase.updateUser(userData);
+
+      let userInserted = await this.getUserUseCase.findById(userId);
+        if (!userInserted.data) {
+            throw new Error('User not found');
+        }
+
+      const response = await this.updateUserUseCase.updateUser(userId, userData);
       res
         .status(201)
         .json(response);
     } catch (error) {
-      res.status(500).json(response);
+      res.status(500)
+      .json({message: error.message});
+    }
+  }
+
+  async updateUserStatus(req, res) {
+    try {
+      const status = req.body.usrStatus;
+      const usrId = req.params.id;
+
+      const response = await this.updateUserUseCase.updateUserStatus(usrId,status);
+      res
+        .status(201)
+        .json(response);
+    } catch (error) {
+      res.status(500)
+      .json({message: error.message});
+    }
+  }
+
+  async updateUserPassword(req, res) {
+    try {
+      const passwordData = req.body;
+      const usrId = req.params.id;
+
+      const response = await this.updateUserUseCase.updateUserPassword(usrId,passwordData);
+      res
+        .status(201)
+        .json(response);
+    } catch (error) {
+      res.status(500)
+      .json({message: error.message});
     }
   }
 }

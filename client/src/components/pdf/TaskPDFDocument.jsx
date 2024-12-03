@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 5,
+    textAlign: "center",
   },
   tableCellHeader: {
     fontSize: 12,

@@ -98,6 +98,23 @@ class SequelizeTaskRepository extends TaskRepository {
       throw error;
     }
   }
+  async getByRoleId(roleId) {
+    const sequelize = sequelizeDatabase.getConnection();
+
+    try {
+      const results = await sequelize.query(
+        'SELECT * FROM users.get_task_by_role_id(:roleId)', // Call the stored function
+        {
+          replacements: { roleId }, 
+          type: sequelize.QueryTypes.SELECT
+        }
+      );
+      return Array.isArray(results) ? results : results ? [results] : [];
+    } catch (error) {
+      console.error('Error calling stored function:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = SequelizeTaskRepository;

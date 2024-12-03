@@ -20,7 +20,7 @@ class GetAppointmentUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'appointment not found';
-            response.error = error;      
+            response.error = error.message;      
           }
         return response;
     }
@@ -40,7 +40,7 @@ class GetAppointmentUseCase {
             response.code = '400';
             response.status = 'failed';
             response.message = 'appointment not found';
-            response.error = error;      
+            response.error = error.message;      
           }
         return response;
     }
@@ -60,7 +60,7 @@ class GetAppointmentUseCase {
           response.code = '400';
           response.status = 'failed';
           response.message = 'appointment not found';
-          response.error = error;      
+          response.error = error.message;      
         }
       return response;
     }
@@ -80,7 +80,7 @@ class GetAppointmentUseCase {
           response.code = '400';
           response.status = 'failed';
           response.message = 'appointment not found';
-          response.error = error;      
+          response.error = error.message;      
         }
       return response;
     }
@@ -100,7 +100,7 @@ class GetAppointmentUseCase {
           response.code = '400';
           response.status = 'failed';
           response.message = 'appointment not found';
-          response.error = error;      
+          response.error = error.message;      
         }
       return response;
     }

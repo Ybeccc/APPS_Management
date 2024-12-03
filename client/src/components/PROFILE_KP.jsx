@@ -29,33 +29,16 @@ const PROFILE_Koordinator = () => {
     fetchActiveUsers();
   }, []);
 
-  const handleLogout = () => {
-    dispatch(LogOut());
-
-    alert('Logout berhasil! Anda akan dialihkan ke halaman Login.');
-
-    setTimeout(() => {
-      navigate('/');
-    }, 1000);
-  };
-
   const handleCreateAccount = () => {
     navigate('/createaccount');
   };
 
   const handleEditUser = (userId) => {
-    navigate(`/edituser/${userId}`);
+    navigate(`/edituserstatus/${userId}`);
   };
 
   return (
     <div className="p-6">
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="absolute mt-5 right-5 bg-red-500 text-white py-2 px-4 rounded-lg shadow hover:bg-red-600 transition"
-      >
-        Logout
-      </button>
 
       <h1 className={`${styles.heading2} mb-6 text-center`}>Profile Koordinator</h1>
 
@@ -78,7 +61,7 @@ const PROFILE_Koordinator = () => {
                     onClick={() => handleEditUser(user.usrId)}
                     className="bg-yellow-500 text-white py-1 px-3 rounded-lg shadow flex items-center gap-1 hover:bg-yellow-600 transition"
                   >
-                    <FaUserEdit /> Edit
+                    <FaUserEdit /> Ubah Status
                   </button>
                 </li>
               ))
@@ -94,7 +77,7 @@ const PROFILE_Koordinator = () => {
         onClick={handleCreateAccount}
         className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg shadow flex items-center gap-2 hover:bg-blue-600 transition"
       >
-        <FaUserPlus /> Create Account
+        <FaUserPlus /> Buat Akun
       </button>
     </div>
   );

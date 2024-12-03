@@ -18,8 +18,9 @@ class ClassCourseController {
             .status(201)
             .json(response);
         } catch (error) {
-        res.status(500).json(response);
-        }
+        res.status(500)
+        .json({message: error.message});
+    }
     }
     async getCCById(req, res) {
         try {
@@ -31,7 +32,7 @@ class ClassCourseController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAll(req, res) {
@@ -43,7 +44,7 @@ class ClassCourseController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAllClassCourse(req, res) {
@@ -55,7 +56,7 @@ class ClassCourseController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
 }

@@ -7,29 +7,31 @@ class UpdateTaskUseCase {
         this.getTaskUseCase = getTaskUseCase;
     }
 
-    async updatetask(taskData) {
+    async updateTask(tskId,taskData) {
         const response = new Response();
 
         try {
-        let taskInserted = await this.getTaskUseCase.findById(taskData.tskId);
-        if (!taskInserted.data) {
-            throw new Error('task not found');
-        }
+            const taskObject = {
+                tskAptId: taskData.tskAptId,
+                tskTaskName: taskData.tskTaskName, 
+                tskDescription: taskData.tskDescription,
+                tskNotes: taskData.tskNotes
+            };
 
-        let taskUpdated = await this.taskRepository.update(taskData.tskId, taskData)
-        if (!taskUpdated) {
-            throw new Error('task failed update');
-        }
+            let taskUpdated = await this.taskRepository.update(tskId, taskObject)
+            if (!taskUpdated) {
+                throw new Error('task failed update');
+            }
 
-        response.code = '200';
-        response.status = 'success';
-        response.message = 'task Updated';
-        response.data = taskUpdated;
+            response.code = '200';
+            response.status = 'success';
+            response.message = 'task Updated';
+            response.data = taskUpdated;
         } catch (error) {
-        response.code = '400';
-        response.status = 'failed';
-        response.message = 'failed update task';
-        response.error = error;      
+            response.code = '400';
+            response.status = 'failed';
+            response.message = 'failed update task';
+            response.error = error.message;      
         }
         return response;
     }

@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { LoginUser, reset } from "../features/authSlice";
 import { landing } from '../assets';
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const Login = () => {
   const [usrUsername, setusrUsername] = useState("");
   const [usrPassword, setusrPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isError, isSuccess, isLoading, message } = useSelector(
@@ -27,7 +30,7 @@ const Login = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
-      <div className="md:w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${landing})` }}>=
+      <div className="md:w-1/2 bg-cover bg-center" style={{ backgroundImage: `url(${landing})` }}>
       </div>
       <div className="md:w-1/2 flex items-center justify-center bg-gray-100">
         <div className="w-full max-w-xs">
@@ -52,15 +55,24 @@ const Login = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                value={usrPassword}
-                onChange={(e) => setusrPassword(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Enter your password"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  value={usrPassword}
+                  onChange={(e) => setusrPassword(e.target.value)}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-2 text-gray-600"
+                >
+                  {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+                </button>
+              </div>
             </div>
             <div className="flex items-center justify-between">
               <button

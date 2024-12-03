@@ -25,12 +25,12 @@ const Appointment = () => {
       <button
         className="bg-gray-500 text-white px-4 py-2 mb-4 rounded"
         onClick={() => navigate(-1)}>Kembali</button>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto mb-8">
         <table className="min-w-full bg-white border border-gray-200 rounded-md">
           <thead>
             <tr className="bg-[#7b2cbf]">
               <th className="border border-gray-300 px-4 py-2 text-center text-white font-semibold text-sm">No</th>
-              {["Status", "Full Name", "Course Name", "Class Name"].map((header, index) => (
+              {["Status", "Nama Lengkap", "Mata Kuliah", "Kelas"].map((header, index) => (
                 <th
                   key={index}
                   className="border border-gray-300 px-4 py-2 text-center text-white font-semibold text-sm"
@@ -52,6 +52,15 @@ const Appointment = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex">
+        <button
+          className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition"
+          onClick={() => navigate('/appointment/add')}
+        >
+          Buat Mata Kuliah Asisten Baru
+        </button>
       </div>
     </Layout>
   );

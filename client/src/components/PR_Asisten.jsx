@@ -79,10 +79,14 @@ const PR_Asisten = () => {
                 <tr key={index} className="text-center border-b">
                   <td className="py-2 px-4 border-r text-sm">{index + 1}</td>
                   <td className="py-2 px-4 border-r text-sm">
-                    {new Date(payroll.created_date).toLocaleDateString('en-GB')}
+                    {new Date(payroll.created_date).toLocaleDateString('id-ID', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                    })}
                   </td>
                   <td className="py-2 px-4 border-r text-sm">
-                    Rp{payroll.nominal.toLocaleString()}
+                    Rp{payroll.nominal.toLocaleString('id-ID')}
                   </td>
                   <td className="py-2 px-4 text-sm">
                     {payroll.payroll_status}

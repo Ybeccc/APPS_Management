@@ -17,6 +17,9 @@ class AttendanceRepository {
     getByUserId(userId) {
       throw new Error('Method not implemented');
     }
+    getAssistantAttendance(userId) {
+      throw new Error('Method not implemented');
+    }
   }
   
 module.exports = AttendanceRepository;

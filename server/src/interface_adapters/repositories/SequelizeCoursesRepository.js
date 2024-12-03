@@ -35,8 +35,29 @@ const CoursesModel = sequelizeDatabase.getConnection().define('Course', {
 });
 
 class SequelizeCoursesRepository extends CourseRepository {
+  async create(coursesData) {
+    const createdCourses = await CoursesModel.create(coursesData);
+    return createdCourses;
+  }
   async getAll() {
     return await CoursesModel.findAll();
+  }
+  async getListAssistantByCourse(roleId) {
+    const sequelize = sequelizeDatabase.getConnection();
+
+    try {
+      const results = await sequelize.query(
+        'SELECT * FROM users.get_assistant_by_course(:roleId)', // Call the stored function
+        {
+          replacements: { roleId }, 
+          type: sequelize.QueryTypes.SELECT
+        }
+      );
+      return Array.isArray(results) ? results : results ? [results] : [];
+    } catch (error) {
+      console.error('Error calling stored function:', error);
+      throw error;
+    }
   }
 }
 

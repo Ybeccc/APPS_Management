@@ -20,7 +20,8 @@ class TaskController {
             .status(201)
             .json(response);
         } catch (error) {
-        res.status(500).json(response);
+            res.status(500)
+            .json({message: error.message});
         }
     }
     async getTaskById(req, res) {
@@ -33,7 +34,7 @@ class TaskController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async getAll(req, res) {
@@ -45,18 +46,25 @@ class TaskController {
         } catch (error) {
         res
             .status(500)
-            .json(response);
+            .json({message: error.message});
         }
     }
     async updateTask(req, res) {
         try {
-          const taskData = req.body;
-          const response = await this.updateTaskUseCase.updateTask(taskData);
-          res
-            .status(201)
-            .json(response);
+            const taskId = req.params.id;
+            const taskData = req.body;
+
+            let taskInserted = await this.getTaskUseCase.findById(taskId);
+            if (!taskInserted.data) {
+                throw new Error('task not found');
+            }
+
+            const response = await this.updateTaskUseCase.updateTask(taskId,taskData);
+            res
+                .status(201)
+                .json(response);
         } catch (error) {
-          res.status(500).json(response);
+            res.status(500).json({message: error.message});
         }
     }
     async getTaskByUserId(req, res) {
@@ -69,7 +77,20 @@ class TaskController {
         } catch (error) {
         res
             .status(500)
+            .json({message: error.message});
+        }
+    }
+    async getTaskByRoleId(req, res) {
+        try {
+        const roleId = req.params.id;
+        const response = await this.getTaskUseCase.findByRoleId(roleId);
+        res
+            .status(200)
             .json(response);
+        } catch (error) {
+        res
+            .status(500)
+            .json({message: error.message});
         }
     }
 }

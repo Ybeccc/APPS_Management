@@ -13,7 +13,7 @@ const ClassesModel = sequelizeDatabase.getConnection().define('Class', {
         field: 'css_id'  // Maps to snake_case in the database
     },
     cssClassName: {
-        type: DataTypes.CHAR(1),
+        type: DataTypes.STRING(25),
         allowNull: false,
         field: 'css_class_name'
     },
@@ -30,6 +30,10 @@ const ClassesModel = sequelizeDatabase.getConnection().define('Class', {
 });
 
 class SequelizeClassesRepository extends ClassRepository {
+  async create(classesData) {
+    const createdClasses = await ClassesModel.create(classesData);
+    return createdClasses;
+  }
   async getAll() {
     return await ClassesModel.findAll();
   }

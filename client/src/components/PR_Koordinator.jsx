@@ -3,22 +3,21 @@ import styles from '../style';
 import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
-import { useSelector } from "react-redux"; // Assuming you're using Redux to get the current user
+import { useSelector } from "react-redux";
 
 const PR_Koordinator = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  const { user } = useSelector((state) => state.auth); // Get current user from Redux store
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (user && user.data) {
-      fetchPayrollData(user.data.usrId); // Pass usrId to fetchPayrollData
+      fetchPayrollData(user.data.usrId);
     }
   }, [user]);
 
   const fetchPayrollData = async (usrId) => {
     try {
-      // Determine role_id based on usrId
       const role_id = usrId === 1 ? 3 : usrId === 2 ? 4 : null;
 
       if (!role_id) {
@@ -26,34 +25,33 @@ const PR_Koordinator = () => {
         return;
       }
 
-      // Fetch payroll data with the specified role_id
       const response = await axios.get(`http://localhost:3001/payroll/role/${role_id}`);
-      console.log('Payroll Data:', response.data); // Debugging log
+      console.log('Payroll Data:', response.data);
 
       if (response.data && response.data.data) {
-        setData(response.data.data); // Store the payroll data
+        setData(response.data.data);
       }
     } catch (error) {
       console.error('Error fetching payroll data:', error);
     }
   };
 
-  const handleDelete = (user_ba_number) => {
-    axios.delete(`http://localhost:3001/delete/payroll/${user_ba_number}`)
+  const handleDelete = (prl_id) => {
+    axios.delete(`http://localhost:3001/delete/payroll/${prl_id}`)
       .then(() => {
-        setData(data.filter((item) => item.user_ba_number !== user_ba_number));
+        setData(data.filter((item) => item.prl_id !== prl_id));
         alert('Data berhasil dihapus');
       })
       .catch((error) => console.error('Error deleting payroll:', error));
   };
 
-  // Function to format date to YYYY-MM-DD
+  // Format date to Indonesian format DD MMMM YYYY
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0]; // Get the date in YYYY-MM-DD format
+    const options = { day: '2-digit', month: 'long', year: 'numeric' };
+    return date.toLocaleDateString('id-ID', options);
   };
 
-  // Helper function to format nominal with Rp prefix and thousands separator
   const formatCurrency = (amount) => {
     return `Rp ${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
   };
@@ -75,7 +73,7 @@ const PR_Koordinator = () => {
         <table className="w-full table-auto bg-white shadow-md rounded-lg">
           <thead>
             <tr className="bg-[#7b2cbf]">
-              {["Tanggal", "Nama", "Nominal", "Status", "Edit", "Delete"].map((header, index) => (
+              {["No", "Tanggal", "Nama", "Nomor Rekening", "Bank", "Nominal", "Status", "Edit"].map((header, index) => (
                 <th
                   key={index}
                   className="border border-gray-300 px-4 py-2 text-center text-white font-semibold text-sm"
@@ -88,18 +86,27 @@ const PR_Koordinator = () => {
           <tbody>
             {data.length === 0 ? (
               <tr>
-                <td colSpan="6" className="text-center py-4 text-gray-500">
+                <td colSpan="9" className="text-center py-4 text-gray-500">
                   Tidak ada data gaji yang tersedia
                 </td>
               </tr>
             ) : (
               data.map((row, index) => (
-                <tr key={index} className="hover:bg-gray-50">
+                <tr key={row.prl_id} className="hover:bg-gray-50">
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    {index + 1}
+                  </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {formatDate(row.created_date)}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {row.user_fullname}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    {row.user_ba_number}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    {row.user_ba}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {formatCurrency(row.nominal)}
@@ -111,19 +118,9 @@ const PR_Koordinator = () => {
                     <div className="flex justify-center">
                       <button
                         className="flex items-center text-green-500 hover:text-green-700 transition"
-                        onClick={() => navigate(`/penggajian/edit/${row.user_ba_number}`)}
+                        onClick={() => navigate(`/penggajian/edit/${row.prl_id}`)}
                       >
                         <FaEdit className="mr-1" /> Ubah
-                      </button>
-                    </div>
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">
-                    <div className="flex justify-center">
-                      <button
-                        className="flex items-center text-red-500 hover:text-red-700 transition"
-                        onClick={() => handleDelete(row.user_ba_number)}
-                      >
-                        <FaTrash className="mr-1" /> Hapus
                       </button>
                     </div>
                   </td>
@@ -134,7 +131,7 @@ const PR_Koordinator = () => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default PR_Koordinator;

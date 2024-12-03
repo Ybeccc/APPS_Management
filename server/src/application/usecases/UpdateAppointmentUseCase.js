@@ -29,8 +29,8 @@ class UpdateAppointmentUseCase {
         response.code = '400';
         response.status = 'failed';
         response.message = 'failed update appointment';
-        response.error = error;      
-        }
+        response.error = error.message;      
+    }
         return response;
     }
 }
