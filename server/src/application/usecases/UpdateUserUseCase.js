@@ -7,30 +7,33 @@ class UpdateUserUseCase {
         this.getUserUseCase = getUserUseCase;
     }
     
-    async updateUser(userData) {
+    async updateUser(usrId, userData) {
         const response = new Response();
 
         try {
-        let userInserted = await this.getUserUseCase.findById(userData.usrId);
-        if (!userInserted.data) {
-            throw new Error('User not found');
-        }
+            const userObject = {
+                usrFullName: userData.usrFullName,
+                usrUsername: userData.usrUsername, 
+                usrNim: userData.usrNim,
+                usrBankAccount: userData.usrBankAccount,
+                usrBankAccountNumber: userData.usrBankAccountNumber
+            };
 
-        let userUpdated = await this.userRepository.update(userData.usrId, userData)
-        if (!userUpdated) {
-            throw new Error('User failed update');
-        }
+            let userUpdated = await this.userRepository.update(usrId, userObject)
+            if (!userUpdated) {
+                throw new Error('user failed update');
+            }
 
-        response.code = '200';
-        response.status = 'success';
-        response.message = 'User Updated';
-        response.data = userUpdated;
+            response.code = '200';
+            response.status = 'success';
+            response.message = 'user Updated';
+            response.data = taskUpdated;
         } catch (error) {
-        response.code = '400';
-        response.status = 'failed';
-        response.message = 'failed update user';
-        response.error = error.message;      
-    }
+            response.code = '400';
+            response.status = 'failed';
+            response.message = 'failed update user';
+            response.error = error.message;      
+        }
         return response;
     }
 

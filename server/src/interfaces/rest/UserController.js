@@ -74,8 +74,15 @@ class UserController {
 
   async updateUser(req, res) {
     try {
+      const userId = req.params.id
       const userData = req.body;
-      const response = await this.updateUserUseCase.updateUser(userData);
+
+      let userInserted = await this.getUserUseCase.findById(userId);
+        if (!userInserted.data) {
+            throw new Error('User not found');
+        }
+
+      const response = await this.updateUserUseCase.updateUser(userId, userData);
       res
         .status(201)
         .json(response);
